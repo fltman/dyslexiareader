@@ -1,0 +1,41 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm create:*)",
+      "Bash(npm install)",
+      "Bash(npm install sqlite3 multer qrcode openai uuid)",
+      "Bash(npm install:*)",
+      "Bash(find:*)",
+      "Bash(lsof:*)",
+      "Bash(xargs kill:*)",
+      "Bash(curl:*)",
+      "Bash(node:*)",
+      "Bash(npm run dev:*)",
+      "Bash(pkill:*)",
+      "Bash(PORT=5001 node server/index.js)",
+      "Bash(ngrok:*)",
+      "Bash(PORT=5001 EXTERNAL_URL=\"https://7644c6710e5d.ngrok-free.app\" node server/index.js)",
+      "Bash(PORT=5001 EXTERNAL_URL=\"https://82960d694746.ngrok-free.app\" node server/index.js)",
+      "Bash(npm run build:*)",
+      "Bash(chmod:*)",
+      "Bash(./deploy-azure.sh)",
+      "Bash(PORT=5002 node server/index.js)",
+      "Bash(docker build:*)",
+      "Bash(az provider register:*)",
+      "Bash(az provider show:*)",
+      "Bash(az webapp list-runtimes:*)",
+      "Bash(az webapp show:*)",
+      "Bash(./deploy-azure-container.sh)",
+      "Bash(az container delete:*)",
+      "Bash(az container logs:*)",
+      "Bash(git init:*)",
+      "Bash(git branch:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git remote add:*)",
+      "Bash(git push:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  thereader:
+    build: .
+    ports:
+      - "3000:80"
+    environment:
+      - NODE_ENV=production
+      - USE_POSTGRES=false
+      - PORT=80
+      - EXTERNAL_URL=http://localhost:3000
+      # R2 Storage Configuration - Set these in your .env file
+      - USE_R2_STORAGE=${USE_R2_STORAGE:-false}
+      - R2_ACCESS_KEY_ID=${R2_ACCESS_KEY_ID}
+      - R2_SECRET_ACCESS_KEY=${R2_SECRET_ACCESS_KEY}
+      - R2_ENDPOINT=${R2_ENDPOINT}
+      - R2_BUCKET=${R2_BUCKET}
+      # API Keys (add your actual keys here)
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - ELEVENLABS_API_KEY=${ELEVENLABS_API_KEY}
+    volumes:
+      # Mount uploads directory for local storage fallback
+      - ./uploads:/app/uploads
+      # Mount SQLite database file for persistence
+      - ./database.sqlite:/app/database.sqlite
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:80/api/books"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
