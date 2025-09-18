@@ -11,22 +11,35 @@
     "build": "cd client && npm run build",
     "start": "node server/index.js",
     "install:all": "npm install && cd client && npm install",
-    "postinstall": "cd client && npm install && npm run build"
+    "postinstall": "cd client && npm install && npm run build",
+    "db:push": "drizzle-kit push",
+    "db:generate": "drizzle-kit generate",
+    "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.891.0",
     "@aws-sdk/lib-storage": "^3.891.0",
     "@elevenlabs/elevenlabs-js": "^2.15.0",
+    "@google-cloud/storage": "^7.17.1",
+    "@neondatabase/serverless": "^1.0.1",
+    "@uppy/aws-s3": "^5.0.1",
+    "@uppy/core": "^5.0.2",
+    "@uppy/dashboard": "^5.0.2",
+    "@uppy/react": "^5.0.3",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
+    "drizzle-kit": "^0.31.4",
+    "drizzle-orm": "^0.44.5",
     "express": "^4.18.2",
+    "google-auth-library": "^10.3.0",
     "image-size": "^2.0.2",
     "multer": "^2.0.2",
     "openai": "^5.21.0",
     "pg": "^8.16.3",
     "qrcode": "^1.5.4",
     "sqlite3": "^5.1.7",
-    "uuid": "^13.0.0"
+    "uuid": "^13.0.0",
+    "ws": "^8.18.3"
   },
   "devDependencies": {
     "concurrently": "^8.2.2",

@@ -10,9 +10,8 @@ import { dirname } from 'path';
 import OpenAI from 'openai';
 import { ElevenLabsClient } from '@elevenlabs/elevenlabs-js';
 import fs from 'fs';
-import { initializeDatabase, runQuery, runStatement } from './database-unified.js';
-import { dbHelpers } from './database.js';
-import { uploadFile, getFileUrl, isUsingR2 } from './storage.js';
+import { dbHelpers } from './database-replit.js';
+import { ObjectStorageService } from './objectStorage.js';
 
 dotenv.config();
 
@@ -22,22 +21,31 @@ const __dirname = dirname(__filename);
 const app = express();
 const PORT = process.env.PORT || 5001;
 
-// Initialize OpenAI
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+// Initialize OpenAI (optional for development)
+let openai = null;
+if (process.env.OPENAI_API_KEY) {
+  openai = new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY,
+  });
+  console.log('✅ OpenAI initialized');
+} else {
+  console.warn('⚠️  OPENAI_API_KEY not set - AI features will not work');
+}
 
-// Initialize ElevenLabs
-const elevenlabs = new ElevenLabsClient({
-  apiKey: process.env.ELEVENLABS_API_KEY
-});
-
-if (!process.env.ELEVENLABS_API_KEY) {
+// Initialize ElevenLabs (optional for development)
+let elevenlabs = null;
+if (process.env.ELEVENLABS_API_KEY) {
+  elevenlabs = new ElevenLabsClient({
+    apiKey: process.env.ELEVENLABS_API_KEY
+  });
+  console.log('✅ ElevenLabs initialized');
+} else {
   console.warn('⚠️  ELEVENLABS_API_KEY not set - text-to-speech will not work');
 }
 
-// Configure multer for image uploads (use memory storage for both local and R2)
+// Configure multer for image uploads (use memory storage for Replit Object Storage)
 const storage = multer.memoryStorage();
+const objectStorageService = new ObjectStorageService();
 
 const upload = multer({
   storage: storage,
@@ -63,10 +71,19 @@ app.use('/uploads', (req, res, next) => {
   next();
 });
 
-// Serve local uploads only if not using R2 storage
-if (!isUsingR2()) {
-  app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));
-}
+// Serve objects from Replit Object Storage
+app.get('/objects/:objectPath(*)', async (req, res) => {
+  try {
+    const objectFile = await objectStorageService.getObjectEntityFile(req.path);
+    await objectStorageService.downloadObject(objectFile, res);
+  } catch (error) {
+    console.error('Error serving object:', error);
+    if (error.name === 'ObjectNotFoundError') {
+      return res.status(404).json({ error: 'File not found' });
+    }
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+});
 app.use('/mobile', express.static(path.join(__dirname, 'public')));
 app.use('/audio', express.static(path.join(__dirname, 'public', 'audio')));
 
@@ -161,8 +178,8 @@ app.post('/api/sessions/:sessionId/pages', upload.single('image'), async (req, r
     const fileExtension = path.extname(req.file.originalname);
     const uniqueFilename = `${Date.now()}-${Math.round(Math.random() * 1E9)}${fileExtension}`;
 
-    // Upload file using our storage module
-    const imageUrl = await uploadFile(req.file.buffer, uniqueFilename, req.file.mimetype);
+    // Upload file using Replit Object Storage
+    const imageUrl = await objectStorageService.uploadFile(req.file.buffer, uniqueFilename, req.file.mimetype);
 
     const existingPages = await dbHelpers.getBookPages(session.book_id);
     const pageNumber = existingPages.length + 1;
@@ -194,12 +211,38 @@ app.post('/api/sessions/:sessionId/complete', async (req, res) => {
       return res.status(400).json({ error: 'No pages uploaded' });
     }
 
-    // Process first page with OpenAI
-    const firstPagePath = path.join(__dirname, '..', pages[0].image_path);
-    const imageBuffer = fs.readFileSync(firstPagePath);
-    const base64Image = imageBuffer.toString('base64');
+    if (!openai) {
+      // If OpenAI is not configured, use default values
+      await dbHelpers.updateBook(session.book_id, {
+        title: 'Scanned Book',
+        category: 'General',
+        cover: pages[0].image_path,
+        status: 'completed'
+      });
 
-    const response = await openai.chat.completions.create({
+      await dbHelpers.closeScanningSession(req.params.sessionId);
+
+      return res.json({
+        success: true,
+        bookId: session.book_id,
+        suggestions: { title: 'Scanned Book', category: 'General' }
+      });
+    }
+
+    // Process first page with OpenAI if available
+    try {
+      const objectFile = await objectStorageService.getObjectEntityFile(pages[0].image_path);
+      const stream = objectFile.createReadStream();
+      const chunks = [];
+      
+      for await (const chunk of stream) {
+        chunks.push(chunk);
+      }
+      
+      const imageBuffer = Buffer.concat(chunks);
+      const base64Image = imageBuffer.toString('base64');
+
+      const response = await openai.chat.completions.create({
       model: "gpt-4o",
       messages: [
         {
@@ -218,40 +261,40 @@ app.post('/api/sessions/:sessionId/complete', async (req, res) => {
           ]
         }
       ],
-      max_tokens: 300
-    });
+        max_tokens: 300
+      });
 
-    let aiSuggestions = {
-      title: "Unknown Book",
-      category: "General"
-    };
+      let aiSuggestions = {
+        title: "Unknown Book",
+        category: "General"
+      };
 
-    try {
-      const content = response.choices[0].message.content;
-      const jsonMatch = content.match(/\{.*\}/s);
-      if (jsonMatch) {
-        aiSuggestions = JSON.parse(jsonMatch[0]);
+      try {
+        const content = response.choices[0].message.content;
+        const jsonMatch = content.match(/\{.*\}/s);
+        if (jsonMatch) {
+          aiSuggestions = JSON.parse(jsonMatch[0]);
+        }
+      } catch (parseError) {
+        console.error('Error parsing AI response:', parseError);
       }
-    } catch (parseError) {
-      console.error('Error parsing AI response:', parseError);
-    }
 
-    // Update book with AI suggestions and set first page as cover
-    await dbHelpers.updateBook(session.book_id, {
-      title: aiSuggestions.title,
-      category: aiSuggestions.category,
-      cover: pages[0].image_path,
-      status: 'completed'
-    });
+      // Update book with AI suggestions and set first page as cover
+      await dbHelpers.updateBook(session.book_id, {
+        title: aiSuggestions.title,
+        category: aiSuggestions.category,
+        cover: pages[0].image_path,
+        status: 'completed'
+      });
 
-    // Close scanning session
-    await dbHelpers.closeScanningSession(req.params.sessionId);
+      // Close scanning session
+      await dbHelpers.closeScanningSession(req.params.sessionId);
 
-    res.json({
-      success: true,
-      bookId: session.book_id,
-      suggestions: aiSuggestions
-    });
+      res.json({
+        success: true,
+        bookId: session.book_id,
+        suggestions: aiSuggestions
+      });
   } catch (error) {
     console.error('Error completing book scan:', error);
     res.status(500).json({ error: 'Failed to complete book processing' });
@@ -663,18 +706,18 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 
-// Initialize database and start server
+// Start server
 (async () => {
   try {
-    await initializeDatabase();
-    console.log('Database initialized successfully');
+    console.log('Using Replit PostgreSQL database');
+    console.log('Using Replit Object Storage');
 
     app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);
       console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
     });
   } catch (error) {
-    console.error('Failed to initialize database:', error);
+    console.error('Failed to start server:', error);
     process.exit(1);
   }
 })();
