@@ -5,7 +5,7 @@
   "main": "server/index.js",
   "type": "module",
   "scripts": {
-    "dev": "concurrently \"npm run server:dev\" \"npm run client:dev\"",
+    "dev": "concurrently --kill-others --prefix \"[{name}]\" --names \"backend,frontend\" \"npm run server:dev\" \"npm run client:dev\"",
     "server:dev": "nodemon server/index.js",
     "client:dev": "cd client && npm run dev",
     "build": "cd client && npm run build",
