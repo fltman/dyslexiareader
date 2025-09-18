@@ -1,5 +1,4 @@
 import { Storage, File } from "@google-cloud/storage";
-import { Response } from "express";
 import { randomUUID } from "crypto";
 import {
   ObjectAclPolicy,
@@ -111,7 +110,7 @@ export class ObjectStorageService {
   }
 
   // Downloads an object to the response.
-  async downloadObject(file: File, res: Response, cacheTtlSec: number = 3600) {
+  async downloadObject(file, res, cacheTtlSec = 3600) {
     try {
       // Get file metadata
       const [metadata] = await file.getMetadata();
@@ -147,7 +146,7 @@ export class ObjectStorageService {
   }
 
   // Gets the upload URL for an object entity.
-  async getObjectEntityUploadURL(): Promise<string> {
+  async getObjectEntityUploadURL() {
     const privateObjectDir = this.getPrivateObjectDir();
     if (!privateObjectDir) {
       throw new Error(
@@ -171,7 +170,7 @@ export class ObjectStorageService {
   }
 
   // Gets the object entity file from the object path.
-  async getObjectEntityFile(objectPath: string): Promise<File> {
+  async getObjectEntityFile(objectPath) {
     if (!objectPath.startsWith("/objects/")) {
       throw new ObjectNotFoundError();
     }
@@ -197,9 +196,7 @@ export class ObjectStorageService {
     return objectFile;
   }
 
-  normalizeObjectEntityPath(
-    rawPath: string,
-  ): string {
+  normalizeObjectEntityPath(rawPath) {
     if (!rawPath.startsWith("https://storage.googleapis.com/")) {
       return rawPath;
     }
@@ -223,10 +220,7 @@ export class ObjectStorageService {
   }
 
   // Tries to set the ACL policy for the object entity and return the normalized path.
-  async trySetObjectEntityAclPolicy(
-    rawPath: string,
-    aclPolicy: ObjectAclPolicy
-  ): Promise<string> {
+  async trySetObjectEntityAclPolicy(rawPath, aclPolicy) {
     const normalizedPath = this.normalizeObjectEntityPath(rawPath);
     if (!normalizedPath.startsWith("/")) {
       return normalizedPath;
@@ -242,11 +236,7 @@ export class ObjectStorageService {
     userId,
     objectFile,
     requestedPermission,
-  }: {
-    userId?: string;
-    objectFile: File;
-    requestedPermission?: ObjectPermission;
-  }): Promise<boolean> {
+  }) {
     return canAccessObject({
       userId,
       objectFile,
@@ -255,10 +245,7 @@ export class ObjectStorageService {
   }
 }
 
-function parseObjectPath(path: string): {
-  bucketName: string;
-  objectName: string;
-} {
+function parseObjectPath(path) {
   if (!path.startsWith("/")) {
     path = `/${path}`;
   }
@@ -281,12 +268,7 @@ async function signObjectURL({
   objectName,
   method,
   ttlSec,
-}: {
-  bucketName: string;
-  objectName: string;
-  method: "GET" | "PUT" | "DELETE" | "HEAD";
-  ttlSec: number;
-}): Promise<string> {
+}) {
   const request = {
     bucket_name: bucketName,
     object_name: objectName,

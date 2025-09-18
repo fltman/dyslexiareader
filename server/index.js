@@ -295,6 +295,10 @@ app.post('/api/sessions/:sessionId/complete', async (req, res) => {
         bookId: session.book_id,
         suggestions: aiSuggestions
       });
+    } catch (error) {
+      console.error('Error completing book scan:', error);
+      res.status(500).json({ error: 'Failed to complete book processing' });
+    }
   } catch (error) {
     console.error('Error completing book scan:', error);
     res.status(500).json({ error: 'Failed to complete book processing' });

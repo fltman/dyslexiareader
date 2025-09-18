@@ -73,12 +73,12 @@ export const textBlocksRelations = relations(textBlocks, ({ one }) => ({
   }),
 }));
 
-// Export types
-export type Book = typeof books.$inferSelect;
-export type InsertBook = typeof books.$inferInsert;
-export type Page = typeof pages.$inferSelect;
-export type InsertPage = typeof pages.$inferInsert;
-export type ScanningSession = typeof scanningSessions.$inferSelect;
-export type InsertScanningSession = typeof scanningSessions.$inferInsert;
-export type TextBlock = typeof textBlocks.$inferSelect;
-export type InsertTextBlock = typeof textBlocks.$inferInsert;
+// Export types (commented out for JavaScript compatibility)
+// export type Book = typeof books.$inferSelect;
+// export type InsertBook = typeof books.$inferInsert;
+// export type Page = typeof pages.$inferSelect;
+// export type InsertPage = typeof pages.$inferInsert;
+// export type ScanningSession = typeof scanningSessions.$inferSelect;
+// export type InsertScanningSession = typeof scanningSessions.$inferInsert;
+// export type TextBlock = typeof textBlocks.$inferSelect;
+// export type InsertTextBlock = typeof textBlocks.$inferInsert;
