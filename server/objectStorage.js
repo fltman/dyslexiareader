@@ -13,6 +13,13 @@ const s3Client = new S3Client({
 
 const BUCKET_NAME = process.env.CLOUDFLARE_R2_BUCKET_NAME;
 
+console.log('🔧 R2 Configuration:', {
+  endpoint: process.env.CLOUDFLARE_R2_ENDPOINT ? 'SET' : 'MISSING',
+  accessKeyId: process.env.CLOUDFLARE_R2_ACCESS_KEY_ID ? 'SET' : 'MISSING', 
+  secretAccessKey: process.env.CLOUDFLARE_R2_SECRET_ACCESS_KEY ? 'SET' : 'MISSING',
+  bucketName: BUCKET_NAME || 'MISSING'
+});
+
 export class ObjectNotFoundError extends Error {
   constructor() {
     super("Object not found");
