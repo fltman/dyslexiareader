@@ -2,136 +2,78 @@ import React, { useState, useEffect } from 'react';
 import './AgentChat.css';
 
 const AgentChat = ({ bookId, bookTitle }) => {
-  const [agentId, setAgentId] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [widgetConfig, setWidgetConfig] = useState(null);
-  const [isOpen, setIsOpen] = useState(false);
+  const agentId = 'agent_2701k5hmygdyegps36rmfm75xts3'; // Hardcoded agent ID
 
-  // Create agent for books that don't have one yet
-  const createAgentForBook = async () => {
+  // Update agent's knowledge base for current book
+  const updateAgentKnowledge = async () => {
     try {
-      console.log('🤖 Creating agent for existing book...');
+      setIsLoading(true);
+      setError(null);
+      console.log(`📚 Updating agent knowledge for book: ${bookTitle}`);
 
       const response = await fetch(`/api/books/${bookId}/agent`, {
         method: 'POST'
       });
 
       if (!response.ok) {
-        throw new Error('Failed to create agent');
+        throw new Error('Failed to update agent knowledge');
       }
 
       const data = await response.json();
-      setAgentId(data.agentId);
-
-      // Load widget with new agent
-      if (data.agentId && window.elevenlabs) {
-        window.elevenlabs.convai.embed({
-          agentId: data.agentId
-        });
-      }
-
-      console.log('✅ Agent created successfully:', data.agentId);
+      console.log('✅ Agent knowledge updated successfully');
     } catch (err) {
-      console.error('Error creating agent:', err);
-      setError(`Failed to create agent: ${err.message}`);
-    }
-  };
-
-  // Load agent from book data
-  const loadAgent = async () => {
-    try {
-      setIsLoading(true);
-      setError(null);
-
-      // Get book information including agent ID
-      const bookResponse = await fetch(`/api/books/${bookId}`);
-      if (!bookResponse.ok) {
-        throw new Error('Failed to load book data');
-      }
-
-      const book = await bookResponse.json();
-
-      // Check if book already has an agent
-      if (book.agent_id) {
-        console.log('📱 Using existing agent:', book.agent_id);
-        setAgentId(book.agent_id);
-
-        // Load widget with existing agent
-        if (window.elevenlabs) {
-          window.elevenlabs.convai.embed({
-            agentId: book.agent_id
-          });
-        }
-      } else {
-        console.log('❌ No agent found for this book, attempting to create one...');
-        // Try to create an agent for this book if it doesn't have one
-        await createAgentForBook();
-      }
-    } catch (err) {
-      console.error('Error loading agent:', err);
-      setError(err.message);
+      console.error('Error updating agent knowledge:', err);
+      setError(`Failed to update agent: ${err.message}`);
     } finally {
       setIsLoading(false);
     }
   };
 
-  // Load agent when component mounts
+  // Update knowledge when component mounts or book changes
   useEffect(() => {
     if (bookId) {
-      loadAgent();
+      updateAgentKnowledge();
     }
   }, [bookId]);
 
-  // Load ElevenLabs SDK
+  // Load ElevenLabs widget script
   useEffect(() => {
-    if (!document.getElementById('elevenlabs-sdk')) {
+    if (!document.getElementById('elevenlabs-widget-script')) {
       const script = document.createElement('script');
-      script.id = 'elevenlabs-sdk';
-      script.src = 'https://elevenlabs.io/convai-widget/index.js';
+      script.id = 'elevenlabs-widget-script';
+      script.src = 'https://unpkg.com/@elevenlabs/convai-widget-embed';
       script.async = true;
-      script.onload = () => {
-        console.log('ElevenLabs SDK loaded');
-      };
-      document.body.appendChild(script);
+      script.type = 'text/javascript';
+      document.head.appendChild(script);
     }
   }, []);
 
   return (
     <div className="agent-chat">
       {isLoading && (
-        <button
-          className="agent-chat-button"
-          disabled={true}
-          title="Laddar bokassistent..."
-        >
+        <div className="agent-loading-container">
           <div className="agent-loading">
             <div className="spinner"></div>
-            <span>Laddar...</span>
+            <span>Uppdaterar bokassistent...</span>
           </div>
-        </button>
-      )}
-
-      {agentId && (
-        <button
-          className="agent-chat-toggle"
-          onClick={() => setIsOpen(!isOpen)}
-          title={`Prata om "${bookTitle}"`}
-        >
-          <span className="chat-icon">🤖</span>
-          <span className="chat-label">Bokassistent</span>
-        </button>
-      )}
-
-      {error && !isLoading && (
-        <div className="agent-error">
-          <p>{error}</p>
-          <button onClick={loadAgent}>Försök igen</button>
         </div>
       )}
 
-      {/* ElevenLabs widget will be embedded here */}
-      <div id="elevenlabs-convai-widget" />
+      {!isLoading && !error && (
+        <div className="agent-widget-container">
+          {/* Simple hardcoded ElevenLabs widget */}
+          <elevenlabs-convai agent-id={agentId}></elevenlabs-convai>
+        </div>
+      )}
+
+      {error && (
+        <div className="agent-error">
+          <p>{error}</p>
+          <button onClick={updateAgentKnowledge}>Försök igen</button>
+        </div>
+      )}
     </div>
   );
 };
