@@ -668,37 +668,32 @@ app.post('/api/textblocks/:blockId/speak', async (req, res) => {
   try {
     const blockId = req.params.blockId;
 
-    // Get text block from database
-    const textBlock = await new Promise((resolve, reject) => {
-      db.get('SELECT * FROM text_blocks WHERE id = ?', [blockId], (err, row) => {
-        if (err) reject(err);
-        else resolve(row);
-      });
-    });
+    // Get text block from database using Drizzle ORM
+    const textBlock = await dbHelpers.getTextBlockById(blockId);
 
-    if (!textBlock || !textBlock.ocr_text) {
+    if (!textBlock || !textBlock.ocrText) {
       return res.status(404).json({ error: 'Text block not found or no text available' });
     }
 
     // Check if we already have cached audio for this text block
-    if (textBlock.audio_url && textBlock.alignment_data) {
+    if (textBlock.audioUrl && textBlock.alignmentData) {
       console.log('Using cached audio for text block:', blockId);
       return res.json({
         success: true,
-        audio_url: textBlock.audio_url,
-        text: textBlock.ocr_text,
-        alignment: JSON.parse(textBlock.alignment_data),
-        normalized_alignment: textBlock.normalized_alignment_data ? JSON.parse(textBlock.normalized_alignment_data) : null
+        audio_url: textBlock.audioUrl,
+        text: textBlock.ocrText,
+        alignment: JSON.parse(textBlock.alignmentData),
+        normalized_alignment: textBlock.normalizedAlignmentData ? JSON.parse(textBlock.normalizedAlignmentData) : null
       });
     }
 
-    console.log('Converting text to speech with timestamps:', textBlock.ocr_text);
+    console.log('Converting text to speech with timestamps:', textBlock.ocrText);
 
     try {
       // Use ElevenLabs to convert text to speech with timestamps
       // Using specified voice ID
       const ttsResult = await elevenlabs.textToSpeech.convertWithTimestamps("iwNZQzqCFIBqLR6sgFpN", {
-        text: textBlock.ocr_text,
+        text: textBlock.ocrText,
         voice_settings: {
           stability: 0.5,
           similarity_boost: 0.75
@@ -733,27 +728,18 @@ app.post('/api/textblocks/:blockId/speak', async (req, res) => {
       const audioUrl = `/audio/${audioFileName}`;
 
       // Cache the audio URL and alignment data in database
-      await new Promise((resolve, reject) => {
-        db.run(
-          'UPDATE text_blocks SET audio_url = ?, alignment_data = ?, normalized_alignment_data = ? WHERE id = ?',
-          [
-            audioUrl,
-            JSON.stringify(ttsResult.alignment),
-            ttsResult.normalized_alignment ? JSON.stringify(ttsResult.normalized_alignment) : null,
-            blockId
-          ],
-          (err) => {
-            if (err) reject(err);
-            else resolve();
-          }
-        );
-      });
+      await dbHelpers.updateTextBlockAudio(
+        blockId,
+        audioUrl,
+        JSON.stringify(ttsResult.alignment),
+        ttsResult.normalized_alignment ? JSON.stringify(ttsResult.normalized_alignment) : null
+      );
 
       // Return audio URL and timing data
       res.json({
         success: true,
         audio_url: audioUrl,
-        text: textBlock.ocr_text,
+        text: textBlock.ocrText,
         alignment: ttsResult.alignment,
         normalized_alignment: ttsResult.normalized_alignment
       });

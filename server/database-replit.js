@@ -129,5 +129,15 @@ export const dbHelpers = {
         status: 'completed' 
       })
       .where(eq(textBlocks.id, parseInt(blockId)));
+  },
+
+  async updateTextBlockAudio(blockId, audioUrl, alignmentData, normalizedAlignmentData) {
+    await db.update(textBlocks)
+      .set({
+        audioUrl,
+        alignmentData,
+        normalizedAlignmentData
+      })
+      .where(eq(textBlocks.id, parseInt(blockId)));
   }
 };
