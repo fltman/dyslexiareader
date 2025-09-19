@@ -1,0 +1,121 @@
+  at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async file:///home/runner/workspace/server/index.js:81:5
+🔍 Trying to download: key="uploads/1758257284422-469328304.jpg"
+❌ Object not found: key="uploads/1758257284422-469328304.jpg", error="undefined"
+📋 Available objects: [
+  'uploads/1758256042404-750382279.jpg',
+  'uploads/1758256250842-488612808.jpg',
+  'uploads/1758256540612-345541378.jpg',
+  'uploads/1758256965786-429267863.jpg',
+  'uploads/1758257284422-469328304.jpg'
+]
+Error downloading file: ObjectNotFoundError: Object not found
+    at ObjectStorageService.downloadObject (file:///home/runner/workspace/server/objectStorage.js:74:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async file:///home/runner/workspace/server/index.js:81:5
+Error serving object: ObjectNotFoundError: Object not found
+    at ObjectStorageService.downloadObject (file:///home/runner/workspace/server/objectStorage.js:74:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async file:///home/runner/workspace/server/index.js:81:5
+🔍 Trying to download: key="uploads/1758257284422-469328304.jpg"
+❌ Object not found: key="uploads/1758257284422-469328304.jpg", error="undefined"
+📋 Available objects: [
+  'uploads/1758256042404-750382279.jpg',
+  'uploads/1758256250842-488612808.jpg',
+  'uploads/1758256540612-345541378.jpg',
+  'uploads/1758256965786-429267863.jpg',
+  'uploads/1758257284422-469328304.jpg'
+]
+Error downloading file: ObjectNotFoundError: Object not found
+    at ObjectStorageService.downloadObject (file:///home/runner/workspace/server/objectStorage.js:74:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async file:///home/runner/workspace/server/index.js:81:5
+Error serving object: ObjectNotFoundError: Object not found
+    at ObjectStorageService.downloadObject (file:///home/runner/workspace/server/objectStorage.js:74:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async file:///home/runner/workspace/server/index.js:81:5
+🔍 Trying to download: key="uploads/1758257284422-469328304.jpg"
+❌ Object not found: key="uploads/1758257284422-469328304.jpg", error="undefined"
+📋 Available objects: [
+  'uploads/1758256042404-750382279.jpg',
+  'uploads/1758256250842-488612808.jpg',
+  'uploads/1758256540612-345541378.jpg',
+  'uploads/1758256965786-429267863.jpg',
+  'uploads/1758257284422-469328304.jpg'
+]
+Error downloading file: ObjectNotFoundError: Object not found
+    at ObjectStorageService.downloadObject (file:///home/runner/workspace/server/objectStorage.js:74:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async file:///home/runner/workspace/server/index.js:81:5
+Error serving object: ObjectNotFoundError: Object not found
+    at ObjectStorageService.downloadObject (file:///home/runner/workspace/server/objectStorage.js:74:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async file:///home/runner/workspace/server/index.js:81:5
+🔍 Trying to download: key="uploads/1758257284422-469328304.jpg"
+❌ Object not found: key="uploads/1758257284422-469328304.jpg", error="undefined"
+📋 Available objects: [
+  'uploads/1758256042404-750382279.jpg',
+  'uploads/1758256250842-488612808.jpg',
+  'uploads/1758256540612-345541378.jpg',
+  'uploads/1758256965786-429267863.jpg',
+  'uploads/1758257284422-469328304.jpg'
+]
+Error downloading file: ObjectNotFoundError: Object not found
+    at ObjectStorageService.downloadObject (file:///home/runner/workspace/server/objectStorage.js:74:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async file:///home/runner/workspace/server/index.js:81:5
+Error serving object: ObjectNotFoundError: Object not found
+    at ObjectStorageService.downloadObject (file:///home/runner/workspace/server/objectStorage.js:74:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async file:///home/runner/workspace/server/index.js:81:5
+🔍 Trying to download: key="uploads/1758257284422-469328304.jpg"
+❌ Object not found: key="uploads/1758257284422-469328304.jpg", error="undefined"
+📋 Available objects: [
+  'uploads/1758256042404-750382279.jpg',
+  'uploads/1758256250842-488612808.jpg',
+  'uploads/1758256540612-345541378.jpg',
+  'uploads/1758256965786-429267863.jpg',
+  'uploads/1758257284422-469328304.jpg'
+]
+Error downloading file: ObjectNotFoundError: Object not found
+    at ObjectStorageService.downloadObject (file:///home/runner/workspace/server/objectStorage.js:74:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async file:///home/runner/workspace/server/index.js:81:5
+Error serving object: ObjectNotFoundError: Object not found
+    at ObjectStorageService.downloadObject (file:///home/runner/workspace/server/objectStorage.js:74:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async file:///home/runner/workspace/server/index.js:81:5
+🔍 Trying to download: key="uploads/1758257284422-469328304.jpg"
+❌ Object not found: key="uploads/1758257284422-469328304.jpg", error="undefined"
+📋 Available objects: [
+  'uploads/1758256042404-750382279.jpg',
+  'uploads/1758256250842-488612808.jpg',
+  'uploads/1758256540612-345541378.jpg',
+  'uploads/1758256965786-429267863.jpg',
+  'uploads/1758257284422-469328304.jpg'
+]
+Error downloading file: ObjectNotFoundError: Object not found
+    at ObjectStorageService.downloadObject (file:///home/runner/workspace/server/objectStorage.js:74:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async file:///home/runner/workspace/server/index.js:81:5
+Error serving object: ObjectNotFoundError: Object not found
+    at ObjectStorageService.downloadObject (file:///home/runner/workspace/server/objectStorage.js:74:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async file:///home/runner/workspace/server/index.js:81:5
+🔍 Trying to download: key="uploads/1758257284422-469328304.jpg"
+❌ Object not found: key="uploads/1758257284422-469328304.jpg", error="undefined"
+📋 Available objects: [
+  'uploads/1758256042404-750382279.jpg',
+  'uploads/1758256250842-488612808.jpg',
+  'uploads/1758256540612-345541378.jpg',
+  'uploads/1758256965786-429267863.jpg',
+  'uploads/1758257284422-469328304.jpg'
+]
+Error downloading file: ObjectNotFoundError: Object not found
+    at ObjectStorageService.downloadObject (file:///home/runner/workspace/server/objectStorage.js:74:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async file:///home/runner/workspace/server/index.js:81:5
+Error serving object: ObjectNotFoundError: Object not found
+    at ObjectStorageService.downloadObject (file:///home/runner/workspace/server/objectStorage.js:74:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async file:///home/runner/workspace/server/index.js:81:5

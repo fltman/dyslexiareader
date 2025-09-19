@@ -56,40 +56,59 @@ export class ObjectStorageService {
     try {
       console.log(`🔍 Trying to download: key="${objectKey}"`);
       
-      const { ok, value: stream, error } = await this.client.downloadAsStream(objectKey);
+      // Try downloadAsBytes instead of downloadAsStream for better reliability
+      const downloadResult = await this.client.downloadAsBytes(objectKey);
       
-      if (!ok) {
-        console.error(`❌ Object not found: key="${objectKey}", error="${error}"`);
+      if (!downloadResult.ok) {
+        console.error(`❌ Object not found via bytes: key="${objectKey}"`);
         
-        // List what's actually in the bucket to debug
-        try {
-          const listResult = await this.client.list({ prefix: 'uploads/' });
-          if (listResult.ok) {
-            console.log(`📋 Available objects:`, listResult.value.map(obj => obj.name));
+        // If bytes method fails, try with a small delay and retry
+        console.log(`🔄 Retrying with delay...`);
+        await new Promise(resolve => setTimeout(resolve, 500)); // 500ms delay
+        
+        const retryResult = await this.client.downloadAsBytes(objectKey);
+        if (!retryResult.ok) {
+          // List what's actually in the bucket to debug
+          try {
+            const listResult = await this.client.list({ prefix: 'uploads/' });
+            if (listResult.ok) {
+              console.log(`📋 Available objects:`, listResult.value.map(obj => obj.name));
+            }
+          } catch (listError) {
+            console.log(`⚠️ Could not list objects for debugging:`, listError);
           }
-        } catch (listError) {
-          console.log(`⚠️ Could not list objects for debugging:`, listError);
+          
+          throw new ObjectNotFoundError();
         }
         
-        throw new ObjectNotFoundError();
+        // Retry succeeded, use that result
+        console.log(`✅ Retry successful for: ${objectKey}`);
+        const bytes = retryResult.value;
+        
+        // Set appropriate headers
+        const contentType = mime.lookup(objectKey) || 'application/octet-stream';
+        res.set({
+          "Content-Type": contentType,
+          "Cache-Control": "public, max-age=3600",
+          "Content-Length": bytes.length.toString()
+        });
+
+        res.send(bytes);
+        return;
       }
+
+      console.log(`✅ Downloaded successfully: ${objectKey} (${downloadResult.value.length} bytes)`);
+      const bytes = downloadResult.value;
 
       // Set appropriate headers
       const contentType = mime.lookup(objectKey) || 'application/octet-stream';
       res.set({
         "Content-Type": contentType,
         "Cache-Control": "public, max-age=3600",
+        "Content-Length": bytes.length.toString()
       });
 
-      // Stream the file to the response
-      stream.on("error", (err) => {
-        console.error("Stream error:", err);
-        if (!res.headersSent) {
-          res.status(500).json({ error: "Error streaming file" });
-        }
-      });
-
-      stream.pipe(res);
+      res.send(bytes);
     } catch (error) {
       console.error("Error downloading file:", error);
       if (error instanceof ObjectNotFoundError) {
