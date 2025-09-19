@@ -646,7 +646,17 @@ const BookViewer = () => {
         </div>
 
         <div className="pages-sidebar">
-          <h3>Pages</h3>
+          <div className="pages-header">
+            <h3>Pages</h3>
+            {(isDetecting || processingBlocks.size > 0) && (
+              <div className="detection-progress">
+                <div className="detection-spinner"></div>
+                <span className="detection-text">
+                  {isDetecting ? 'Detecting text...' : `Processing ${processingBlocks.size} blocks...`}
+                </span>
+              </div>
+            )}
+          </div>
           <div className="page-thumbnails">
             {pages.map((page, index) => (
               <div
