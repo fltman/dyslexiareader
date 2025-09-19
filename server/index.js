@@ -586,17 +586,20 @@ app.delete('/api/books/:id', async (req, res) => {
 
     // Delete image files from storage
     for (const page of pages) {
-      if (page.image_path.startsWith('/objects/')) {
+      // Handle both field names and null checks
+      const pageImagePath = page.imagePath || page.image_path;
+      
+      if (pageImagePath && pageImagePath.startsWith('/objects/')) {
         // Delete from Replit Object Storage
-        const objectKey = page.image_path.replace('/objects/', '');
+        const objectKey = pageImagePath.replace('/objects/', '');
         try {
           await objectStorageService.deleteObject(objectKey);
         } catch (fileError) {
           console.warn(`Could not delete object storage file: ${objectKey}`, fileError);
         }
-      } else {
+      } else if (pageImagePath) {
         // Legacy: Delete from local filesystem
-        const imagePath = path.join(__dirname, '..', page.image_path);
+        const imagePath = path.join(__dirname, '..', pageImagePath);
         try {
           if (fs.existsSync(imagePath)) {
             fs.unlinkSync(imagePath);
