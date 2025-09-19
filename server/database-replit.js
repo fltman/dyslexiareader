@@ -91,6 +91,18 @@ export const dbHelpers = {
       .where(eq(scanningSessions.id, sessionId));
   },
 
+  async updateScanningSessionProgress(sessionId, progressData) {
+    await db.update(scanningSessions)
+      .set({
+        processingStep: progressData.currentStep,
+        stepsCompleted: progressData.stepsCompleted,
+        totalSteps: progressData.totalSteps,
+        processingDetails: progressData.details,
+        status: progressData.status || 'processing'
+      })
+      .where(eq(scanningSessions.id, sessionId));
+  },
+
   // Text block operations
   async getTextBlocks(pageId) {
     return await db.select().from(textBlocks)

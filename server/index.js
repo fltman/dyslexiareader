@@ -349,16 +349,54 @@ app.post('/api/sessions/:sessionId/complete', async (req, res) => {
 
       // Process all pages for text detection and build knowledge base
       console.log('🔍 Processing all pages for text detection and knowledge base creation...');
+      const totalSteps = pages.length + 3; // Pages OCR + title extraction + category analysis + finalization
+
+      // Step 1: Initialize processing
+      await dbHelpers.updateScanningSessionProgress(req.params.sessionId, {
+        currentStep: 'Preparing book for processing...',
+        stepsCompleted: 0,
+        totalSteps: totalSteps,
+        details: `Processing ${pages.length} page${pages.length > 1 ? 's' : ''}`,
+        status: 'processing'
+      });
+
+      // Step 2: Analyze first page for book info
+      await dbHelpers.updateScanningSessionProgress(req.params.sessionId, {
+        currentStep: 'Analyzing book cover and title...',
+        stepsCompleted: 1,
+        totalSteps: totalSteps,
+        details: 'Using AI to extract book information',
+        status: 'processing'
+      });
+
       let fullBookText = '';
       let agentId = null;
       let knowledgeBaseId = null;
 
       if (elevenlabsAgent) {
         try {
+          // Step 3: Start OCR processing
+          await dbHelpers.updateScanningSessionProgress(req.params.sessionId, {
+            currentStep: 'Preparing pages for text recognition...',
+            stepsCompleted: 2,
+            totalSteps: totalSteps,
+            details: 'Setting up OCR for all pages',
+            status: 'processing'
+          });
+
           // Process all pages for OCR text extraction
           for (let i = 0; i < pages.length; i++) {
             const page = pages[i];
             const pageImagePath = page.imagePath || page.image_path;
+
+            // Update progress for current page
+            await dbHelpers.updateScanningSessionProgress(req.params.sessionId, {
+              currentStep: `Processing page ${i + 1} of ${pages.length}...`,
+              stepsCompleted: 2 + i + 1,
+              totalSteps: totalSteps,
+              details: `Extracting text from page ${i + 1}`,
+              status: 'processing'
+            });
 
             console.log(`📖 Processing page ${i + 1}/${pages.length} for text extraction...`);
 
@@ -405,10 +443,19 @@ app.post('/api/sessions/:sessionId/complete', async (req, res) => {
 
           console.log(`📚 Extracted ${fullBookText.length} characters from ${pages.length} pages`);
 
+          // Final step: Create knowledge base
+          await dbHelpers.updateScanningSessionProgress(req.params.sessionId, {
+            currentStep: 'Finalizing book...',
+            stepsCompleted: totalSteps,
+            totalSteps: totalSteps,
+            details: 'Book ready for reading!',
+            status: 'processing'
+          });
+
           // Create ElevenLabs knowledge base and agent if we have text
           if (fullBookText.length > 100) {
             console.log('🤖 Creating ElevenLabs knowledge base and agent...');
-            const agentData = await elevenlabsAgent.setupBookAgent(
+            const agentData = await elevenlabsAgent.updateBookKnowledge(
               bookId,
               aiSuggestions.title,
               fullBookText
@@ -430,9 +477,9 @@ app.post('/api/sessions/:sessionId/complete', async (req, res) => {
         category: aiSuggestions.category,
         cover: firstPageImagePath,
         status: 'completed',
-        full_text: fullBookText,
-        agent_id: agentId,
-        knowledge_base_id: knowledgeBaseId
+        fullText: fullBookText,
+        agentId: agentId,
+        knowledgeBaseId: knowledgeBaseId
       });
 
       // Close scanning session
@@ -475,7 +522,13 @@ app.get('/api/sessions/:sessionId/status', async (req, res) => {
       bookId: bookId,
       status: session.status,
       pageCount: pages.length,
-      pages
+      pages,
+      progress: {
+        currentStep: session.processingStep,
+        stepsCompleted: session.stepsCompleted || 0,
+        totalSteps: session.totalSteps,
+        details: session.processingDetails
+      }
     });
   } catch (error) {
     console.error('Error fetching session status:', error);
@@ -1214,14 +1267,14 @@ app.post('/api/books/:bookId/agent', async (req, res) => {
     }
 
     // Check if agent already exists in the database
-    if (book.agent_id) {
-      console.log(`📱 Agent already exists for book: ${book.title} (${book.agent_id})`);
+    if (book.agentId) {
+      console.log(`📱 Agent already exists for book: ${book.title} (${book.agentId})`);
       return res.json({
         success: true,
         bookId,
         bookTitle: book.title,
-        agentId: book.agent_id,
-        knowledgeBaseId: book.knowledge_base_id
+        agentId: book.agentId,
+        knowledgeBaseId: book.knowledgeBaseId
       });
     }
 
@@ -1247,8 +1300,8 @@ app.post('/api/books/:bookId/agent', async (req, res) => {
 
     // Store the knowledge base ID in the database (agent ID is hardcoded)
     await dbHelpers.updateBook(bookId, {
-      agent_id: agentData.agentId, // Always the same hardcoded agent
-      knowledge_base_id: agentData.knowledgeBaseId
+      agentId: agentData.agentId, // Always the same hardcoded agent
+      knowledgeBaseId: agentData.knowledgeBaseId
     });
 
     console.log(`✅ Agent created and saved to database: ${agentData.agentId}`);

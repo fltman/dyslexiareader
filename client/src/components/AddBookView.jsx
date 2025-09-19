@@ -11,6 +11,13 @@ const AddBookView = () => {
   const [processing, setProcessing] = useState(false);
   const [initializing, setInitializing] = useState(false);
   const [mobileUrl, setMobileUrl] = useState('');
+  const [processingProgress, setProcessingProgress] = useState({
+    show: false,
+    currentStep: '',
+    stepsCompleted: 0,
+    totalSteps: 0,
+    details: ''
+  });
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -61,8 +68,20 @@ const AddBookView = () => {
         setPages(data.pages);
       }
 
+      // Update progress if processing
+      if (data.status === 'processing' && data.progress) {
+        setProcessingProgress({
+          show: true,
+          currentStep: data.progress.currentStep || 'Processing...',
+          stepsCompleted: data.progress.stepsCompleted || 0,
+          totalSteps: data.progress.totalSteps || 1,
+          details: data.progress.details || ''
+        });
+      }
+
       // Check if processing is complete
       if (data.status === 'completed') {
+        setProcessingProgress({ show: false, currentStep: '', stepsCompleted: 0, totalSteps: 0, details: '' });
         navigate('/');
       }
     } catch (error) {
@@ -78,21 +97,23 @@ const AddBookView = () => {
 
     try {
       setProcessing(true);
+
+      // Start the backend processing - progress will be tracked via polling
       const response = await fetch(`/api/sessions/${sessionId}/complete`, {
         method: 'POST'
       });
 
-      if (response.ok) {
-        // Navigate back to books view
-        navigate('/');
-      } else {
+      if (!response.ok) {
         alert('Error processing book. Please try again.');
         setProcessing(false);
+        setProcessingProgress({ show: false, currentStep: '', stepsCompleted: 0, totalSteps: 0, details: '' });
       }
+      // Note: Navigation will happen automatically via pollForUpdates when status becomes 'completed'
     } catch (error) {
       console.error('Error completing book:', error);
       alert('Error processing book. Please try again.');
       setProcessing(false);
+      setProcessingProgress({ show: false, currentStep: '', stepsCompleted: 0, totalSteps: 0, details: '' });
     }
   };
 
@@ -187,6 +208,33 @@ const AddBookView = () => {
           )}
         </div>
       </div>
+
+      {/* Progress Modal */}
+      {processingProgress.show && (
+        <div className="processing-modal-overlay">
+          <div className="processing-modal">
+            <h2>Processing Book</h2>
+            <div className="progress-container">
+              <div className="progress-bar">
+                <div
+                  className="progress-fill"
+                  style={{ width: `${(processingProgress.stepsCompleted / processingProgress.totalSteps) * 100}%` }}
+                />
+              </div>
+              <div className="progress-text">
+                {processingProgress.stepsCompleted} of {processingProgress.totalSteps} steps
+              </div>
+            </div>
+            <div className="progress-current-step">
+              <div className="step-spinner"></div>
+              <h3>{processingProgress.currentStep}</h3>
+            </div>
+            <div className="progress-details">
+              {processingProgress.details}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

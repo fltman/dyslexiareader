@@ -11,6 +11,9 @@ export const books = pgTable('books', {
   keywords: jsonb('keywords'), // Array of {label, emoji, group} objects
   cover: text('cover'),
   status: text('status').default('processing'),
+  fullText: text('full_text'),
+  agentId: text('agent_id'),
+  knowledgeBaseId: text('knowledge_base_id'),
   createdAt: timestamp('created_at').defaultNow(),
   updatedAt: timestamp('updated_at').defaultNow(),
 });
@@ -27,6 +30,10 @@ export const scanningSessions = pgTable('scanning_sessions', {
   id: text('id').primaryKey(),
   bookId: integer('book_id').references(() => books.id, { onDelete: 'cascade' }),
   status: text('status').default('active'),
+  processingStep: text('processing_step'),
+  stepsCompleted: integer('steps_completed').default(0),
+  totalSteps: integer('total_steps'),
+  processingDetails: text('processing_details'),
   createdAt: timestamp('created_at').defaultNow(),
   expiresAt: timestamp('expires_at'),
 });
