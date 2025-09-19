@@ -89,6 +89,7 @@ app.get('/objects/:objectPath(*)', async (req, res) => {
 });
 app.use('/mobile', express.static(path.join(__dirname, 'public')));
 app.use('/audio', express.static(path.join(__dirname, 'public', 'audio')));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Serve React build files in production
 if (process.env.NODE_ENV === 'production') {
@@ -182,8 +183,28 @@ app.post('/api/sessions/:sessionId/pages', upload.single('image'), async (req, r
     const fileExtension = path.extname(req.file.originalname);
     const uniqueFilename = `${Date.now()}-${Math.round(Math.random() * 1E9)}${fileExtension}`;
 
-    // Upload file using Replit Object Storage
-    const imageUrl = await objectStorageService.uploadFile(req.file.buffer, uniqueFilename, req.file.mimetype);
+    let imageUrl;
+    try {
+      // Try to upload file using Replit Object Storage
+      imageUrl = await objectStorageService.uploadFile(req.file.buffer, uniqueFilename, req.file.mimetype);
+      console.log('✅ File uploaded to Replit Object Storage:', imageUrl);
+    } catch (error) {
+      console.warn('⚠️ Replit Object Storage failed, using local filesystem fallback:', error.message);
+      
+      // Fallback to local filesystem
+      const uploadsDir = path.join(__dirname, 'uploads');
+      const filePath = path.join(uploadsDir, uniqueFilename);
+      
+      // Ensure uploads directory exists
+      if (!fs.existsSync(uploadsDir)) {
+        fs.mkdirSync(uploadsDir, { recursive: true });
+      }
+      
+      // Save file to local filesystem
+      fs.writeFileSync(filePath, req.file.buffer);
+      imageUrl = `/uploads/${uniqueFilename}`;
+      console.log('✅ File saved to local filesystem:', imageUrl);
+    }
 
     const existingPages = await dbHelpers.getBookPages(session.book_id);
     const pageNumber = existingPages.length + 1;
