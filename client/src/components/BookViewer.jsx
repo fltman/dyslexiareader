@@ -11,7 +11,7 @@ const BookViewer = () => {
   const [pages, setPages] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
   const [textBlocks, setTextBlocks] = useState([]);
-  const [textBlocksCache, setTextBlocksCache] = useState({}); // Cache for instant loading
+  const textBlocksCache = useRef({}); // Use ref to persist cache across re-renders
   const [isDetecting, setIsDetecting] = useState(false);
   const [processingBlocks, setProcessingBlocks] = useState(new Set());
   const [loading, setLoading] = useState(true);
@@ -41,12 +41,12 @@ const BookViewer = () => {
     if (pages.length > 0) {
       const pageId = pages[currentPage].id;
       console.log('📄 Loading text blocks for page:', currentPage, 'pageId:', pageId);
-      console.log('🗺️ Current cache state:', Object.keys(textBlocksCache));
+      console.log('🗺️ Current cache state:', Object.keys(textBlocksCache.current));
 
       // Check cache first for instant loading
-      if (textBlocksCache[pageId]) {
-        console.log('⚡ Loading text blocks from cache, count:', textBlocksCache[pageId].length);
-        setTextBlocks(textBlocksCache[pageId]);
+      if (textBlocksCache.current[pageId]) {
+        console.log('⚡ Loading text blocks from cache, count:', textBlocksCache.current[pageId].length);
+        setTextBlocks(textBlocksCache.current[pageId]);
       } else {
         console.log('🌍 No cache found, fetching from API...');
         // Clear current text blocks if no cache available
@@ -123,10 +123,10 @@ const BookViewer = () => {
         const blocks = await response.json();
 
         // Cache the results
-        setTextBlocksCache(prev => ({
-          ...prev,
+        textBlocksCache.current = {
+          ...textBlocksCache.current,
           [pageId]: blocks
-        }));
+        };
 
         // Only update if this is still the current page to prevent race conditions
         if (pages[currentPage]?.id === pageId) {
@@ -153,14 +153,11 @@ const BookViewer = () => {
       console.log('✅ Fetched', blocks.length, 'text blocks from API for page', pageId);
 
       // Cache the results for instant loading
-      setTextBlocksCache(prev => {
-        const newCache = {
-          ...prev,
-          [pageId]: blocks
-        };
-        console.log('🗺️ Updated cache, now contains:', Object.keys(newCache));
-        return newCache;
-      });
+      textBlocksCache.current = {
+        ...textBlocksCache.current,
+        [pageId]: blocks
+      };
+      console.log('🗺️ Updated cache, now contains:', Object.keys(textBlocksCache.current));
 
       // Only update if this is still the current page to prevent race conditions
       if (pages[currentPage]?.id === pageId) {
@@ -234,10 +231,10 @@ const BookViewer = () => {
 
         if (result.success && result.blocks?.length > 0) {
           // Cache the newly detected blocks
-          setTextBlocksCache(prev => ({
-            ...prev,
+          textBlocksCache.current = {
+            ...textBlocksCache.current,
             [pageId]: result.blocks
-          }));
+          };
 
           // Blocks are already saved by the backend, refresh text blocks for current page only
           if (pages[currentPage]?.id === pageId) {
