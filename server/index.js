@@ -225,7 +225,7 @@ app.post('/api/sessions/:sessionId/complete', async (req, res) => {
       await dbHelpers.updateBook(bookId, {
         title: 'Scanned Book',
         category: 'General',
-        cover: pages[0].image_path,
+        cover: pages[0]?.imagePath || pages[0]?.image_path,
         status: 'completed'
       });
 
@@ -242,14 +242,19 @@ app.post('/api/sessions/:sessionId/complete', async (req, res) => {
     try {
       let imageBuffer;
       
-      if (pages[0].image_path.startsWith('/objects/')) {
+      // Handle both field names (imagePath from schema, image_path from database)
+      const firstPageImagePath = pages[0]?.imagePath || pages[0]?.image_path;
+      
+      if (firstPageImagePath && firstPageImagePath.startsWith('/objects/')) {
         // Image is stored in Replit Object Storage
-        const objectKey = pages[0].image_path.replace('/objects/', '');
+        const objectKey = firstPageImagePath.replace('/objects/', '');
         imageBuffer = await objectStorageService.downloadBytes(objectKey);
-      } else {
+      } else if (firstPageImagePath) {
         // Legacy: Image might be stored on filesystem (for development)
-        const imagePath = path.join(__dirname, '..', pages[0].image_path);
+        const imagePath = path.join(__dirname, '..', firstPageImagePath);
         imageBuffer = fs.readFileSync(imagePath);
+      } else {
+        throw new Error('No valid image path found for first page');
       }
       
       const base64Image = imageBuffer.toString('base64');
@@ -295,7 +300,7 @@ app.post('/api/sessions/:sessionId/complete', async (req, res) => {
       await dbHelpers.updateBook(bookId, {
         title: aiSuggestions.title,
         category: aiSuggestions.category,
-        cover: pages[0].image_path,
+        cover: firstPageImagePath,
         status: 'completed'
       });
 
