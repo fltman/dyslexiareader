@@ -81,27 +81,17 @@ class ElevenLabsAgentSDKService {
     }
   }
 
-  // Get widget configuration for embedding (if needed)
-  async getWidgetConfig(agentId) {
-    try {
-      console.log(`📱 Getting widget config for agent: ${agentId}`);
-
-      // For now, return a basic config since the SDK doesn't expose this
-      return {
-        agentId,
-        embedUrl: `https://elevenlabs.io/convai-widget/index.js`,
-        config: {
-          agentId
-        }
-      };
-    } catch (error) {
-      console.error('Error getting widget config:', error.message);
-      throw error;
-    }
+  // Get the hardcoded agent ID and widget HTML
+  getWidgetHTML() {
+    const agentId = 'agent_2701k5hmygdyegps36rmfm75xts3';
+    return {
+      agentId,
+      html: `<elevenlabs-convai agent-id="${agentId}"></elevenlabs-convai><script src="https://unpkg.com/@elevenlabs/convai-widget-embed" async type="text/javascript"></script>`
+    };
   }
 
-  // Setup book agent with hardcoded agent ID
-  async setupBookAgent(bookId, bookTitle, bookText) {
+  // Update agent knowledge base for a specific book
+  async updateBookKnowledge(bookId, bookTitle, bookText) {
     try {
       // Create knowledge base for the book
       const knowledgeBaseId = await this.createKnowledgeBase(bookTitle, bookText, bookId);
@@ -109,16 +99,16 @@ class ElevenLabsAgentSDKService {
       // Update the hardcoded agent with the new knowledge base
       const agentId = await this.updateAgentKnowledgeBase(bookTitle, knowledgeBaseId);
 
-      // Get widget configuration
-      const widgetConfig = await this.getWidgetConfig(agentId);
+      // Get widget HTML
+      const widget = this.getWidgetHTML();
 
       return {
         agentId,
         knowledgeBaseId,
-        widgetConfig
+        widget
       };
     } catch (error) {
-      console.error('Error setting up book agent:', error);
+      console.error('Error updating book knowledge:', error);
       throw error;
     }
   }

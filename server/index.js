@@ -1238,16 +1238,16 @@ app.post('/api/books/:bookId/agent', async (req, res) => {
 
     console.log(`📚 Creating agent for book: ${book.title} (${fullText.length} characters)`);
 
-    // Create agent with knowledge base
-    const agentData = await elevenlabsAgent.setupBookAgent(
+    // Update agent knowledge base for this book
+    const agentData = await elevenlabsAgent.updateBookKnowledge(
       bookId,
       book.title,
       fullText
     );
 
-    // Store the agent ID and knowledge base ID in the database
+    // Store the knowledge base ID in the database (agent ID is hardcoded)
     await dbHelpers.updateBook(bookId, {
-      agent_id: agentData.agentId,
+      agent_id: agentData.agentId, // Always the same hardcoded agent
       knowledge_base_id: agentData.knowledgeBaseId
     });
 
