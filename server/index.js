@@ -11,6 +11,7 @@ import OpenAI from 'openai';
 import { ElevenLabsClient } from '@elevenlabs/elevenlabs-js';
 import fs from 'fs';
 import { dbHelpers } from './database-replit.js';
+import { db } from './db.js';
 import { books } from '../shared/schema.js';
 import { eq } from 'drizzle-orm';
 import { ObjectStorageService } from './objectStorage.js';
