@@ -667,17 +667,26 @@ app.delete('/api/books/cleanup', async (req, res) => {
 app.post('/api/textblocks/:blockId/speak', async (req, res) => {
   try {
     const blockId = req.params.blockId;
+    console.log('🎵 TTS ENDPOINT CALLED for block:', blockId);
 
     // Get text block from database using Drizzle ORM
     const textBlock = await dbHelpers.getTextBlockById(blockId);
+    console.log('📖 Retrieved text block:', {
+      id: textBlock?.id,
+      hasOcrText: !!textBlock?.ocrText,
+      hasAudioUrl: !!textBlock?.audioUrl,
+      hasAlignmentData: !!textBlock?.alignmentData,
+      status: textBlock?.status
+    });
 
     if (!textBlock || !textBlock.ocrText) {
+      console.log('❌ Text block not found or no text available');
       return res.status(404).json({ error: 'Text block not found or no text available' });
     }
 
     // Check if we already have cached audio for this text block
     if (textBlock.audioUrl && textBlock.alignmentData) {
-      console.log('Using cached audio for text block:', blockId);
+      console.log('♻️ Using cached audio for text block:', blockId);
       return res.json({
         success: true,
         audio_url: textBlock.audioUrl,

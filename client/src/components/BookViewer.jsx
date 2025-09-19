@@ -129,30 +129,47 @@ const BookViewer = () => {
   };
 
   const playTextBlock = async (block) => {
-    if (!block.ocr_text) return;
+    console.log('🎵 PLAY BUTTON CLICKED - Block data:', {
+      id: block.id,
+      ocrText: block.ocrText,
+      ocr_text: block.ocr_text,
+      status: block.status,
+      hasText: !!(block.ocrText || block.ocr_text)
+    });
+
+    // Check for text in both field names (camelCase and snake_case)
+    const textContent = block.ocrText || block.ocr_text;
+    if (!textContent) {
+      console.log('❌ No text content found for block');
+      return;
+    }
 
     // If already playing this block, pause it
     if (currentPlayingBlock === block.id && isPlaying) {
+      console.log('⏸️ Pausing currently playing block');
       pauseAudio();
       return;
     }
 
     // Stop any currently playing audio
     if (currentAudio) {
+      console.log('🛑 Stopping previous audio');
       currentAudio.pause();
       currentAudio.currentTime = 0;
     }
 
-    console.log('Playing text:', block.ocr_text);
+    console.log('🔊 Making TTS request for text:', textContent);
 
     try {
       const response = await fetch(`/api/textblocks/${block.id}/speak`, {
         method: 'POST'
       });
 
+      console.log('📡 TTS API response status:', response.status);
+
       if (response.ok) {
         const result = await response.json();
-        console.log('TTS result:', result);
+        console.log('✅ TTS result received:', result);
 
         // Play audio with error handling and synchronization
         if (result.audio_url) {
