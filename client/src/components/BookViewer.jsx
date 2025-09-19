@@ -266,11 +266,16 @@ const BookViewer = () => {
       return;
     }
 
-    // Stop any currently playing audio
+    // Stop any currently playing audio and clean up listeners
     if (currentAudio) {
       console.log('🛑 Stopping previous audio');
       currentAudio.pause();
       currentAudio.currentTime = 0;
+      // Remove all event listeners from previous audio
+      currentAudio.removeEventListener('timeupdate', currentAudio._highlightingHandler);
+      currentAudio.removeEventListener('play', currentAudio._playHandler);
+      currentAudio.removeEventListener('pause', currentAudio._pauseHandler);
+      currentAudio.removeEventListener('ended', currentAudio._endedHandler);
     }
 
     console.log('🔊 Making TTS request for text:', textContent);
@@ -295,6 +300,8 @@ const BookViewer = () => {
           // Set current text and alignment for subtitle display
           setCurrentPlayingText(result.text || textContent);
           setCurrentAlignment(result.alignment);
+          
+          console.log('🎵 Audio setup - text:', result.text, 'alignment:', !!result.alignment);
 
           audio.addEventListener('error', (e) => {
             console.error('Audio playback error:', e);
@@ -309,48 +316,73 @@ const BookViewer = () => {
             console.log('Audio can start playing');
           });
 
-          // Handle synchronized highlighting
-          audio.addEventListener('timeupdate', () => {
-            if (result.alignment?.characters && result.text) {
-              const currentTime = audio.currentTime;
+          // Create robust highlighting handler
+          const highlightingHandler = () => {
+            const currentTime = audio.currentTime;
+            const playingText = currentPlayingText || (result.text || textContent);
+            
+            if (!playingText) return;
+            
+            // Robust fallback highlighting using progress
+            let charIndex = -1;
+            if (isFinite(audio.duration) && audio.duration > 0) {
+              const progress = currentTime / audio.duration;
+              charIndex = Math.floor(progress * playingText.length);
+              charIndex = Math.max(0, Math.min(charIndex, playingText.length - 1));
+            }
+            
+            // Try precise alignment data if available
+            if (result.alignment?.characters) {
               const characters = result.alignment.characters;
               
-              // Consistency guard: ensure text and alignment lengths match
-              if (characters.length !== result.text.length) {
-                console.warn('⚠️ Text/alignment length mismatch, disabling character highlighting');
-                setHighlightedCharIndex(-1);
-                return;
-              }
-
               // Find the character being spoken at current time
-              let charIndex = -1;
+              let alignmentIndex = -1;
               for (let i = 0; i < characters.length; i++) {
                 if (characters[i].start_time <= currentTime && characters[i].end_time >= currentTime) {
-                  charIndex = i;
+                  alignmentIndex = i;
                   break;
                 }
               }
-              setHighlightedCharIndex(charIndex);
+              
+              // Use alignment index if valid and within text bounds
+              if (alignmentIndex >= 0 && alignmentIndex < playingText.length) {
+                charIndex = alignmentIndex;
+              }
             }
-          });
+            
+            setHighlightedCharIndex(charIndex);
+          };
+          
+          // Store handler reference for cleanup
+          audio._highlightingHandler = highlightingHandler;
+          audio.addEventListener('timeupdate', highlightingHandler);
 
-          audio.addEventListener('play', () => {
+          const playHandler = () => {
             setIsPlaying(true);
             setCurrentPlayingBlock(block.id);
-          });
-
-          audio.addEventListener('pause', () => {
+          };
+          
+          const pauseHandler = () => {
             setIsPlaying(false);
-          });
-
-          audio.addEventListener('ended', () => {
+          };
+          
+          const endedHandler = () => {
             setIsPlaying(false);
             setCurrentPlayingBlock(null);
             setHighlightedCharIndex(-1);
             setCurrentAudio(null);
             setCurrentPlayingText('');
             setCurrentAlignment(null);
-          });
+          };
+          
+          // Store handler references for cleanup
+          audio._playHandler = playHandler;
+          audio._pauseHandler = pauseHandler;
+          audio._endedHandler = endedHandler;
+          
+          audio.addEventListener('play', playHandler);
+          audio.addEventListener('pause', pauseHandler);
+          audio.addEventListener('ended', endedHandler);
 
           setCurrentAudio(audio);
 
@@ -427,22 +459,45 @@ const BookViewer = () => {
             setHighlightedCharIndex(-1);
           });
           
-          // Handle character highlighting if alignment data exists
-          if (result.alignment?.characters) {
-            audio.addEventListener('timeupdate', () => {
-              const currentTime = audio.currentTime;
+          // Create robust highlighting handler for title
+          const titleHighlightingHandler = () => {
+            const currentTime = audio.currentTime;
+            
+            if (!titleText) return;
+            
+            // Robust fallback highlighting using progress
+            let charIndex = -1;
+            if (isFinite(audio.duration) && audio.duration > 0) {
+              const progress = currentTime / audio.duration;
+              charIndex = Math.floor(progress * titleText.length);
+              charIndex = Math.max(0, Math.min(charIndex, titleText.length - 1));
+            }
+            
+            // Try precise alignment data if available
+            if (result.alignment?.characters) {
               const characters = result.alignment.characters;
               
-              let charIndex = -1;
+              // Find the character being spoken at current time
+              let alignmentIndex = -1;
               for (let i = 0; i < characters.length; i++) {
                 if (characters[i].start_time <= currentTime && characters[i].end_time >= currentTime) {
-                  charIndex = i;
+                  alignmentIndex = i;
                   break;
                 }
               }
-              setHighlightedCharIndex(charIndex);
-            });
-          }
+              
+              // Use alignment index if valid and within text bounds
+              if (alignmentIndex >= 0 && alignmentIndex < titleText.length) {
+                charIndex = alignmentIndex;
+              }
+            }
+            
+            setHighlightedCharIndex(charIndex);
+          };
+          
+          // Store handler reference for cleanup and add listener
+          audio._highlightingHandler = titleHighlightingHandler;
+          audio.addEventListener('timeupdate', titleHighlightingHandler);
           
           audio.play();
         }
@@ -550,14 +605,20 @@ const BookViewer = () => {
             {currentPlayingText && isPlaying && (
               <div className="subtitle-overlay">
                 <div className="subtitle-text">
-                  {currentPlayingText.split('').map((char, index) => (
-                    <span
-                      key={index}
-                      className={`subtitle-char ${index === highlightedCharIndex ? 'highlighted-char' : ''}`}
-                    >
-                      {char}
-                    </span>
-                  ))}
+                  {currentPlayingText.split('').map((char, index) => {
+                    const isHighlighted = index === highlightedCharIndex;
+                    if (isHighlighted) {
+                      console.log('🔆 Highlighting character:', char, 'at index:', index);
+                    }
+                    return (
+                      <span
+                        key={index}
+                        className={`subtitle-char ${isHighlighted ? 'highlighted-char' : ''}`}
+                      >
+                        {char}
+                      </span>
+                    );
+                  })}
                 </div>
               </div>
             )}
