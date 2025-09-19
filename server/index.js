@@ -578,12 +578,7 @@ Focus on grouping text into meaningful blocks (complete sentences/paragraphs) ra
 // Process text block with OCR (now simplified since text is already extracted)
 app.post('/api/textblocks/:blockId/process', async (req, res) => {
   try {
-    const textBlock = await new Promise((resolve, reject) => {
-      db.get('SELECT * FROM text_blocks WHERE id = ?', [req.params.blockId], (err, row) => {
-        if (err) reject(err);
-        else resolve(row);
-      });
-    });
+    const textBlock = await dbHelpers.getTextBlockById(req.params.blockId);
 
     if (!textBlock) {
       return res.status(404).json({ error: 'Text block not found' });
@@ -592,7 +587,7 @@ app.post('/api/textblocks/:blockId/process', async (req, res) => {
     // Text is already extracted during detection, just return it
     res.json({
       success: true,
-      text: textBlock.ocr_text || 'Text already extracted',
+      text: textBlock.ocrText || 'Text already extracted',
       confidence: textBlock.confidence || 0.9
     });
 

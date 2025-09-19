@@ -103,6 +103,12 @@ export const dbHelpers = {
       .where(eq(textBlocks.pageId, parseInt(pageId)));
   },
 
+  async getTextBlockById(blockId) {
+    const result = await db.select().from(textBlocks)
+      .where(eq(textBlocks.id, parseInt(blockId)));
+    return result[0] || null;
+  },
+
   async createTextBlock(pageId, x, y, width, height) {
     const result = await db.insert(textBlocks).values({
       pageId: parseInt(pageId),
