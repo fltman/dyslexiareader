@@ -415,12 +415,7 @@ app.post('/api/pages/:pageId/detect-text-blocks', async (req, res) => {
     const pageId = req.params.pageId;
 
     // Get page info
-    const page = await new Promise((resolve, reject) => {
-      db.get('SELECT * FROM pages WHERE id = ?', [pageId], (err, row) => {
-        if (err) reject(err);
-        else resolve(row);
-      });
-    });
+    const page = await dbHelpers.getPageById(pageId);
 
     if (!page) {
       return res.status(404).json({ error: 'Page not found' });
@@ -429,14 +424,26 @@ app.post('/api/pages/:pageId/detect-text-blocks', async (req, res) => {
     // Load the page image and get actual dimensions first
     let imageBuffer;
     
-    if (page.image_path.startsWith('/objects/')) {
-      // Image is stored in Replit Object Storage
-      const objectKey = page.image_path.replace('/objects/', '');
+    // Handle both field names and path formats
+    const pageImagePath = page.imagePath || page.image_path;
+    
+    if (pageImagePath && (pageImagePath.startsWith('/objects/') || pageImagePath.startsWith('uploads/'))) {
+      // Image is stored in Object Storage (R2 or Replit)
+      let objectKey;
+      if (pageImagePath.startsWith('/objects/')) {
+        objectKey = pageImagePath.replace('/objects/', '');
+      } else {
+        objectKey = pageImagePath; // Already in format "uploads/filename"
+      }
+      
+      console.log(`🔍 Downloading image for text detection: ${objectKey}`);
       imageBuffer = await objectStorageService.downloadBytes(objectKey);
-    } else {
+    } else if (pageImagePath) {
       // Legacy: Image might be stored on filesystem (for development)
-      const imagePath = path.join(__dirname, '..', page.image_path);
+      const imagePath = path.join(__dirname, '..', pageImagePath);
       imageBuffer = fs.readFileSync(imagePath);
+    } else {
+      throw new Error('No valid image path found for page');
     }
     
     const base64Image = imageBuffer.toString('base64');
@@ -510,12 +517,7 @@ Focus on grouping text into meaningful blocks (complete sentences/paragraphs) ra
     console.log('OpenAI detected text blocks:', aiResult);
 
     // Clear existing text blocks for this page
-    await new Promise((resolve, reject) => {
-      db.run('DELETE FROM text_blocks WHERE page_id = ?', [pageId], (err) => {
-        if (err) reject(err);
-        else resolve();
-      });
-    });
+    await dbHelpers.clearTextBlocks(pageId);
 
     const createdBlocks = [];
 

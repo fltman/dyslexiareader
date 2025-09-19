@@ -54,6 +54,12 @@ export const dbHelpers = {
       .orderBy(pages.pageNumber);
   },
 
+  async getPageById(pageId) {
+    const result = await db.select().from(pages)
+      .where(eq(pages.id, parseInt(pageId)));
+    return result[0] || null;
+  },
+
   async addPage(bookId, pageNumber, imagePath) {
     const result = await db.insert(pages).values({
       bookId: parseInt(bookId),
@@ -90,6 +96,11 @@ export const dbHelpers = {
     return await db.select().from(textBlocks)
       .where(eq(textBlocks.pageId, parseInt(pageId)))
       .orderBy(textBlocks.createdAt);
+  },
+
+  async clearTextBlocks(pageId) {
+    await db.delete(textBlocks)
+      .where(eq(textBlocks.pageId, parseInt(pageId)));
   },
 
   async createTextBlock(pageId, x, y, width, height) {
