@@ -65,24 +65,10 @@ class ElevenLabsAgentService {
                 - Var tålmodig och uppmuntrande
                 - Hjälp läsaren att förstå och njuta av boken
                 - Om frågan inte handlar om "${bookTitle}", hänvisa tillbaka till boken`,
-                knowledge_base: {
-                  id: knowledgeBaseId
-                }
+                knowledge_base: [knowledgeBaseId]
               },
               language: 'sv',
               voice: 'iwNZQzqCFIBqLR6sgFpN' // Same voice as TTS
-            }
-          },
-          platform_settings: {
-            widget: {
-              name: `Prata om "${bookTitle}"`,
-              description: 'Fråga mig vad som helst om boken!',
-              welcome_message: `Hej! Jag är din personliga assistent för "${bookTitle}". Vad vill du veta om boken?`,
-              placeholder: 'Ställ en fråga om boken...',
-              color: {
-                primary: '#3498db',
-                secondary: '#2ecc71'
-              }
             }
           },
           tags: ['book-assistant', 'dyslexia-friendly', bookTitle.toLowerCase().replace(/\s+/g, '-')]
