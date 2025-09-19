@@ -794,7 +794,7 @@
   display: block;
 }
 
-/* Unread text - grey color */
+/* Default text color - grey for unread */
 .subtitle-char {
   display: inline;
   transition: all 0.15s ease-in-out;
@@ -807,7 +807,7 @@
 
 /* Already read text - white color */
 .subtitle-char.read-char {
-  color: #ffffff;
+  color: #ffffff !important;
   background-color: transparent;
   opacity: 1;
 }
@@ -874,22 +874,23 @@
   white-space: nowrap;
   margin-right: 0.15em;
   transition: all 0.2s ease-in-out;
+  color: rgba(150, 150, 150, 0.8); /* Default: grey for unread words */
+}
+
+/* Read word styling - white color */
+.subtitle-word.read-word {
+  color: #ffffff !important;
 }
 
 /* Highlight entire word when current */
 .subtitle-word.current-word {
-  background-color: rgba(255, 255, 0, 0.9);
-  color: #000000;
+  background-color: rgba(255, 255, 0, 0.9) !important;
+  color: #000000 !important;
   font-weight: 700;
   padding: 2px 4px;
   margin: 0 2px;
   border-radius: 4px;
   box-shadow: 0 0 8px rgba(255, 255, 0, 0.7);
-}
-
-/* Read word styling */
-.subtitle-word.read-word {
-  color: #ffffff;
 }
 
 /* Force line break for better readability */
