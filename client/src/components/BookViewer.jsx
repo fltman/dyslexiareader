@@ -683,21 +683,13 @@ const BookViewer = () => {
 
                       charCounter += word.length;
 
-                      // Add line breaks after punctuation and at regular intervals
-                      const shouldBreak = (
-                        word.match(/[.!?,;:]/) ||
-                        (wordIndex > 0 && !isWhitespace && ++wordCount % maxWordsPerLine === 0)
-                      );
-
                       return (
-                        <React.Fragment key={wordIndex}>
-                          <span
-                            className={`subtitle-word ${isReadWord ? 'read-word' : ''} ${isCurrentWord ? 'current-word' : ''}`}
-                          >
-                            {word}
-                          </span>
-                          {shouldBreak && <span className="subtitle-break" />}
-                        </React.Fragment>
+                        <span
+                          key={wordIndex}
+                          className={`subtitle-word ${isReadWord ? 'read-word' : ''} ${isCurrentWord ? 'current-word' : ''}`}
+                        >
+                          {word}
+                        </span>
                       );
                     });
                   })()}
