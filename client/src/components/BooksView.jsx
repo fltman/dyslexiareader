@@ -23,6 +23,11 @@ const BooksView = () => {
   const fetchBooks = async () => {
     try {
       const response = await fetch('/api/books');
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
       const data = await response.json();
       setBooks(data);
       setLoading(false);

@@ -248,9 +248,16 @@ app.post('/api/sessions/:sessionId/complete', async (req, res) => {
       // Handle both field names (imagePath from schema, image_path from database)
       const firstPageImagePath = pages[0]?.imagePath || pages[0]?.image_path;
       
-      if (firstPageImagePath && firstPageImagePath.startsWith('/objects/')) {
-        // Image is stored in Replit Object Storage
-        const objectKey = firstPageImagePath.replace('/objects/', '');
+      if (firstPageImagePath && (firstPageImagePath.startsWith('/objects/') || firstPageImagePath.startsWith('uploads/'))) {
+        // Image is stored in Object Storage (R2 or Replit)
+        let objectKey;
+        if (firstPageImagePath.startsWith('/objects/')) {
+          objectKey = firstPageImagePath.replace('/objects/', '');
+        } else {
+          objectKey = firstPageImagePath; // Already in format "uploads/filename"
+        }
+        
+        console.log(`🔍 Downloading image for AI analysis: ${objectKey}`);
         imageBuffer = await objectStorageService.downloadBytes(objectKey);
       } else if (firstPageImagePath) {
         // Legacy: Image might be stored on filesystem (for development)

@@ -39,6 +39,11 @@ const BookViewer = () => {
   const fetchBook = async () => {
     try {
       const response = await fetch(`/api/books/${bookId}`);
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
       const data = await response.json();
       setBook(data);
       setPages(data.pages || []);
@@ -52,6 +57,11 @@ const BookViewer = () => {
   const fetchTextBlocks = async (pageId) => {
     try {
       const response = await fetch(`/api/pages/${pageId}/textblocks`);
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
       const blocks = await response.json();
       setTextBlocks(blocks);
     } catch (error) {
