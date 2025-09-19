@@ -61,6 +61,62 @@ const BookViewer = () => {
     }
   };
 
+  const processIncompleteBlocks = async (blocks, pageId) => {
+    // Process any blocks that aren't completed, regardless of OCR text status
+    const incompleteBlocks = blocks.filter(block => block.status !== 'completed');
+    if (incompleteBlocks.length > 0) {
+      console.log('🔄 Auto-processing', incompleteBlocks.length, 'incomplete text blocks...');
+      
+      // Set processing state for all blocks
+      setProcessingBlocks(prev => {
+        const newSet = new Set(prev);
+        incompleteBlocks.forEach(block => newSet.add(block.id));
+        return newSet;
+      });
+
+      try {
+        // Process all blocks in parallel to avoid refetch storms
+        await Promise.all(incompleteBlocks.map(async (block) => {
+          try {
+            const response = await fetch(`/api/textblocks/${block.id}/process`, {
+              method: 'POST'
+            });
+            if (!response.ok) {
+              console.error(`Failed to process block ${block.id}`);
+            }
+          } catch (error) {
+            console.error(`Error processing block ${block.id}:`, error);
+          }
+        }));
+
+        // Single refresh after all processing is complete, using the specific pageId
+        fetchTextBlocksOnly(pageId);
+      } finally {
+        // Clear processing state for all blocks
+        setProcessingBlocks(prev => {
+          const newSet = new Set(prev);
+          incompleteBlocks.forEach(block => newSet.delete(block.id));
+          return newSet;
+        });
+      }
+    }
+  };
+
+  const fetchTextBlocksOnly = async (pageId) => {
+    try {
+      const response = await fetch(`/api/pages/${pageId}/textblocks`);
+      if (response.ok) {
+        const blocks = await response.json();
+        // Only update if this is still the current page to prevent race conditions
+        if (pages[currentPage]?.id === pageId) {
+          setTextBlocks(blocks);
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching text blocks:', error);
+    }
+  };
+
   const fetchTextBlocks = async (pageId) => {
     console.log('🔍 Fetching text blocks for pageId:', pageId);
     try {
@@ -72,12 +128,22 @@ const BookViewer = () => {
       
       const blocks = await response.json();
       console.log('📦 Fetched text blocks:', blocks.length, 'blocks');
-      setTextBlocks(blocks);
+      
+      // Only update if this is still the current page to prevent race conditions
+      if (pages[currentPage]?.id === pageId) {
+        setTextBlocks(blocks);
+      } else {
+        console.log('⚠️ Skipping text blocks update - page changed during fetch');
+        return;
+      }
       
       // Automatically detect text blocks if none exist for this page
       if (blocks.length === 0 && !isDetecting) {
         console.log('🔍 No text blocks found for page, auto-detecting...');
         detectTextBlocksAutomatically(pageId);
+      } else if (blocks.length > 0) {
+        // Process any incomplete blocks automatically
+        processIncompleteBlocks(blocks, pageId);
       }
     } catch (error) {
       console.error('Error fetching text blocks:', error);
@@ -136,6 +202,8 @@ const BookViewer = () => {
           // Blocks are already saved by the backend, refresh text blocks for current page only
           if (pages[currentPage]?.id === pageId) {
             setTextBlocks(result.blocks);
+            // Process the newly created blocks to make them clickable
+            processIncompleteBlocks(result.blocks, pageId);
           }
         }
       } else {
@@ -162,7 +230,7 @@ const BookViewer = () => {
       });
 
       if (response.ok) {
-        fetchTextBlocks(pages[currentPage].id);
+        fetchTextBlocksOnly(pages[currentPage].id);
       }
     } catch (error) {
       console.error('Error processing text block:', error);
@@ -506,11 +574,11 @@ const BookViewer = () => {
                   top: `${(((block.y * scaleY) + offsetY) / imageRef.current?.naturalHeight * 100) || 0}%`,
                   width: `${((block.width * scaleX) / imageRef.current?.naturalWidth * 100) || 0}%`,
                   height: `${((block.height * scaleY) / imageRef.current?.naturalHeight * 100) || 0}%`,
-                  cursor: (block.status === 'completed' || block.ocrText) ? 'pointer' : 'default'
+                  cursor: block.status === 'completed' ? 'pointer' : 'default'
                 }}
-                title={block.ocr_text || 'Click to play audio'}
+                title={block.status === 'completed' ? (block.ocr_text || 'Click to play audio') : 'Processing...'}
                 onClick={() => {
-                  if (block.status === 'completed' || block.ocrText) {
+                  if (block.status === 'completed') {
                     playTextBlock(block);
                   }
                 }}
@@ -520,7 +588,7 @@ const BookViewer = () => {
                     <div className="spinner"></div>
                   </div>
                 )}
-                {(block.status === 'completed' || block.ocrText) && (
+                {block.status === 'completed' && (
                   <div className="clickable-indicator">
                     🎵
                   </div>
