@@ -581,7 +581,7 @@ app.post('/api/pages/:pageId/detect-text-blocks', async (req, res) => {
             // Handle EXIF orientation transformations to match browser display
             switch (actualImageDimensions.orientation) {
               case 6: // 90 degrees clockwise - displayed image is 3024w x 4032h
-                transformedX = block.y;
+                transformedX = actualImageDimensions.height - (block.y + block.height);
                 transformedY = block.x;
                 transformedWidth = block.height;
                 transformedHeight = block.width;
