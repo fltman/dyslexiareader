@@ -6,7 +6,9 @@ export const books = pgTable('books', {
   id: serial('id').primaryKey(),
   title: text('title'),
   author: text('author'),
-  category: text('category'),
+  category: text('category'), // Keep for backward compatibility
+  categories: jsonb('categories'), // Array of category strings
+  keywords: jsonb('keywords'), // Array of {label, emoji, group} objects
   cover: text('cover'),
   status: text('status').default('processing'),
   createdAt: timestamp('created_at').defaultNow(),

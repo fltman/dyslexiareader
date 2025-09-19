@@ -135,7 +135,7 @@ const BooksView = () => {
               onClick={(e) => handleDeleteClick(e, book)}
               title="Delete book"
             >
-              🗑️
+              ×
             </button>
           </div>
         ))}

@@ -286,7 +286,7 @@ app.post('/api/sessions/:sessionId/complete', async (req, res) => {
           content: [
             {
               type: "text",
-              text: "Look at this book page image carefully. Extract the book title and determine the best category. If you can see a clear title on the page, use it. If it's unclear, suggest a descriptive title based on the content. Choose one category from: Fiction, Non-Fiction, Education, Science, History, Biography, Children, or General. Respond only in JSON format: {\"title\": \"Book Title Here\", \"category\": \"Category Here\"}"
+              text: "Look at this book page image carefully and extract comprehensive information. Extract the book title, determine up to 3 relevant categories, and generate 8-12 descriptive keywords with emojis. If you can see a clear title, use it. If unclear, suggest a descriptive title based on content. \n\nCategories to choose from: Fiction, Non-Fiction, Education, Science, History, Biography, Children, General\n\nFor keywords, include:\n- Language (🇬🇧 English, 🇸🇪 Swedish, etc.)\n- Topic/Subject (📚 Literature, 🔬 Science, etc.)\n- Level/Audience (👶 Children, 🎓 Academic, etc.)\n- Content type (📖 Book, 📋 Certificate, etc.)\n\nRespond only in strict JSON format:\n{\n  \"title\": \"Book Title Here\",\n  \"category\": \"Primary Category\",\n  \"categories\": [\"Category1\", \"Category2\", \"Category3\"],\n  \"keywords\": [\n    {\"label\": \"Keyword\", \"emoji\": \"🔤\", \"group\": \"language|topic|level|content\"},\n    {\"label\": \"Another\", \"emoji\": \"📚\", \"group\": \"topic\"}\n  ]\n}"
             },
             {
               type: "image_url",

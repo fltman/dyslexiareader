@@ -312,6 +312,78 @@ const BookViewer = () => {
     }
   };
 
+  const playTitleText = async (titleText) => {
+    // Create a title audio block directly without database interaction
+    try {
+      console.log('🎵 Playing title text:', titleText);
+      
+      // Stop any currently playing audio
+      if (currentAudio) {
+        currentAudio.pause();
+      }
+      
+      // Get TTS directly for title
+      const response = await fetch('/api/tts/direct', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          text: titleText,
+          speed: playbackSpeed
+        })
+      });
+      
+      if (response.ok) {
+        const result = await response.json();
+        if (result.audioUrl) {
+          // Create and play audio
+          const audio = new Audio(result.audioUrl);
+          audio.playbackRate = playbackSpeed;
+          setCurrentAudio(audio);
+          setCurrentPlayingText(titleText);
+          setCurrentPlayingBlock('title');
+          
+          audio.addEventListener('play', () => {
+            setIsPlaying(true);
+          });
+          
+          audio.addEventListener('pause', () => {
+            setIsPlaying(false);
+          });
+          
+          audio.addEventListener('ended', () => {
+            setIsPlaying(false);
+            setCurrentPlayingBlock(null);
+            setCurrentPlayingText('');
+            setHighlightedCharIndex(-1);
+          });
+          
+          // Handle character highlighting if alignment data exists
+          if (result.alignment?.characters) {
+            audio.addEventListener('timeupdate', () => {
+              const currentTime = audio.currentTime;
+              const characters = result.alignment.characters;
+              
+              let charIndex = -1;
+              for (let i = 0; i < characters.length; i++) {
+                if (characters[i].start_time <= currentTime && characters[i].end_time >= currentTime) {
+                  charIndex = i;
+                  break;
+                }
+              }
+              setHighlightedCharIndex(charIndex);
+            });
+          }
+          
+          audio.play();
+        }
+      }
+    } catch (error) {
+      console.error('Error playing title:', error);
+    }
+  };
+
   const changePlaybackSpeed = (speed) => {
     setPlaybackSpeed(speed);
     localStorage.setItem('readerPlaybackSpeed', speed.toString());
@@ -335,8 +407,8 @@ const BookViewer = () => {
     return (
       <div className="book-viewer-error">
         <h2>Book not found or no pages available</h2>
-        <button onClick={() => navigate('/')} className="back-button">
-          ← Back to Books
+        <button onClick={() => navigate('/')} className="back-button" title="Back to Books">
+          ←
         </button>
       </div>
     );
@@ -345,11 +417,20 @@ const BookViewer = () => {
   return (
     <div className="book-viewer">
       <div className="book-viewer-header">
-        <button onClick={() => navigate('/')} className="back-button">
-          ← Back to Books
+        <button onClick={() => navigate('/')} className="back-button" title="Back to Books">
+          ←
         </button>
         <div className="book-info">
-          <h1>{book.title}</h1>
+          <h1 
+            className="clickable-title" 
+            onClick={() => playTitleText(book.title)}
+            title="Click to play title"
+          >
+            {book.title}
+          </h1>
+          <div className="page-keywords">
+            {/* Keywords will be extracted from text blocks */}
+          </div>
           <p>Page {currentPage + 1} of {pages.length}</p>
         </div>
         <div className="header-controls">
@@ -357,8 +438,9 @@ const BookViewer = () => {
             onClick={detectTextBlocks}
             disabled={isDetecting}
             className="detect-button"
+            title={isDetecting ? 'Detecting...' : 'Re-detect Text Blocks'}
           >
-{isDetecting ? 'Detecting...' : '🔄 Re-detect Text Blocks'}
+            {isDetecting ? '⏳' : '🔍'}
           </button>
           <div className="speed-controls">
             <label htmlFor="speed-selector" className="speed-label">🎚️ Speed:</label>
