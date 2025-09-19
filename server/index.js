@@ -582,7 +582,7 @@ app.post('/api/pages/:pageId/detect-text-blocks', async (req, res) => {
             switch (actualImageDimensions.orientation) {
               case 6: // 90 degrees clockwise - displayed image is 3024w x 4032h
                 transformedX = block.y;
-                transformedY = actualImageDimensions.width - (block.x + block.width);
+                transformedY = block.x;
                 transformedWidth = block.height;
                 transformedHeight = block.width;
                 break;
