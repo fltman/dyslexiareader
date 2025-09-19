@@ -858,20 +858,50 @@ app.post('/api/textblocks/:blockId/speak', async (req, res) => {
     }
 
     // Check if we already have cached audio for this text block
-    if (textBlock.audioUrl && textBlock.alignmentData) {
+    if (textBlock.audioUrl) {
       console.log('♻️ Using cached audio for text block:', blockId, 'URL:', textBlock.audioUrl);
 
-      // For R2 stored files, assume they exist if we have a URL
-      // R2 URLs start with /objects/
+      // For R2 stored files, load alignment data from R2 as well
       if (textBlock.audioUrl.startsWith('/objects/')) {
-        console.log('✅ Cached audio file exists, returning cached result');
-        return res.json({
-          success: true,
-          audio_url: textBlock.audioUrl,
-          text: textBlock.ocrText,
-          alignment: JSON.parse(textBlock.alignmentData),
-          normalized_alignment: textBlock.normalizedAlignmentData ? JSON.parse(textBlock.normalizedAlignmentData) : null
-        });
+        console.log('✅ Using R2 cached audio and alignment data');
+
+        // Load alignment data from R2
+        const alignmentFileName = `alignment/tts_block_${blockId}_alignment.json`;
+        const normalizedAlignmentFileName = `alignment/tts_block_${blockId}_normalized.json`;
+
+        try {
+          // Download alignment data from R2
+          const alignmentKey = `uploads/${alignmentFileName}`;
+          const normalizedAlignmentKey = `uploads/${normalizedAlignmentFileName}`;
+
+          const [alignmentBytes, normalizedAlignmentBytes] = await Promise.allSettled([
+            objectStorageService.downloadBytes(alignmentKey),
+            objectStorageService.downloadBytes(normalizedAlignmentKey)
+          ]);
+
+          const alignment = alignmentBytes.status === 'fulfilled' ?
+            JSON.parse(alignmentBytes.value.toString()) : null;
+          const normalizedAlignment = normalizedAlignmentBytes.status === 'fulfilled' ?
+            JSON.parse(normalizedAlignmentBytes.value.toString()) : null;
+
+          return res.json({
+            success: true,
+            audio_url: textBlock.audioUrl,
+            text: textBlock.ocrText,
+            alignment: alignment,
+            normalized_alignment: normalizedAlignment
+          });
+        } catch (error) {
+          console.warn('⚠️ Could not load alignment data from R2, falling back to database:', error);
+          // Fall back to database if R2 alignment files don't exist
+          return res.json({
+            success: true,
+            audio_url: textBlock.audioUrl,
+            text: textBlock.ocrText,
+            alignment: textBlock.alignmentData ? JSON.parse(textBlock.alignmentData) : null,
+            normalized_alignment: textBlock.normalizedAlignmentData ? JSON.parse(textBlock.normalizedAlignmentData) : null
+          });
+        }
       } else {
         // For legacy local files, check if they exist
         const audioPath = path.join(__dirname, 'public', textBlock.audioUrl);
@@ -930,15 +960,38 @@ app.post('/api/textblocks/:blockId/speak', async (req, res) => {
       console.log('☁️ Uploading audio to Cloudflare R2...');
       const audioUrl = await objectStorageService.uploadFile(audioBuffer, audioFileName, 'audio/mpeg');
 
-      // Cache the audio URL and alignment data in database
+      // Upload alignment data to R2 as well
+      const alignmentFileName = `alignment/tts_block_${blockId}_alignment.json`;
+      const normalizedAlignmentFileName = `alignment/tts_block_${blockId}_normalized.json`;
+
+      const alignmentPromises = [];
+
+      if (ttsResult.alignment) {
+        const alignmentBuffer = Buffer.from(JSON.stringify(ttsResult.alignment), 'utf8');
+        alignmentPromises.push(
+          objectStorageService.uploadFile(alignmentBuffer, alignmentFileName, 'application/json')
+        );
+      }
+
+      if (ttsResult.normalized_alignment) {
+        const normalizedAlignmentBuffer = Buffer.from(JSON.stringify(ttsResult.normalized_alignment), 'utf8');
+        alignmentPromises.push(
+          objectStorageService.uploadFile(normalizedAlignmentBuffer, normalizedAlignmentFileName, 'application/json')
+        );
+      }
+
+      await Promise.all(alignmentPromises);
+      console.log('☁️ Uploaded alignment data to Cloudflare R2');
+
+      // Cache only the audio URL in database (alignment data is now in R2)
       await dbHelpers.updateTextBlockAudio(
         blockId,
         audioUrl,
-        JSON.stringify(ttsResult.alignment),
-        ttsResult.normalized_alignment ? JSON.stringify(ttsResult.normalized_alignment) : null
+        null, // No longer storing alignment in DB
+        null  // No longer storing normalized alignment in DB
       );
 
-      // Return audio URL and timing data
+      // Return audio URL and timing data (same as what we just uploaded)
       res.json({
         success: true,
         audio_url: audioUrl,
