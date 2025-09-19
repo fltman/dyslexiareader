@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import AgentChat from './AgentChat';
 import './BookViewer.css';
 
 const BookViewer = () => {
@@ -873,6 +874,9 @@ const BookViewer = () => {
           </div>
         </div>
       </div>
+
+      {/* Book Agent Chat */}
+      <AgentChat bookId={bookId} bookTitle={book?.title} />
     </div>
   );
 };

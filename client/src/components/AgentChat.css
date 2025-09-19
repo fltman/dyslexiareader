@@ -1,0 +1,163 @@
+/* Agent Chat Styles - Dyslexia-friendly design */
+.agent-chat {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 1000;
+}
+
+.agent-chat-button,
+.agent-chat-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 50px;
+  font-family: 'Open Dyslexic', Arial, sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
+  transition: all 0.3s ease;
+  min-height: 56px;
+}
+
+.agent-chat-button:hover:not(:disabled),
+.agent-chat-toggle:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 25px rgba(102, 126, 234, 0.5);
+}
+
+.agent-chat-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.chat-icon {
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+}
+
+.chat-label {
+  font-size: 1rem;
+  letter-spacing: 0.02em;
+}
+
+.agent-loading {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.agent-loading .spinner {
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: #fff;
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.agent-error {
+  position: fixed;
+  bottom: 6rem;
+  right: 2rem;
+  background: white;
+  border: 2px solid #e74c3c;
+  border-radius: 12px;
+  padding: 1rem;
+  max-width: 300px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.agent-error p {
+  color: #e74c3c;
+  font-family: 'Open Dyslexic', Arial, sans-serif;
+  font-size: 0.9rem;
+  margin: 0 0 0.5rem 0;
+  line-height: 1.4;
+}
+
+.agent-error button {
+  padding: 0.5rem 1rem;
+  background: #e74c3c;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-family: 'Open Dyslexic', Arial, sans-serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.agent-error button:hover {
+  background: #c0392b;
+}
+
+/* ElevenLabs widget customization */
+#elevenlabs-convai-widget {
+  position: fixed !important;
+  bottom: 8rem !important;
+  right: 2rem !important;
+  z-index: 999 !important;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .agent-chat {
+    bottom: 1rem;
+    right: 1rem;
+  }
+
+  .agent-chat-button,
+  .agent-chat-toggle {
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  .chat-icon {
+    font-size: 1.25rem;
+  }
+
+  #elevenlabs-convai-widget {
+    bottom: 6rem !important;
+    right: 1rem !important;
+    left: 1rem !important;
+    width: calc(100% - 2rem) !important;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .agent-chat-button,
+  .agent-chat-toggle {
+    background: #5a2d81;
+    border: 2px solid white;
+  }
+
+  .agent-error {
+    border: 3px solid #e74c3c;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .agent-chat-button,
+  .agent-chat-toggle {
+    transition: none;
+  }
+
+  .agent-loading .spinner {
+    animation: none;
+    border-color: white;
+  }
+}

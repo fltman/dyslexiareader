@@ -16,6 +16,7 @@ import { db } from './db.js';
 import { books } from '../shared/schema.js';
 import { eq } from 'drizzle-orm';
 import { ObjectStorageService } from './objectStorage.js';
+import ElevenLabsAgentService from './elevenlabsAgent.js';
 
 dotenv.config();
 
@@ -38,10 +39,12 @@ if (process.env.OPENAI_API_KEY) {
 
 // Initialize ElevenLabs (optional for development)
 let elevenlabs = null;
+let elevenlabsAgent = null;
 if (process.env.ELEVENLABS_API_KEY) {
   elevenlabs = new ElevenLabsClient({
     apiKey: process.env.ELEVENLABS_API_KEY
   });
+  elevenlabsAgent = new ElevenLabsAgentService(process.env.ELEVENLABS_API_KEY);
   console.log('✅ ElevenLabs initialized');
 } else {
   console.warn('⚠️  ELEVENLABS_API_KEY not set - text-to-speech will not work');
@@ -331,12 +334,92 @@ app.post('/api/sessions/:sessionId/complete', async (req, res) => {
         console.error('Error parsing AI response:', parseError);
       }
 
-      // Update book with AI suggestions and set first page as cover
+      // Process all pages for text detection and build knowledge base
+      console.log('🔍 Processing all pages for text detection and knowledge base creation...');
+      let fullBookText = '';
+      let agentId = null;
+      let knowledgeBaseId = null;
+
+      if (elevenlabsAgent) {
+        try {
+          // Process all pages for OCR text extraction
+          for (let i = 0; i < pages.length; i++) {
+            const page = pages[i];
+            const pageImagePath = page.imagePath || page.image_path;
+
+            console.log(`📖 Processing page ${i + 1}/${pages.length} for text extraction...`);
+
+            if (pageImagePath && (pageImagePath.startsWith('/objects/') || pageImagePath.startsWith('uploads/'))) {
+              let objectKey;
+              if (pageImagePath.startsWith('/objects/')) {
+                objectKey = pageImagePath.replace('/objects/', '');
+              } else {
+                objectKey = pageImagePath;
+              }
+
+              const pageImageBuffer = await objectStorageService.downloadBytes(objectKey);
+              const pageBase64 = pageImageBuffer.toString('base64');
+
+              // Extract text from this page using OCR
+              const ocrResponse = await openai.chat.completions.create({
+                model: "gpt-4o",
+                messages: [
+                  {
+                    role: "user",
+                    content: [
+                      {
+                        type: "text",
+                        text: "Extract all text from this image. Return only the text content, preserving the original structure and formatting as much as possible. If there's no readable text, return 'NO_TEXT_FOUND'."
+                      },
+                      {
+                        type: "image_url",
+                        image_url: {
+                          url: `data:image/jpeg;base64,${pageBase64}`
+                        }
+                      }
+                    ]
+                  }
+                ],
+                max_tokens: 1000
+              });
+
+              const pageText = ocrResponse.choices[0].message.content;
+              if (pageText && pageText !== 'NO_TEXT_FOUND') {
+                fullBookText += `\n\n=== Sida ${i + 1} ===\n${pageText}`;
+              }
+            }
+          }
+
+          console.log(`📚 Extracted ${fullBookText.length} characters from ${pages.length} pages`);
+
+          // Create ElevenLabs knowledge base and agent if we have text
+          if (fullBookText.length > 100) {
+            console.log('🤖 Creating ElevenLabs knowledge base and agent...');
+            const agentData = await elevenlabsAgent.setupBookAgent(
+              bookId,
+              aiSuggestions.title,
+              fullBookText
+            );
+
+            agentId = agentData.agentId;
+            knowledgeBaseId = agentData.knowledgeBaseId;
+            console.log(`✅ Created agent: ${agentId}, knowledge base: ${knowledgeBaseId}`);
+          }
+        } catch (error) {
+          console.error('❌ Error processing pages for knowledge base:', error);
+          // Continue without agent if there's an error
+        }
+      }
+
+      // Update book with AI suggestions, full text, and agent information
       await dbHelpers.updateBook(bookId, {
         title: aiSuggestions.title,
         category: aiSuggestions.category,
         cover: firstPageImagePath,
-        status: 'completed'
+        status: 'completed',
+        full_text: fullBookText,
+        agent_id: agentId,
+        knowledge_base_id: knowledgeBaseId
       });
 
       // Close scanning session
@@ -1041,6 +1124,138 @@ if (process.env.NODE_ENV === 'production') {
   try {
     console.log('Using Replit PostgreSQL database');
     console.log('Using Cloudflare R2 Object Storage');
+
+// =======================
+// ELEVENLABS AGENT ENDPOINTS
+// =======================
+
+// Get all text from a book for knowledge base
+app.get('/api/books/:bookId/fulltext', async (req, res) => {
+  try {
+    const bookId = req.params.bookId;
+
+    // Get book info
+    const book = await dbHelpers.getBookById(bookId);
+    if (!book) {
+      return res.status(404).json({ error: 'Book not found' });
+    }
+
+    // Get all pages for the book
+    const pages = await dbHelpers.getPagesByBookId(bookId);
+
+    // For each page, get all text blocks
+    let fullText = `Bok: ${book.title}\n`;
+    if (book.author) {
+      fullText += `Författare: ${book.author}\n\n`;
+    }
+
+    for (const page of pages) {
+      const textBlocks = await dbHelpers.getTextBlocksByPageId(page.id);
+
+      // Sort text blocks by position (top to bottom, left to right)
+      textBlocks.sort((a, b) => {
+        const yDiff = a.y - b.y;
+        if (Math.abs(yDiff) > 50) return yDiff;
+        return a.x - b.x;
+      });
+
+      // Add page separator
+      fullText += `\n--- Sida ${page.page_number || page.pageNumber} ---\n\n`;
+
+      // Add text from each block
+      for (const block of textBlocks) {
+        const text = block.ocrText || block.ocr_text;
+        if (text && text.trim()) {
+          fullText += text.trim() + '\n';
+        }
+      }
+    }
+
+    res.json({
+      bookId,
+      title: book.title,
+      author: book.author,
+      pageCount: pages.length,
+      fullText,
+      textLength: fullText.length
+    });
+  } catch (error) {
+    console.error('Error getting full text:', error);
+    res.status(500).json({ error: 'Failed to get full text' });
+  }
+});
+
+// Create an agent for a book
+app.post('/api/books/:bookId/agent', async (req, res) => {
+  try {
+    if (!elevenlabsAgent) {
+      return res.status(503).json({ error: 'ElevenLabs not configured' });
+    }
+
+    const bookId = req.params.bookId;
+
+    // Get book info
+    const book = await dbHelpers.getBookById(bookId);
+    if (!book) {
+      return res.status(404).json({ error: 'Book not found' });
+    }
+
+    // Check if agent already exists (you might want to store this in DB)
+    // For now, we'll create a new one each time
+
+    // Get all text from the book
+    const textResponse = await fetch(`http://localhost:${PORT}/api/books/${bookId}/fulltext`);
+    const { fullText } = await textResponse.json();
+
+    console.log(`📚 Creating agent for book: ${book.title} (${fullText.length} characters)`);
+
+    // Create agent with knowledge base
+    const agentData = await elevenlabsAgent.setupBookAgent(
+      bookId,
+      book.title,
+      fullText
+    );
+
+    // You might want to store the agent ID in your database here
+    // await dbHelpers.updateBookAgent(bookId, agentData.agentId);
+
+    res.json({
+      success: true,
+      bookId,
+      bookTitle: book.title,
+      ...agentData
+    });
+  } catch (error) {
+    console.error('Error creating agent:', error);
+    res.status(500).json({ error: 'Failed to create agent' });
+  }
+});
+
+// Get agent widget configuration for a book
+app.get('/api/books/:bookId/agent/widget', async (req, res) => {
+  try {
+    if (!elevenlabsAgent) {
+      return res.status(503).json({ error: 'ElevenLabs not configured' });
+    }
+
+    const bookId = req.params.bookId;
+
+    // In a real implementation, you'd retrieve the stored agent ID from database
+    // For now, we'll need the agent ID from the client
+    const agentId = req.query.agentId;
+
+    if (!agentId) {
+      return res.status(400).json({ error: 'Agent ID required' });
+    }
+
+    const widgetConfig = await elevenlabsAgent.getWidgetConfig(agentId);
+
+    res.json(widgetConfig);
+  } catch (error) {
+    console.error('Error getting widget config:', error);
+    res.status(500).json({ error: 'Failed to get widget config' });
+  }
+});
 
     app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);

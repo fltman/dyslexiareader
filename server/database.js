@@ -19,6 +19,9 @@ db.serialize(() => {
       category TEXT,
       cover TEXT,
       status TEXT DEFAULT 'processing',
+      agent_id TEXT,
+      knowledge_base_id TEXT,
+      full_text TEXT,
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
       updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
     )

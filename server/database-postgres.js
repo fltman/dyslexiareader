@@ -30,7 +30,13 @@ export async function initializeDatabase() {
                 id SERIAL PRIMARY KEY,
                 title TEXT NOT NULL,
                 category TEXT,
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                cover TEXT,
+                status TEXT DEFAULT 'processing',
+                agent_id TEXT,
+                knowledge_base_id TEXT,
+                full_text TEXT,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
         `);
 
