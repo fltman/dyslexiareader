@@ -55,18 +55,28 @@ export class ObjectStorageService {
     try {
       console.log(`🔍 Trying to download: key="${objectKey}"`);
       
-      // Use downloadAsBytes with correct destructuring pattern
-      console.log(`🔄 Attempting downloadAsBytes for: ${objectKey}`);
-      const { ok, value: bytesValue, error } = await this.client.downloadAsBytes(objectKey);
-      console.log(`📥 Download result:`, { ok, bytesLength: bytesValue?.length, error });
+      // Use downloadAsStream since downloadAsBytes is buggy (returns only 1 byte)
+      console.log(`🔄 Using downloadAsStream to bypass downloadAsBytes bug for: ${objectKey}`);
+      const { ok, value: stream, error } = await this.client.downloadAsStream(objectKey);
       
       if (!ok) {
-        console.error(`❌ Object not found via bytes: key="${objectKey}"`, error);
+        console.error(`❌ Object not found via stream: key="${objectKey}"`, error);
         throw new ObjectNotFoundError();
       }
 
-      console.log(`✅ Downloaded successfully: ${objectKey} (${bytesValue.length} bytes)`);
-      const bytes = bytesValue;
+      console.log(`📥 Stream download successful, converting to bytes...`);
+      
+      // Convert stream to buffer manually
+      const chunks = [];
+      let totalSize = 0;
+      
+      for await (const chunk of stream) {
+        chunks.push(chunk);
+        totalSize += chunk.length;
+      }
+      
+      const bytes = Buffer.concat(chunks, totalSize);
+      console.log(`✅ Stream converted to bytes: ${bytes.length} bytes (was buggy downloadAsBytes: 1 byte)`);
 
       // Set appropriate headers
       const contentType = mime.lookup(objectKey) || 'application/octet-stream';
