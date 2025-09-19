@@ -22,6 +22,7 @@
     "@elevenlabs/elevenlabs-js": "^2.15.0",
     "@google-cloud/storage": "^7.17.1",
     "@neondatabase/serverless": "^1.0.1",
+    "@replit/object-storage": "^1.0.0",
     "@uppy/aws-s3": "^5.0.1",
     "@uppy/core": "^5.0.2",
     "@uppy/dashboard": "^5.0.2",
