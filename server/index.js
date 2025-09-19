@@ -1267,15 +1267,9 @@ app.post('/api/books/:bookId/agent', async (req, res) => {
     }
 
     // Check if agent already exists in the database
-    if (book.agentId) {
-      console.log(`📱 Agent already exists for book: ${book.title} (${book.agentId})`);
-      return res.json({
-        success: true,
-        bookId,
-        bookTitle: book.title,
-        agentId: book.agentId,
-        knowledgeBaseId: book.knowledgeBaseId
-      });
+    const agentExists = !!book.agentId;
+    if (agentExists) {
+      console.log(`📱 Agent already exists for book: ${book.title} (${book.agentId}) - updating knowledge base`);
     }
 
     // Get book's existing full text or extract from pages
@@ -1312,7 +1306,7 @@ app.post('/api/books/:bookId/agent', async (req, res) => {
       throw new Error('No text content available for this book');
     }
 
-    console.log(`📚 Creating agent for book: ${book.title} (${fullText.length} characters)`);
+    console.log(`📚 ${agentExists ? 'Updating' : 'Creating'} agent for book: ${book.title} (${fullText.length} characters)`);
 
     // Update agent knowledge base for this book
     const agentData = await elevenlabsAgent.updateBookKnowledge(
@@ -1327,7 +1321,7 @@ app.post('/api/books/:bookId/agent', async (req, res) => {
       knowledgeBaseId: agentData.knowledgeBaseId
     });
 
-    console.log(`✅ Agent created and saved to database: ${agentData.agentId}`);
+    console.log(`✅ Agent ${agentExists ? 'updated' : 'created'} and saved to database: ${agentData.agentId}`);
 
     res.json({
       success: true,

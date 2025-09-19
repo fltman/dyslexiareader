@@ -14,7 +14,6 @@ const BookViewer = () => {
   const textBlocksCache = useRef({}); // Use ref to persist cache across re-renders
   const [isDetecting, setIsDetecting] = useState(false);
   const [processingBlocks, setProcessingBlocks] = useState(new Set());
-  const [isRebuildingKnowledge, setIsRebuildingKnowledge] = useState(false);
   const [loading, setLoading] = useState(true);
   const [scaleX, setScaleX] = useState(1.0);
   const [scaleY, setScaleY] = useState(1.0);
@@ -60,32 +59,6 @@ const BookViewer = () => {
     }
   };
 
-  // Rebuild knowledge base - force update the agent with current book content
-  const handleRebuildKnowledge = async () => {
-    try {
-      setIsRebuildingKnowledge(true);
-      console.log(`🔄 Rebuilding knowledge base for book: ${book?.title}`);
-
-      const response = await fetch(`/api/books/${bookId}/agent`, {
-        method: 'POST'
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to rebuild knowledge base');
-      }
-
-      const data = await response.json();
-      console.log('✅ Knowledge base rebuilt successfully');
-
-      // Show success message to user
-      alert('Knowledge base rebuilt successfully! The AI agent now has the latest book content.');
-    } catch (error) {
-      console.error('Error rebuilding knowledge base:', error);
-      alert('Failed to rebuild knowledge base. Please try again.');
-    } finally {
-      setIsRebuildingKnowledge(false);
-    }
-  };
 
   useEffect(() => {
     if (pages.length > 0) {
@@ -923,22 +896,6 @@ const BookViewer = () => {
         </div>
       </div>
 
-      {/* AI Agent Controls */}
-      <div className="agent-controls">
-        <div className="agent-header">
-          <h3>AI Assistant</h3>
-          <button
-            className="rebuild-knowledge-btn"
-            onClick={handleRebuildKnowledge}
-            disabled={isRebuildingKnowledge}
-          >
-            {isRebuildingKnowledge ? '🔄 Rebuilding...' : '🔄 Rebuild Knowledge'}
-          </button>
-        </div>
-        <p className="agent-description">
-          Chat with AI about "{book?.title}". Use the rebuild button to update the AI's knowledge when book content changes.
-        </p>
-      </div>
 
       {/* Book Agent Chat */}
       <elevenlabs-convai agent-id="agent_2701k5hmygdyegps36rmfm75xts3"></elevenlabs-convai><script src="https://unpkg.com/@elevenlabs/convai-widget-embed" async type="text/javascript"></script>
