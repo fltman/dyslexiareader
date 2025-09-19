@@ -133,7 +133,9 @@ const AddBookView = () => {
             {mobileUrl && (
               <div className="mobile-url">
                 <p className="url-label">Or visit this URL on your phone:</p>
-                <code className="url-text">{mobileUrl}</code>
+                <a href={mobileUrl} target="_blank" rel="noopener noreferrer" className="url-text">
+                  {mobileUrl}
+                </a>
               </div>
             )}
           </div>
