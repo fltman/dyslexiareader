@@ -352,7 +352,7 @@ const BookViewer = () => {
           <div className="page-container">
             <img
               ref={imageRef}
-              src={pages[currentPage].image_path}
+              src={pages[currentPage].imagePath}
               alt={`Page ${currentPage + 1}`}
               className="page-image"
               crossOrigin="anonymous"
@@ -435,7 +435,7 @@ const BookViewer = () => {
                 onClick={() => handlePageSelect(index)}
               >
                 <img
-                  src={page.image_path}
+                  src={page.imagePath}
                   alt={`Page ${index + 1}`}
                 />
                 <div className="page-number">{index + 1}</div>

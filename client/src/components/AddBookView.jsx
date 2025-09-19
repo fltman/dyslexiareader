@@ -164,11 +164,11 @@ const AddBookView = () => {
             ) : (
               pages.map((page, index) => (
                 <div key={page.id} className="page-item">
-                  <div className="page-number">Page {page.page_number || (index + 1)}</div>
+                  <div className="page-number">Page {page.pageNumber || (index + 1)}</div>
                   <div className="page-preview">
                     <img
-                      src={page.image_path}
-                      alt={`Page ${page.page_number || (index + 1)}`}
+                      src={page.imagePath}
+                      alt={`Page ${page.pageNumber || (index + 1)}`}
                     />
                   </div>
                 </div>
