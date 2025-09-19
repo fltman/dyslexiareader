@@ -144,7 +144,7 @@ app.post('/api/books', async (req, res) => {
     // Use Replit domain or external URL if provided, otherwise fallback to localhost  
     const baseUrl = process.env.EXTERNAL_URL || 
                     (process.env.REPLIT_DEV_DOMAIN ? `https://${process.env.REPLIT_DEV_DOMAIN}` : `http://localhost:${PORT}`);
-    const mobileUrl = `${baseUrl}/camera.html?session=${sessionId}`;
+    const mobileUrl = `${baseUrl}/mobile/camera.html?session=${sessionId}`;
     const qrCodeDataUrl = await QRCode.toDataURL(mobileUrl);
 
     res.json({
