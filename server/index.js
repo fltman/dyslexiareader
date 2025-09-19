@@ -10,6 +10,7 @@ import { dirname } from 'path';
 import OpenAI from 'openai';
 import { ElevenLabsClient } from '@elevenlabs/elevenlabs-js';
 import fs from 'fs';
+import crypto from 'crypto';
 import { dbHelpers } from './database-replit.js';
 import { db } from './db.js';
 import { books } from '../shared/schema.js';
@@ -58,6 +59,21 @@ if (process.env.GOOGLE_CLOUD_VISION_API_KEY) {
 // Configure multer for image uploads (use memory storage for Replit Object Storage)
 const storage = multer.memoryStorage();
 const objectStorageService = new ObjectStorageService();
+
+// Generate content-based UUID for consistent caching
+function generateContentUUID(text) {
+  const hash = crypto.createHash('sha256').update(text.trim()).digest('hex');
+  // Take first 32 chars and format as UUID
+  const uuid = [
+    hash.slice(0, 8),
+    hash.slice(8, 12),
+    hash.slice(12, 16),
+    hash.slice(16, 20),
+    hash.slice(20, 32)
+  ].join('-');
+  console.log(`🔑 Generated content UUID: ${uuid} for text: "${text.slice(0, 50)}..."`);
+  return uuid;
+}
 
 const upload = multer({
   storage: storage,
@@ -865,9 +881,10 @@ app.post('/api/textblocks/:blockId/speak', async (req, res) => {
       if (textBlock.audioUrl.startsWith('/objects/')) {
         console.log('✅ Using R2 cached audio and alignment data');
 
-        // Load alignment data from R2
-        const alignmentFileName = `alignment/tts_block_${blockId}_alignment.json`;
-        const normalizedAlignmentFileName = `alignment/tts_block_${blockId}_normalized.json`;
+        // Load alignment data from R2 using content UUID
+        const contentUuid = generateContentUUID(textBlock.ocrText);
+        const alignmentFileName = `alignment/tts_content_${contentUuid}_alignment.json`;
+        const normalizedAlignmentFileName = `alignment/tts_content_${contentUuid}_normalized.json`;
 
         try {
           // Download alignment data from R2
@@ -954,15 +971,16 @@ app.post('/api/textblocks/:blockId/speak', async (req, res) => {
 
       // Convert base64 audio to buffer and upload to R2
       const audioBuffer = Buffer.from(ttsResult.audioBase64, 'base64');
-      // Use deterministic filename for better caching
-      const audioFileName = `audio/tts_block_${blockId}.mp3`;
+      // Use content-based UUID for consistent caching across identical text
+      const contentUuid = generateContentUUID(textBlock.ocrText);
+      const audioFileName = `audio/tts_content_${contentUuid}.mp3`;
 
       console.log('☁️ Uploading audio to Cloudflare R2...');
       const audioUrl = await objectStorageService.uploadFile(audioBuffer, audioFileName, 'audio/mpeg');
 
       // Upload alignment data to R2 as well
-      const alignmentFileName = `alignment/tts_block_${blockId}_alignment.json`;
-      const normalizedAlignmentFileName = `alignment/tts_block_${blockId}_normalized.json`;
+      const alignmentFileName = `alignment/tts_content_${contentUuid}_alignment.json`;
+      const normalizedAlignmentFileName = `alignment/tts_content_${contentUuid}_normalized.json`;
 
       const alignmentPromises = [];
 

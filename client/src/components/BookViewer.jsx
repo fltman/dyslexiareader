@@ -25,6 +25,7 @@ const BookViewer = () => {
   const [highlightedCharIndex, setHighlightedCharIndex] = useState(-1);
   const [currentPlayingText, setCurrentPlayingText] = useState('');
   const [currentAlignment, setCurrentAlignment] = useState(null);
+  const [generatingAudio, setGeneratingAudio] = useState(new Set()); // Track which blocks are generating audio
   const [playbackSpeed, setPlaybackSpeed] = useState(() => {
     // Load saved speed preference from localStorage
     const saved = localStorage.getItem('readerPlaybackSpeed');
@@ -296,6 +297,12 @@ const BookViewer = () => {
       return;
     }
 
+    // Prevent double-clicking - check if already generating audio for this block
+    if (generatingAudio.has(block.id)) {
+      console.log('⏳ Audio already being generated for block:', block.id);
+      return;
+    }
+
     // If already playing this block, pause it
     if (currentPlayingBlock === block.id && isPlaying) {
       console.log('⏸️ Pausing currently playing block');
@@ -316,6 +323,9 @@ const BookViewer = () => {
     }
 
     console.log('🔊 Making TTS request for text:', textContent);
+
+    // Add this block to the generating audio set
+    setGeneratingAudio(prev => new Set([...prev, block.id]));
 
     try {
       const response = await fetch(`/api/textblocks/${block.id}/speak`, {
@@ -461,6 +471,13 @@ const BookViewer = () => {
       }
     } catch (error) {
       console.error('Error playing text block:', error);
+    } finally {
+      // Always remove the block from generating audio set when done
+      setGeneratingAudio(prev => {
+        const newSet = new Set(prev);
+        newSet.delete(block.id);
+        return newSet;
+      });
     }
   };
 
@@ -743,7 +760,7 @@ const BookViewer = () => {
                 key={block.id}
                 className={`text-block-overlay ${
                   processingBlocks.has(block.id) ? 'processing' : ''
-                } ${block.status === 'completed' ? 'completed' : ''}`}
+                } ${generatingAudio.has(block.id) ? 'generating-audio' : ''} ${block.status === 'completed' ? 'completed' : ''}`}
                 style={{
                   left: `${(((block.x * scaleX) + offsetX) / imageRef.current?.naturalWidth * 100) || 0}%`,
                   top: `${(((block.y * scaleY) + offsetY) / imageRef.current?.naturalHeight * 100) || 0}%`,
@@ -763,7 +780,13 @@ const BookViewer = () => {
                     <div className="spinner"></div>
                   </div>
                 )}
-                {block.status === 'completed' && (
+                {generatingAudio.has(block.id) && (
+                  <div className="audio-generating-indicator">
+                    <div className="spinner"></div>
+                    <span>🎧</span>
+                  </div>
+                )}
+                {block.status === 'completed' && !generatingAudio.has(block.id) && (
                   <div className="clickable-indicator">
                     🎵
                   </div>
