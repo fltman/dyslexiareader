@@ -65,9 +65,9 @@ class ElevenLabsAgentService {
                 - Var tålmodig och uppmuntrande
                 - Hjälp läsaren att förstå och njuta av boken
                 - Om frågan inte handlar om "${bookTitle}", hänvisa tillbaka till boken`,
-                knowledge_base: [knowledgeBaseId]
+                knowledge_base: knowledgeBaseId
               },
-              language: 'swedish',
+              language: 'sv',
               voice: {
                 voice_id: 'iwNZQzqCFIBqLR6sgFpN' // Same voice as TTS
               }
