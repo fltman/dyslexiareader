@@ -17,7 +17,7 @@
     "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.891.0",
+    "@aws-sdk/client-s3": "^3.892.0",
     "@aws-sdk/lib-storage": "^3.891.0",
     "@elevenlabs/elevenlabs-js": "^2.15.0",
     "@google-cloud/storage": "^7.17.1",

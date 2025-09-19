@@ -762,7 +762,7 @@ if (process.env.NODE_ENV === 'production') {
 (async () => {
   try {
     console.log('Using Replit PostgreSQL database');
-    console.log('Using Replit Object Storage');
+    console.log('Using Cloudflare R2 Object Storage');
 
     app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);

@@ -1,8 +1,17 @@
-import { Client } from '@replit/object-storage';
+import { S3Client, PutObjectCommand, GetObjectCommand } from '@aws-sdk/client-s3';
 import mime from 'mime-types';
 
-// Simple Replit Object Storage client
-export const objectStorageClient = new Client();
+// Cloudflare R2 client using S3 API
+const s3Client = new S3Client({
+  region: 'auto',
+  endpoint: process.env.CLOUDFLARE_R2_ENDPOINT,
+  credentials: {
+    accessKeyId: process.env.CLOUDFLARE_R2_ACCESS_KEY_ID,
+    secretAccessKey: process.env.CLOUDFLARE_R2_SECRET_ACCESS_KEY,
+  },
+});
+
+const BUCKET_NAME = process.env.CLOUDFLARE_R2_BUCKET_NAME;
 
 export class ObjectNotFoundError extends Error {
   constructor() {
@@ -12,40 +21,29 @@ export class ObjectNotFoundError extends Error {
   }
 }
 
-// Simple Replit Object Storage service
+// Cloudflare R2 Object Storage service
 export class ObjectStorageService {
-  constructor() {
-    this.client = objectStorageClient;
-  }
-
-  // Upload a file to Replit Object Storage
+  // Upload a file to Cloudflare R2
   async uploadFile(buffer, fileName, contentType = 'application/octet-stream') {
     try {
       const objectKey = `uploads/${fileName}`;
-      console.log(`🔄 Uploading: key="${objectKey}", input size=${buffer.length} bytes`);
-      console.log(`📄 Upload buffer info: isBuffer=${Buffer.isBuffer(buffer)}, constructor=${buffer.constructor.name}`);
+      console.log(`🔄 Uploading to R2: key="${objectKey}", size=${buffer.length} bytes`);
       
-      // Ensure we have a proper Uint8Array for the Object Storage client
-      let uploadBuffer = buffer;
-      if (Buffer.isBuffer(buffer)) {
-        console.log(`🔄 Converting Buffer to Uint8Array for upload...`);
-        uploadBuffer = new Uint8Array(buffer);
-        console.log(`✅ Converted: new size=${uploadBuffer.length} bytes`);
-      }
+      const uploadCommand = new PutObjectCommand({
+        Bucket: BUCKET_NAME,
+        Key: objectKey,
+        Body: buffer,
+        ContentType: contentType,
+      });
       
-      const uploadResult = await this.client.uploadFromBytes(objectKey, uploadBuffer);
+      await s3Client.send(uploadCommand);
       
-      if (!uploadResult.ok) {
-        console.error(`❌ Upload failed for ${objectKey}:`, uploadResult.error);
-        throw new Error(uploadResult.error || 'Upload failed');
-      }
-      
-      console.log(`✅ File uploaded to Object Storage: key="${objectKey}"`);
+      console.log(`✅ File uploaded to Cloudflare R2: key="${objectKey}"`);
       
       // Return the object path that can be used to access the file
       return `/objects/${objectKey}`;
     } catch (error) {
-      console.error('Error uploading file to Replit Object Storage:', error);
+      console.error('Error uploading file to Cloudflare R2:', error);
       throw new Error('Failed to upload file');
     }
   }
@@ -53,30 +51,32 @@ export class ObjectStorageService {
   // Download and stream an object to the response
   async downloadObject(objectKey, res) {
     try {
-      console.log(`🔍 Trying to download: key="${objectKey}"`);
+      console.log(`🔍 Downloading from R2: key="${objectKey}"`);
       
-      // Use downloadAsStream since downloadAsBytes is buggy (returns only 1 byte)
-      console.log(`🔄 Using downloadAsStream to bypass downloadAsBytes bug for: ${objectKey}`);
-      const { ok, value: stream, error } = await this.client.downloadAsStream(objectKey);
+      const downloadCommand = new GetObjectCommand({
+        Bucket: BUCKET_NAME,
+        Key: objectKey,
+      });
       
-      if (!ok) {
-        console.error(`❌ Object not found via stream: key="${objectKey}"`, error);
+      const response = await s3Client.send(downloadCommand);
+      
+      if (!response.Body) {
+        console.error(`❌ Object not found in R2: key="${objectKey}"`);
         throw new ObjectNotFoundError();
       }
-
-      console.log(`📥 Stream download successful, converting to bytes...`);
       
-      // Convert stream to buffer manually
+      console.log(`✅ R2 download successful for: ${objectKey}`);
+      
+      // Convert stream to buffer
       const chunks = [];
-      let totalSize = 0;
+      const stream = response.Body;
       
       for await (const chunk of stream) {
         chunks.push(chunk);
-        totalSize += chunk.length;
       }
       
-      const bytes = Buffer.concat(chunks, totalSize);
-      console.log(`✅ Stream converted to bytes: ${bytes.length} bytes (was buggy downloadAsBytes: 1 byte)`);
+      const bytes = Buffer.concat(chunks);
+      console.log(`✅ Downloaded from R2: ${bytes.length} bytes`);
 
       // Set appropriate headers
       const contentType = mime.lookup(objectKey) || 'application/octet-stream';
@@ -88,27 +88,56 @@ export class ObjectStorageService {
 
       res.send(bytes);
     } catch (error) {
-      console.error("Error downloading file:", error);
+      if (error.name === 'NoSuchKey') {
+        console.error(`❌ Object not found in R2: key="${objectKey}"`);
+        throw new ObjectNotFoundError();
+      }
       if (error instanceof ObjectNotFoundError) {
         throw error;
       }
-      throw new Error("Error downloading file");
+      console.error('Error downloading object from R2:', error);
+      throw new Error('Failed to download object');
     }
   }
 
   // Download object as bytes (for AI processing)
   async downloadBytes(objectKey) {
     try {
-      const downloadResult = await this.client.downloadAsBytes(objectKey);
+      console.log(`🔍 Downloading bytes from R2: key="${objectKey}"`);
       
-      if (!downloadResult.ok) {
+      const downloadCommand = new GetObjectCommand({
+        Bucket: BUCKET_NAME,
+        Key: objectKey,
+      });
+      
+      const response = await s3Client.send(downloadCommand);
+      
+      if (!response.Body) {
+        console.error(`❌ Object not found in R2: key="${objectKey}"`);
         throw new ObjectNotFoundError();
       }
       
-      return downloadResult.value;
+      // Convert stream to buffer
+      const chunks = [];
+      const stream = response.Body;
+      
+      for await (const chunk of stream) {
+        chunks.push(chunk);
+      }
+      
+      const bytes = Buffer.concat(chunks);
+      console.log(`✅ Downloaded bytes from R2: ${objectKey} (${bytes.length} bytes)`);
+      return bytes;
     } catch (error) {
-      console.error("Error downloading bytes:", error);
-      throw error instanceof ObjectNotFoundError ? error : new Error("Error downloading bytes");
+      if (error.name === 'NoSuchKey') {
+        console.error(`❌ Object not found in R2: key="${objectKey}"`);
+        throw new ObjectNotFoundError();
+      }
+      if (error instanceof ObjectNotFoundError) {
+        throw error;
+      }
+      console.error('Error downloading bytes from R2:', error);
+      throw new Error('Failed to download bytes');
     }
   }
 
