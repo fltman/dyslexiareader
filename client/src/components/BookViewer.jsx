@@ -382,7 +382,7 @@ const BookViewer = () => {
                     <div className="spinner"></div>
                   </div>
                 )}
-                {block.status === 'completed' && (
+                {(block.status === 'completed' || block.ocrText) && (
                   <div className="audio-controls">
                     <button
                       className={`play-button ${currentPlayingBlock === block.id ? 'playing' : ''}`}
@@ -407,18 +407,6 @@ const BookViewer = () => {
                       </button>
                     )}
                   </div>
-                )}
-                {!block.ocr_text && (
-                  <button
-                    className="process-button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      processTextBlock(block);
-                    }}
-                    title="Process with OCR"
-                  >
-                    🔍
-                  </button>
                 )}
               </div>
             ))}
