@@ -712,10 +712,10 @@ const BookViewer = () => {
                       const wordEndIndex = charCounter + word.length - 1;
 
                       // Determine word state based on character position
-                      // For more accurate timing, highlight word when we're closer to the middle/end
-                      const wordMidPoint = Math.floor((wordStartIndex + wordEndIndex) / 2);
+                      // For faster highlighting, trigger when we're 25% into the word
+                      const wordTriggerPoint = Math.floor(wordStartIndex + (word.length * 0.25));
                       const isCurrentWord = !isWhitespace && (
-                        highlightedCharIndex >= wordMidPoint &&
+                        highlightedCharIndex >= wordTriggerPoint &&
                         highlightedCharIndex <= wordEndIndex
                       );
                       const isReadWord = !isWhitespace && wordEndIndex < highlightedCharIndex;
