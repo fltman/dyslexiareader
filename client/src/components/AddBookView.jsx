@@ -112,9 +112,8 @@ const AddBookView = () => {
           onClick={() => navigate('/')}
           disabled={processing}
         >
-          ← Back to Books
+          ←
         </button>
-        <h1>Add New Book</h1>
       </div>
 
       <div className="add-book-content">
