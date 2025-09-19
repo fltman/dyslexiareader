@@ -508,28 +508,21 @@ Focus on grouping text into meaningful blocks (complete sentences/paragraphs) ra
       const content = response.choices[0].message.content;
       console.log('Raw OpenAI response:', content);
       
-      // Find JSON content more robustly
-      const jsonMatch = content.match(/\{[\s\S]*\}/);
-      if (jsonMatch) {
-        // Clean up control characters that break JSON parsing
-        let jsonString = jsonMatch[0];
-        
-        // Replace problematic control characters in string values only
-        // This regex finds strings and replaces control chars within them
-        jsonString = jsonString.replace(/"([^"\\]*(\\.[^"\\]*)*)"/g, (match, stringContent) => {
-          // Replace control characters within the string content only
-          const cleaned = stringContent
-            .replace(/\n/g, '\\n')   // newlines
-            .replace(/\r/g, '\\r')   // carriage returns  
-            .replace(/\t/g, '\\t')   // tabs
-            .replace(/\b/g, '\\b')   // backspace
-            .replace(/\f/g, '\\f');  // form feed
-          return `"${cleaned}"`;
-        });
-        
-        console.log('Cleaned JSON string:', jsonString);
-        aiResult = JSON.parse(jsonString);
+      // First try to extract JSON from markdown code blocks
+      let jsonString = content;
+      const codeBlockMatch = content.match(/```(?:json)?\s*(\{[\s\S]*?\})\s*```/);
+      if (codeBlockMatch) {
+        jsonString = codeBlockMatch[1];
+      } else {
+        // Fallback: find JSON object directly
+        const jsonMatch = content.match(/\{[\s\S]*\}/);
+        if (jsonMatch) {
+          jsonString = jsonMatch[0];
+        }
       }
+      
+      console.log('Extracted JSON string:', jsonString.substring(0, 200) + '...');
+      aiResult = JSON.parse(jsonString);
     } catch (parseError) {
       console.error('Error parsing AI response:', parseError);
       console.error('Failed content snippet:', response.choices[0].message.content.substring(0, 200));

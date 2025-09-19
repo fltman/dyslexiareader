@@ -1,0 +1,187 @@
+Environment: development
+🔍 Downloading image for text detection: uploads/1758264110386-535290324.jpg
+🔍 Downloading bytes from R2: key="uploads/1758264110386-535290324.jpg"
+✅ Downloaded bytes from R2: uploads/1758264110386-535290324.jpg (3664937 bytes)
+Actual image dimensions: { height: 3024, orientation: 6, width: 4032, type: 'jpg' }
+Raw OpenAI response: ```json
+{
+  "textBlocks": [
+    {
+      "text": "TheReader",
+      "x": 1770,
+      "y": 254,
+      "width": 500,
+      "height": 120,
+      "confidence": 0.98
+    },
+    {
+      "text": "Add New Book",
+      "x": 2900,
+      "y": 260,
+      "width": 600,
+      "height": 110,
+      "confidence": 0.97
+    },
+    {
+      "text": "Back to Books",
+      "x": 200,
+      "y": 420,
+      "width": 600,
+      "height": 100,
+      "confidence": 0.96
+    },
+    {
+      "text": "Scan with your phone",
+      "x": 1650,
+      "y": 1540,
+      "width": 720,
+      "height": 100,
+      "confidence": 0.97
+    },
+    {
+      "text": "Scan this QR code with your phone's camera to start taking photos of book pages",
+      "x": 1050,
+      "y": 2480,
+      "width": 2700,
+      "height": 90,
+      "confidence": 0.95
+    },
+    {
+      "text": "Or visit this URL on your phone:",
+      "x": 1100,
+      "y": 2750,
+      "width": 1200,
+      "height": 80,
+      "confidence": 0.96
+    },
+    {
+      "text": "https://thereader-9b0b-467c-b033-pfb8d34bca1a-00-7j2stpb5h4jk.wef.replit.dev/mobile/camera.html?session=819daa96-1ec0-4724-9e8a-f47a45383a57",
+      "x": 700,
+      "y": 2900,
+      "width": 3400,
+      "height": 100,
+      "confidence": 0.95
+    }
+  ]
+}
+```
+Cleaned JSON string: {
+  "\btextBlocks\b": [
+    {
+      "\btext\b": "\bTheReader\b",
+      "\bx\b": 1770,
+      "\by\b": 254,
+      "\bwidth\b": 500,
+      "\bheight\b": 120,
+      "\bconfidence\b": 0.98
+    },
+    {
+      "\btext\b": "\bAdd\b \bNew\b \bBook\b",
+      "\bx\b": 2900,
+      "\by\b": 260,
+      "\bwidth\b": 600,
+      "\bheight\b": 110,
+      "\bconfidence\b": 0.97
+    },
+    {
+      "\btext\b": "\bBack\b \bto\b \bBooks\b",
+      "\bx\b": 200,
+      "\by\b": 420,
+      "\bwidth\b": 600,
+      "\bheight\b": 100,
+      "\bconfidence\b": 0.96
+    },
+    {
+      "\btext\b": "\bScan\b \bwith\b \byour\b \bphone\b",
+      "\bx\b": 1650,
+      "\by\b": 1540,
+      "\bwidth\b": 720,
+      "\bheight\b": 100,
+      "\bconfidence\b": 0.97
+    },
+    {
+      "\btext\b": "\bScan\b \bthis\b \bQR\b \bcode\b \bwith\b \byour\b \bphone\b'\bs\b \bcamera\b \bto\b \bstart\b \btaking\b \bphotos\b \bof\b \bbook\b \bpages\b",
+      "\bx\b": 1050,
+      "\by\b": 2480,
+      "\bwidth\b": 2700,
+      "\bheight\b": 90,
+      "\bconfidence\b": 0.95
+    },
+    {
+      "\btext\b": "\bOr\b \bvisit\b \bthis\b \bURL\b \bon\b \byour\b \bphone\b:",
+      "\bx\b": 1100,
+      "\by\b": 2750,
+      "\bwidth\b": 1200,
+      "\bheight\b": 80,
+      "\bconfidence\b": 0.96
+    },
+    {
+      "\btext\b": "\bhttps\b://\bthereader\b-\b9b0b\b-\b467c\b-\bb033\b-\bpfb8d34bca1a\b-\b00\b-\b7j2stpb5h4jk\b.\bwef\b.\breplit\b.\bdev\b/\bmobile\b/\bcamera\b.\bhtml\b?\bsession\b=\b819daa96\b-\b1ec0\b-\b4724\b-\b9e8a\b-\bf47a45383a57\b",
+      "\bx\b": 700,
+      "\by\b": 2900,
+      "\bwidth\b": 3400,
+      "\bheight\b": 100,
+      "\bconfidence\b": 0.95
+    }
+  ]
+}
+OpenAI detected text blocks: {
+  '\btextBlocks\b': [
+    {
+      '\btext\b': '\bTheReader\b',
+      '\bx\b': 1770,
+      '\by\b': 254,
+      '\bwidth\b': 500,
+      '\bheight\b': 120,
+      '\bconfidence\b': 0.98
+    },
+    {
+      '\btext\b': '\bAdd\b \bNew\b \bBook\b',
+      '\bx\b': 2900,
+      '\by\b': 260,
+      '\bwidth\b': 600,
+      '\bheight\b': 110,
+      '\bconfidence\b': 0.97
+    },
+    {
+      '\btext\b': '\bBack\b \bto\b \bBooks\b',
+      '\bx\b': 200,
+      '\by\b': 420,
+      '\bwidth\b': 600,
+      '\bheight\b': 100,
+      '\bconfidence\b': 0.96
+    },
+    {
+      '\btext\b': '\bScan\b \bwith\b \byour\b \bphone\b',
+      '\bx\b': 1650,
+      '\by\b': 1540,
+      '\bwidth\b': 720,
+      '\bheight\b': 100,
+      '\bconfidence\b': 0.97
+    },
+    {
+      '\btext\b': "\bScan\b \bthis\b \bQR\b \bcode\b \bwith\b \byour\b \bphone\b'\bs\b \bcamera\b \bto\b \bstart\b \btaking\b \bphotos\b \bof\b \bbook\b \bpages\b",
+      '\bx\b': 1050,
+      '\by\b': 2480,
+      '\bwidth\b': 2700,
+      '\bheight\b': 90,
+      '\bconfidence\b': 0.95
+    },
+    {
+      '\btext\b': '\bOr\b \bvisit\b \bthis\b \bURL\b \bon\b \byour\b \bphone\b:',
+      '\bx\b': 1100,
+      '\by\b': 2750,
+      '\bwidth\b': 1200,
+      '\bheight\b': 80,
+      '\bconfidence\b': 0.96
+    },
+    {
+      '\btext\b': '\bhttps\b://\bthereader\b-\b9b0b\b-\b467c\b-\bb033\b-\bpfb8d34bca1a\b-\b00\b-\b7j2stpb5h4jk\b.\bwef\b.\breplit\b.\bdev\b/\bmobile\b/\bcamera\b.\bhtml\b?\bsession\b=\b819daa96\b-\b1ec0\b-\b4724\b-\b9e8a\b-\bf47a45383a57\b',
+      '\bx\b': 700,
+      '\by\b': 2900,
+      '\bwidth\b': 3400,
+      '\bheight\b': 100,
+      '\bconfidence\b': 0.95
+    }
+  ]
+}
