@@ -41,24 +41,6 @@ const AgentChat = ({ bookId, bookTitle }) => {
   
   return (
     <elevenlabs-convai agent-id="agent_2701k5hmygdyegps36rmfm75xts3"></elevenlabs-convai><script src="https://unpkg.com/@elevenlabs/convai-widget-embed" async type="text/javascript"></script>
-    <div className="agent-chat">
-      {isLoading && (
-        <div className="agent-loading-container">
-          <div className="agent-loading">
-            <div className="spinner"></div>
-            <span>Uppdaterar bokassistent...</span>
-          </div>
-        </div>
-      )}
-
-  
-      {error && (
-        <div className="agent-error">
-          <p>{error}</p>
-          <button onClick={updateAgentKnowledge}>Försök igen</button>
-        </div>
-      )}
-    </div>
   );
 };
 
