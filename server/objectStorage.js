@@ -55,54 +55,18 @@ export class ObjectStorageService {
     try {
       console.log(`🔍 Trying to download: key="${objectKey}"`);
       
-      // Try downloadAsBytes instead of downloadAsStream for better reliability
+      // Use downloadAsBytes with correct destructuring pattern
       console.log(`🔄 Attempting downloadAsBytes for: ${objectKey}`);
-      const downloadResult = await this.client.downloadAsBytes(objectKey);
-      console.log(`📥 Download result:`, { ok: downloadResult.ok, valueLength: downloadResult.value?.length, error: downloadResult.error });
+      const { ok, value: bytesValue, error } = await this.client.downloadAsBytes(objectKey);
+      console.log(`📥 Download result:`, { ok, bytesLength: bytesValue?.length, error });
       
-      if (!downloadResult.ok) {
-        console.error(`❌ Object not found via bytes: key="${objectKey}"`);
-        
-        // If bytes method fails, try with a small delay and retry
-        console.log(`🔄 Retrying with delay...`);
-        await new Promise(resolve => setTimeout(resolve, 500)); // 500ms delay
-        
-        const retryResult = await this.client.downloadAsBytes(objectKey);
-        console.log(`🔄 Retry result:`, { ok: retryResult.ok, valueLength: retryResult.value?.length, error: retryResult.error });
-        
-        if (!retryResult.ok) {
-          // List what's actually in the bucket to debug
-          try {
-            const listResult = await this.client.list({ prefix: 'uploads/' });
-            if (listResult.ok) {
-              console.log(`📋 Available objects:`, listResult.value.map(obj => obj.name));
-            }
-          } catch (listError) {
-            console.log(`⚠️ Could not list objects for debugging:`, listError);
-          }
-          
-          throw new ObjectNotFoundError();
-        }
-        
-        // Retry succeeded, use that result
-        console.log(`✅ Retry successful for: ${objectKey} (${retryResult.value.length} bytes)`);
-        const bytes = retryResult.value;
-        
-        // Set appropriate headers
-        const contentType = mime.lookup(objectKey) || 'application/octet-stream';
-        res.set({
-          "Content-Type": contentType,
-          "Cache-Control": "public, max-age=3600",
-          "Content-Length": bytes.length.toString()
-        });
-
-        res.send(bytes);
-        return;
+      if (!ok) {
+        console.error(`❌ Object not found via bytes: key="${objectKey}"`, error);
+        throw new ObjectNotFoundError();
       }
 
-      console.log(`✅ Downloaded successfully: ${objectKey} (${downloadResult.value.length} bytes)`);
-      console.log(`📊 Download value type: ${typeof downloadResult.value}, constructor: ${downloadResult.value.constructor.name}`);
-      const bytes = downloadResult.value;
+      console.log(`✅ Downloaded successfully: ${objectKey} (${bytesValue.length} bytes)`);
+      const bytes = bytesValue;
 
       // Set appropriate headers
       const contentType = mime.lookup(objectKey) || 'application/octet-stream';
