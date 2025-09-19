@@ -703,28 +703,6 @@ const BookViewer = () => {
                     let wordCount = 0;
                     const maxWordsPerLine = 8; // Optimal for dyslexic readers
 
-                    // Find the next word to highlight (one word ahead of current position)
-                    let nextWordIndex = -1;
-                    let tempCharCounter = 0;
-                    for (let i = 0; i < words.length; i++) {
-                      const word = words[i];
-                      const isWhitespace = word.match(/^\s+$/);
-                      const wordStartIndex = tempCharCounter;
-                      const wordEndIndex = tempCharCounter + word.length - 1;
-
-                      if (!isWhitespace && highlightedCharIndex >= wordStartIndex && highlightedCharIndex <= wordEndIndex) {
-                        // Found current word, next non-whitespace word should be highlighted
-                        for (let j = i + 1; j < words.length; j++) {
-                          if (!words[j].match(/^\s+$/)) {
-                            nextWordIndex = j;
-                            break;
-                          }
-                        }
-                        break;
-                      }
-                      tempCharCounter += word.length;
-                    }
-
                     return words.map((word, wordIndex) => {
                       // Skip whitespace-only words for highlighting logic
                       const isWhitespace = word.match(/^\s+$/);
@@ -733,8 +711,12 @@ const BookViewer = () => {
                       const wordStartIndex = charCounter;
                       const wordEndIndex = charCounter + word.length - 1;
 
-                      // Highlight the next word (one ahead) instead of current word
-                      const isCurrentWord = !isWhitespace && wordIndex === nextWordIndex;
+                      // Simple approach: highlight when we're in the previous word
+                      // This effectively highlights "one word ahead"
+                      const isCurrentWord = !isWhitespace && (
+                        highlightedCharIndex >= (wordStartIndex - 50) &&
+                        highlightedCharIndex < wordStartIndex
+                      );
                       const isReadWord = !isWhitespace && wordEndIndex < highlightedCharIndex;
 
                       charCounter += word.length;
