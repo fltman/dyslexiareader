@@ -64,8 +64,7 @@ class ElevenLabsAgentService {
                 - Ge konkreta exempel från boken
                 - Var tålmodig och uppmuntrande
                 - Hjälp läsaren att förstå och njuta av boken
-                - Om frågan inte handlar om "${bookTitle}", hänvisa tillbaka till boken`,
-                knowledge_base: [knowledgeBaseId]
+                - Om frågan inte handlar om "${bookTitle}", hänvisa tillbaka till boken`
               },
               language: 'sv',
               voice: 'iwNZQzqCFIBqLR6sgFpN' // Same voice as TTS
