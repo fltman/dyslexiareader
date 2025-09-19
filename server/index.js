@@ -187,10 +187,12 @@ app.post('/api/sessions/:sessionId/pages', upload.single('image'), async (req, r
     const imageUrl = await objectStorageService.uploadFile(req.file.buffer, uniqueFilename, req.file.mimetype);
     console.log('✅ File uploaded to Replit Object Storage:', imageUrl);
 
-    const existingPages = await dbHelpers.getBookPages(session.book_id);
+    // Handle both field names (bookId from schema, book_id from database)
+    const bookId = session.bookId || session.book_id;
+    const existingPages = await dbHelpers.getBookPages(bookId);
     const pageNumber = existingPages.length + 1;
 
-    await dbHelpers.addPage(session.book_id, pageNumber, imageUrl);
+    await dbHelpers.addPage(bookId, pageNumber, imageUrl);
 
     res.json({
       success: true,
@@ -212,14 +214,15 @@ app.post('/api/sessions/:sessionId/complete', async (req, res) => {
     }
 
     // Get first page for AI processing
-    const pages = await dbHelpers.getBookPages(session.book_id);
+    const bookId = session.bookId || session.book_id;
+    const pages = await dbHelpers.getBookPages(bookId);
     if (pages.length === 0) {
       return res.status(400).json({ error: 'No pages uploaded' });
     }
 
     if (!openai) {
       // If OpenAI is not configured, use default values
-      await dbHelpers.updateBook(session.book_id, {
+      await dbHelpers.updateBook(bookId, {
         title: 'Scanned Book',
         category: 'General',
         cover: pages[0].image_path,
@@ -230,7 +233,7 @@ app.post('/api/sessions/:sessionId/complete', async (req, res) => {
 
       return res.json({
         success: true,
-        bookId: session.book_id,
+        bookId: bookId,
         suggestions: { title: 'Scanned Book', category: 'General' }
       });
     }
@@ -289,7 +292,7 @@ app.post('/api/sessions/:sessionId/complete', async (req, res) => {
       }
 
       // Update book with AI suggestions and set first page as cover
-      await dbHelpers.updateBook(session.book_id, {
+      await dbHelpers.updateBook(bookId, {
         title: aiSuggestions.title,
         category: aiSuggestions.category,
         cover: pages[0].image_path,
@@ -301,7 +304,7 @@ app.post('/api/sessions/:sessionId/complete', async (req, res) => {
 
       res.json({
         success: true,
-        bookId: session.book_id,
+        bookId: bookId,
         suggestions: aiSuggestions
       });
     } catch (error) {
