@@ -1213,12 +1213,28 @@ app.post('/api/books/:bookId/agent', async (req, res) => {
       return res.status(404).json({ error: 'Book not found' });
     }
 
-    // Check if agent already exists (you might want to store this in DB)
-    // For now, we'll create a new one each time
+    // Check if agent already exists in the database
+    if (book.agent_id) {
+      console.log(`📱 Agent already exists for book: ${book.title} (${book.agent_id})`);
+      return res.json({
+        success: true,
+        bookId,
+        bookTitle: book.title,
+        agentId: book.agent_id,
+        knowledgeBaseId: book.knowledge_base_id
+      });
+    }
 
     // Get all text from the book
     const textResponse = await fetch(`http://localhost:${PORT}/api/books/${bookId}/fulltext`);
+    if (!textResponse.ok) {
+      throw new Error('Failed to retrieve book text for agent creation');
+    }
     const { fullText } = await textResponse.json();
+
+    if (!fullText || fullText.trim().length === 0) {
+      throw new Error('No text content available for this book');
+    }
 
     console.log(`📚 Creating agent for book: ${book.title} (${fullText.length} characters)`);
 
@@ -1229,8 +1245,13 @@ app.post('/api/books/:bookId/agent', async (req, res) => {
       fullText
     );
 
-    // You might want to store the agent ID in your database here
-    // await dbHelpers.updateBookAgent(bookId, agentData.agentId);
+    // Store the agent ID and knowledge base ID in the database
+    await dbHelpers.updateBook(bookId, {
+      agent_id: agentData.agentId,
+      knowledge_base_id: agentData.knowledgeBaseId
+    });
+
+    console.log(`✅ Agent created and saved to database: ${agentData.agentId}`);
 
     res.json({
       success: true,

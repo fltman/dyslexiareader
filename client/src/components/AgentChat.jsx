@@ -8,6 +8,36 @@ const AgentChat = ({ bookId, bookTitle }) => {
   const [widgetConfig, setWidgetConfig] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
 
+  // Create agent for books that don't have one yet
+  const createAgentForBook = async () => {
+    try {
+      console.log('🤖 Creating agent for existing book...');
+
+      const response = await fetch(`/api/books/${bookId}/agent`, {
+        method: 'POST'
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to create agent');
+      }
+
+      const data = await response.json();
+      setAgentId(data.agentId);
+
+      // Load widget with new agent
+      if (data.agentId && window.elevenlabs) {
+        window.elevenlabs.convai.embed({
+          agentId: data.agentId
+        });
+      }
+
+      console.log('✅ Agent created successfully:', data.agentId);
+    } catch (err) {
+      console.error('Error creating agent:', err);
+      setError(`Failed to create agent: ${err.message}`);
+    }
+  };
+
   // Load agent from book data
   const loadAgent = async () => {
     try {
@@ -34,8 +64,9 @@ const AgentChat = ({ bookId, bookTitle }) => {
           });
         }
       } else {
-        console.log('❌ No agent found for this book');
-        setError('Agent not available for this book yet');
+        console.log('❌ No agent found for this book, attempting to create one...');
+        // Try to create an agent for this book if it doesn't have one
+        await createAgentForBook();
       }
     } catch (err) {
       console.error('Error loading agent:', err);
