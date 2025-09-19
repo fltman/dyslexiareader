@@ -785,29 +785,31 @@
 .subtitle-text {
   font-family: 'Open Dyslexic', Arial, sans-serif;
   font-size: 1.5rem;
-  line-height: 1.8;
+  line-height: 1.6;
   color: #ffffff;
-  text-align: center;
-  letter-spacing: 0.02em;
-  word-spacing: 0.3em;
+  text-align: left;
+  letter-spacing: 0.01em;
+  word-spacing: 0.15em;
   max-width: 100%;
   display: block;
 }
 
+/* Unread text - grey color */
 .subtitle-char {
   display: inline;
   transition: all 0.15s ease-in-out;
   border-radius: 2px;
-  padding: 1px 0;
+  padding: 0;
   margin: 0;
   position: relative;
+  color: rgba(150, 150, 150, 0.8);
 }
 
-/* Already read text - lighter/softer color for dyslexia comfort */
+/* Already read text - white color */
 .subtitle-char.read-char {
-  color: rgba(200, 200, 200, 0.7);
+  color: #ffffff;
   background-color: transparent;
-  opacity: 0.7;
+  opacity: 1;
 }
 
 /* Currently being spoken character */
@@ -870,7 +872,24 @@
 .subtitle-word {
   display: inline;
   white-space: nowrap;
-  margin-right: 0.3em;
+  margin-right: 0.15em;
+  transition: all 0.2s ease-in-out;
+}
+
+/* Highlight entire word when current */
+.subtitle-word.current-word {
+  background-color: rgba(255, 255, 0, 0.9);
+  color: #000000;
+  font-weight: 700;
+  padding: 2px 4px;
+  margin: 0 2px;
+  border-radius: 4px;
+  box-shadow: 0 0 8px rgba(255, 255, 0, 0.7);
+}
+
+/* Read word styling */
+.subtitle-word.read-word {
+  color: #ffffff;
 }
 
 /* Force line break for better readability */
