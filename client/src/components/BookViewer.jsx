@@ -738,7 +738,10 @@ const BookViewer = () => {
             )}
 
             {/* Text block overlays */}
-            {textBlocks.map((block) => (
+            {console.log('🟢 Rendering', textBlocks.length, 'text block overlays, imageRef:', !!imageRef.current)}
+            {textBlocks.map((block) => {
+              console.log('🟢 Rendering block:', block.id, 'status:', block.status, 'position:', { x: block.x, y: block.y, width: block.width, height: block.height });
+              return (
               <div
                 key={block.id}
                 className={`text-block-overlay ${
@@ -769,7 +772,8 @@ const BookViewer = () => {
                   </div>
                 )}
               </div>
-            ))}
+              );
+            })}
             
             {/* Fixed Audio Player */}
             {currentPlayingBlock && (
