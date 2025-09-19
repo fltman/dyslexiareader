@@ -1278,12 +1278,35 @@ app.post('/api/books/:bookId/agent', async (req, res) => {
       });
     }
 
-    // Get all text from the book
-    const textResponse = await fetch(`http://localhost:${PORT}/api/books/${bookId}/fulltext`);
-    if (!textResponse.ok) {
-      throw new Error('Failed to retrieve book text for agent creation');
+    // Get book's existing full text or extract from pages
+    let fullText = book.fullText;
+
+    if (!fullText || fullText.trim().length === 0) {
+      // Extract text from pages if not already stored
+      const pages = await dbHelpers.getBookPages(bookId);
+      fullText = `Bok: ${book.title}\n`;
+      if (book.author) {
+        fullText += `Författare: ${book.author}\n\n`;
+      }
+
+      for (const page of pages) {
+        const textBlocks = await dbHelpers.getTextBlocks(page.id);
+        textBlocks.sort((a, b) => {
+          const yDiff = a.y - b.y;
+          if (Math.abs(yDiff) > 50) return yDiff;
+          return a.x - b.x;
+        });
+
+        fullText += `\n--- Sida ${page.pageNumber || page.page_number} ---\n\n`;
+
+        for (const block of textBlocks) {
+          const text = block.ocrText || block.ocr_text;
+          if (text && text.trim()) {
+            fullText += text.trim() + '\n';
+          }
+        }
+      }
     }
-    const { fullText } = await textResponse.json();
 
     if (!fullText || fullText.trim().length === 0) {
       throw new Error('No text content available for this book');
