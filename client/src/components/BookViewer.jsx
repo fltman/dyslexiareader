@@ -711,11 +711,10 @@ const BookViewer = () => {
                       const wordStartIndex = charCounter;
                       const wordEndIndex = charCounter + word.length - 1;
 
-                      // Simple approach: highlight when we're in the previous word
-                      // This effectively highlights "one word ahead"
+                      // Highlight the current word being spoken with good timing
                       const isCurrentWord = !isWhitespace && (
-                        highlightedCharIndex >= (wordStartIndex - 50) &&
-                        highlightedCharIndex < wordStartIndex
+                        highlightedCharIndex >= wordStartIndex &&
+                        highlightedCharIndex <= wordEndIndex
                       );
                       const isReadWord = !isWhitespace && wordEndIndex < highlightedCharIndex;
 
