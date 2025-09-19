@@ -41,12 +41,14 @@ const BookViewer = () => {
     if (pages.length > 0) {
       const pageId = pages[currentPage].id;
       console.log('📄 Loading text blocks for page:', currentPage, 'pageId:', pageId);
+      console.log('🗺️ Current cache state:', Object.keys(textBlocksCache));
 
       // Check cache first for instant loading
       if (textBlocksCache[pageId]) {
-        console.log('⚡ Loading text blocks from cache');
+        console.log('⚡ Loading text blocks from cache, count:', textBlocksCache[pageId].length);
         setTextBlocks(textBlocksCache[pageId]);
       } else {
+        console.log('🌍 No cache found, fetching from API...');
         // Clear current text blocks if no cache available
         setTextBlocks([]);
         // Always fetch from API to ensure text blocks are loaded
@@ -148,14 +150,21 @@ const BookViewer = () => {
       const blocks = await response.json();
       console.log('📦 Fetched text blocks:', blocks.length, 'blocks');
       
+      console.log('✅ Fetched', blocks.length, 'text blocks from API for page', pageId);
+
       // Cache the results for instant loading
-      setTextBlocksCache(prev => ({
-        ...prev,
-        [pageId]: blocks
-      }));
+      setTextBlocksCache(prev => {
+        const newCache = {
+          ...prev,
+          [pageId]: blocks
+        };
+        console.log('🗺️ Updated cache, now contains:', Object.keys(newCache));
+        return newCache;
+      });
 
       // Only update if this is still the current page to prevent race conditions
       if (pages[currentPage]?.id === pageId) {
+        console.log('💻 Setting text blocks for current page:', blocks.length, 'blocks');
         setTextBlocks(blocks);
       } else {
         console.log('⚠️ Skipping text blocks update - page changed during fetch');

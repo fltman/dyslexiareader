@@ -887,9 +887,8 @@
 .subtitle-word.current-word {
   background-color: rgba(255, 255, 0, 0.9) !important;
   color: #000000 !important;
-  font-weight: 700;
   border-radius: 4px;
-  box-shadow: 0 0 8px rgba(255, 255, 0, 0.7);
+  /* Removed font-weight and box-shadow to prevent size changes */
 }
 
 
