@@ -24,7 +24,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const app = express();
-const PORT = process.env.PORT || 5001;
+const PORT = process.env.PORT || 5000;
 
 // Initialize OpenAI (optional for development)
 let openai = null;
@@ -170,9 +170,22 @@ app.post('/api/books', async (req, res) => {
     const sessionId = uuidv4();
     await dbHelpers.createScanningSession(sessionId, bookId);
 
-    // Use Replit domain or external URL if provided, otherwise fallback to localhost  
-    const baseUrl = process.env.EXTERNAL_URL || 
-                    (process.env.REPLIT_DEV_DOMAIN ? `https://${process.env.REPLIT_DEV_DOMAIN}` : `http://localhost:${PORT}`);
+    // Use external URL if provided, otherwise construct from request headers
+    let baseUrl;
+    if (process.env.EXTERNAL_URL) {
+      baseUrl = process.env.EXTERNAL_URL;
+    } else if (process.env.REPLIT_DEPLOYMENT === '1') {
+      // In deployment, construct URL from request headers
+      const protocol = req.headers['x-forwarded-proto'] || 'https';
+      const host = req.headers['x-forwarded-host'] || req.headers.host;
+      baseUrl = `${protocol}://${host}`;
+    } else if (process.env.REPLIT_DEV_DOMAIN) {
+      // In development workspace
+      baseUrl = `https://${process.env.REPLIT_DEV_DOMAIN}`;
+    } else {
+      // Local development fallback
+      baseUrl = `http://localhost:${PORT}`;
+    }
     const mobileUrl = `${baseUrl}/mobile/camera.html?session=${sessionId}`;
     const qrCodeDataUrl = await QRCode.toDataURL(mobileUrl);
 

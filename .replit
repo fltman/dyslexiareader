@@ -19,6 +19,10 @@ author = "agent"
 task = "workflow.run"
 args = "TheReader Development"
 
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "TheReader Production"
+
 [[workflows.workflow]]
 name = "TheReader Development"
 author = "agent"
@@ -31,6 +35,18 @@ task = "shell.exec"
 args = "npm run server:dev & npm run client:dev & wait"
 waitForPort = 5000
 
+[[workflows.workflow]]
+name = "TheReader Production"
+author = "agent"
+
+[workflows.workflow.metadata]
+outputType = "webview"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "NODE_ENV=production node server/index.js"
+waitForPort = 5000
+
 [[ports]]
 localPort = 5000
 externalPort = 80
@@ -41,8 +57,8 @@ externalPort = 3000
 
 [deployment]
 deploymentTarget = "autoscale"
-build = ["npm", "run", "build"]
-run = ["node", "server/index.js"]
+build = ["bash", "-c", "cd client && npm run build"]
+run = ["bash", "-c", "NODE_ENV=production node server/index.js"]
 
 [objectStorage]
 defaultBucketID = "replit-objstore-54c85f1f-0c63-470f-a590-90629dbbf4a0"
