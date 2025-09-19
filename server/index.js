@@ -77,8 +77,8 @@ app.use('/uploads', (req, res, next) => {
 // Serve objects from Replit Object Storage
 app.get('/objects/:objectPath(*)', async (req, res) => {
   try {
-    const objectFile = await objectStorageService.getObjectEntityFile(req.path);
-    await objectStorageService.downloadObject(objectFile, res);
+    const objectKey = req.params.objectPath;
+    await objectStorageService.downloadObject(objectKey, res);
   } catch (error) {
     console.error('Error serving object:', error);
     if (error.name === 'ObjectNotFoundError') {
@@ -183,28 +183,9 @@ app.post('/api/sessions/:sessionId/pages', upload.single('image'), async (req, r
     const fileExtension = path.extname(req.file.originalname);
     const uniqueFilename = `${Date.now()}-${Math.round(Math.random() * 1E9)}${fileExtension}`;
 
-    let imageUrl;
-    try {
-      // Try to upload file using Replit Object Storage
-      imageUrl = await objectStorageService.uploadFile(req.file.buffer, uniqueFilename, req.file.mimetype);
-      console.log('✅ File uploaded to Replit Object Storage:', imageUrl);
-    } catch (error) {
-      console.warn('⚠️ Replit Object Storage failed, using local filesystem fallback:', error.message);
-      
-      // Fallback to local filesystem
-      const uploadsDir = path.join(__dirname, 'uploads');
-      const filePath = path.join(uploadsDir, uniqueFilename);
-      
-      // Ensure uploads directory exists
-      if (!fs.existsSync(uploadsDir)) {
-        fs.mkdirSync(uploadsDir, { recursive: true });
-      }
-      
-      // Save file to local filesystem
-      fs.writeFileSync(filePath, req.file.buffer);
-      imageUrl = `/uploads/${uniqueFilename}`;
-      console.log('✅ File saved to local filesystem:', imageUrl);
-    }
+    // Upload file using Replit Object Storage
+    const imageUrl = await objectStorageService.uploadFile(req.file.buffer, uniqueFilename, req.file.mimetype);
+    console.log('✅ File uploaded to Replit Object Storage:', imageUrl);
 
     const existingPages = await dbHelpers.getBookPages(session.book_id);
     const pageNumber = existingPages.length + 1;
@@ -256,15 +237,18 @@ app.post('/api/sessions/:sessionId/complete', async (req, res) => {
 
     // Process first page with OpenAI if available
     try {
-      const objectFile = await objectStorageService.getObjectEntityFile(pages[0].image_path);
-      const stream = objectFile.createReadStream();
-      const chunks = [];
+      let imageBuffer;
       
-      for await (const chunk of stream) {
-        chunks.push(chunk);
+      if (pages[0].image_path.startsWith('/objects/')) {
+        // Image is stored in Replit Object Storage
+        const objectKey = pages[0].image_path.replace('/objects/', '');
+        imageBuffer = await objectStorageService.downloadBytes(objectKey);
+      } else {
+        // Legacy: Image might be stored on filesystem (for development)
+        const imagePath = path.join(__dirname, '..', pages[0].image_path);
+        imageBuffer = fs.readFileSync(imagePath);
       }
       
-      const imageBuffer = Buffer.concat(chunks);
       const base64Image = imageBuffer.toString('base64');
 
       const response = await openai.chat.completions.create({
@@ -425,8 +409,18 @@ app.post('/api/pages/:pageId/detect-text-blocks', async (req, res) => {
     }
 
     // Load the page image and get actual dimensions first
-    const imagePath = path.join(__dirname, '..', page.image_path);
-    const imageBuffer = fs.readFileSync(imagePath);
+    let imageBuffer;
+    
+    if (page.image_path.startsWith('/objects/')) {
+      // Image is stored in Replit Object Storage
+      const objectKey = page.image_path.replace('/objects/', '');
+      imageBuffer = await objectStorageService.downloadBytes(objectKey);
+    } else {
+      // Legacy: Image might be stored on filesystem (for development)
+      const imagePath = path.join(__dirname, '..', page.image_path);
+      imageBuffer = fs.readFileSync(imagePath);
+    }
+    
     const base64Image = imageBuffer.toString('base64');
 
     // Get actual image dimensions using image-size library
@@ -582,15 +576,26 @@ app.delete('/api/books/:id', async (req, res) => {
     // Get book pages to delete image files
     const pages = await dbHelpers.getBookPages(bookId);
 
-    // Delete image files from filesystem
+    // Delete image files from storage
     for (const page of pages) {
-      const imagePath = path.join(__dirname, '..', page.image_path);
-      try {
-        if (fs.existsSync(imagePath)) {
-          fs.unlinkSync(imagePath);
+      if (page.image_path.startsWith('/objects/')) {
+        // Delete from Replit Object Storage
+        const objectKey = page.image_path.replace('/objects/', '');
+        try {
+          await objectStorageService.deleteObject(objectKey);
+        } catch (fileError) {
+          console.warn(`Could not delete object storage file: ${objectKey}`, fileError);
         }
-      } catch (fileError) {
-        console.warn(`Could not delete image file: ${imagePath}`, fileError);
+      } else {
+        // Legacy: Delete from local filesystem
+        const imagePath = path.join(__dirname, '..', page.image_path);
+        try {
+          if (fs.existsSync(imagePath)) {
+            fs.unlinkSync(imagePath);
+          }
+        } catch (fileError) {
+          console.warn(`Could not delete local file: ${imagePath}`, fileError);
+        }
       }
     }
 
