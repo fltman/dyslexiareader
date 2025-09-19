@@ -327,27 +327,6 @@
   animation: spin 1s ease-in-out infinite;
 }
 
-.play-button {
-  background-color: rgba(39, 174, 96, 0.9);
-  color: white;
-  border: none;
-  border-radius: 50%;
-  width: 24px;
-  height: 24px;
-  font-size: 0.8rem;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease;
-  font-family: 'Open Dyslexic', Arial, sans-serif;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-}
-
-.play-button:hover {
-  background-color: rgba(39, 174, 96, 1);
-  transform: scale(1.1);
-}
 
 .process-button {
   background-color: rgba(52, 152, 219, 0.9);
@@ -741,35 +720,6 @@
   }
 }
 
-.play-button.playing {
-  background-color: rgba(231, 76, 60, 0.9);
-}
-
-.play-button.playing:hover {
-  background-color: rgba(231, 76, 60, 1);
-}
-
-.resume-button {
-  background-color: rgba(52, 152, 219, 0.9);
-  color: white;
-  border: none;
-  border-radius: 50%;
-  width: 20px;
-  height: 20px;
-  font-size: 0.7rem;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease;
-  font-family: 'Open Dyslexic', Arial, sans-serif;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-}
-
-.resume-button:hover {
-  background-color: rgba(52, 152, 219, 1);
-  transform: scale(1.1);
-}
 
 /* Highlighted text during audio playback */
 .highlighted-text {
