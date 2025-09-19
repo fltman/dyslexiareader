@@ -20,6 +20,14 @@ export default defineConfig({
       '/audio': {
         target: 'http://localhost:5001',
         changeOrigin: true
+      },
+      '/mobile': {
+        target: 'http://localhost:5001',
+        changeOrigin: true
+      },
+      '/objects': {
+        target: 'http://localhost:5001',
+        changeOrigin: true
       }
     }
   }
