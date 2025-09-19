@@ -39,6 +39,8 @@ const BookViewer = () => {
   useEffect(() => {
     if (pages.length > 0) {
       console.log('📄 Loading text blocks for page:', currentPage, 'pageId:', pages[currentPage].id);
+      // Clear current text blocks immediately to avoid showing wrong page's blocks
+      setTextBlocks([]);
       fetchTextBlocks(pages[currentPage].id);
     }
   }, [currentPage, pages]);
