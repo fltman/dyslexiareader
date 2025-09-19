@@ -16,7 +16,7 @@ import { db } from './db.js';
 import { books } from '../shared/schema.js';
 import { eq } from 'drizzle-orm';
 import { ObjectStorageService } from './objectStorage.js';
-import ElevenLabsAgentService from './elevenlabsAgent.js';
+import ElevenLabsAgentSDKService from './elevenlabsAgentSDK.js';
 
 dotenv.config();
 
@@ -44,7 +44,7 @@ if (process.env.ELEVENLABS_API_KEY) {
   elevenlabs = new ElevenLabsClient({
     apiKey: process.env.ELEVENLABS_API_KEY
   });
-  elevenlabsAgent = new ElevenLabsAgentService(process.env.ELEVENLABS_API_KEY);
+  elevenlabsAgent = new ElevenLabsAgentSDKService(process.env.ELEVENLABS_API_KEY);
   console.log('✅ ElevenLabs initialized');
 } else {
   console.warn('⚠️  ELEVENLABS_API_KEY not set - text-to-speech will not work');
