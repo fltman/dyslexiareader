@@ -568,48 +568,7 @@ app.post('/api/pages/:pageId/detect-text-blocks', async (req, res) => {
           }
         }
         
-        // Transform coordinates based on image orientation
-        if (actualImageDimensions.orientation && detectedBlocks.length > 0) {
-          console.log(`🔄 Transforming coordinates for orientation: ${actualImageDimensions.orientation}`);
-          
-          detectedBlocks = detectedBlocks.map(block => {
-            let transformedX = block.x;
-            let transformedY = block.y;
-            let transformedWidth = block.width;
-            let transformedHeight = block.height;
-            
-            // Handle EXIF orientation transformations
-            switch (actualImageDimensions.orientation) {
-              case 6: // 90 degrees clockwise
-                transformedX = block.y;
-                transformedY = actualImageDimensions.width - (block.x + block.width);
-                transformedWidth = block.height;
-                transformedHeight = block.width;
-                break;
-              case 8: // 90 degrees counter-clockwise
-                transformedX = actualImageDimensions.height - (block.y + block.height);
-                transformedY = block.x;
-                transformedWidth = block.height;
-                transformedHeight = block.width;
-                break;
-              case 3: // 180 degrees
-                transformedX = actualImageDimensions.width - (block.x + block.width);
-                transformedY = actualImageDimensions.height - (block.y + block.height);
-                break;
-              // Orientation 1 (no rotation) and others use original coordinates
-            }
-            
-            return {
-              ...block,
-              x: transformedX,
-              y: transformedY,
-              width: transformedWidth,
-              height: transformedHeight
-            };
-          });
-        }
-        
-        console.log('Google Cloud Vision detected text blocks (after coordinate transformation):', detectedBlocks);
+        console.log('Google Cloud Vision detected text blocks:', detectedBlocks);
         
       } catch (visionError) {
         console.error('Google Cloud Vision API error:', visionError);
