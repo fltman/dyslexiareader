@@ -877,6 +877,7 @@ const BookViewer = () => {
 
       {/* Book Agent Chat */}
       <AgentChat bookId={bookId} bookTitle={book?.title} />
+      <elevenlabs-convai agent-id="agent_2701k5hmygdyegps36rmfm75xts3"></elevenlabs-convai><script src="https://unpkg.com/@elevenlabs/convai-widget-embed" async type="text/javascript"></script>
     </div>
   );
 };
