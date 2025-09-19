@@ -791,6 +791,8 @@
   word-spacing: 0.15em;
   max-width: 100%;
   display: block;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
   /* Remove global color - let word-level colors take precedence */
 }
 
@@ -871,7 +873,6 @@
 /* Word wrapping helper - keeps letters together */
 .subtitle-word {
   display: inline;
-  white-space: nowrap;
   margin-right: 0.15em;
   transition: all 0.2s ease-in-out;
   color: rgba(150, 150, 150, 0.8); /* Default: grey for unread words */
