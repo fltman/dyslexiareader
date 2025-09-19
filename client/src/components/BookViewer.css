@@ -287,6 +287,11 @@
   border-width: 3px;
 }
 
+.text-block-overlay[style*="cursor: pointer"]:hover {
+  border-color: #27ae60;
+  background-color: rgba(39, 174, 96, 0.15);
+}
+
 .text-block-overlay.processing {
   border-color: #f39c12;
   background-color: rgba(243, 156, 18, 0.2);
@@ -635,15 +640,105 @@
     }
   }
 }
-/* Audio controls styling */
-.audio-controls {
+/* Clickable indicator for text blocks */
+.clickable-indicator {
   position: absolute;
-  bottom: 4px;
+  top: 4px;
   right: 4px;
+  font-size: 1rem;
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+/* Fixed Audio Player */
+.fixed-audio-player {
+  position: fixed;
+  bottom: 80px;
+  right: 20px;
+  background: rgba(0, 0, 0, 0.9);
+  border-radius: 12px;
+  padding: 12px 16px;
+  min-width: 280px;
+  max-width: 350px;
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  z-index: 1001;
+  animation: player-appear 0.3s ease-out;
+}
+
+.player-content {
   display: flex;
-  gap: 0.25rem;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.player-text {
+  font-family: 'Open Dyslexic', Arial, sans-serif;
+  font-size: 0.9rem;
+  color: #ffffff;
+  line-height: 1.4;
+  max-height: 2.8em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.player-controls {
+  display: flex;
+  gap: 8px;
   align-items: center;
   justify-content: center;
+}
+
+.player-play-button,
+.player-stop-button {
+  background-color: rgba(52, 152, 219, 0.9);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  font-family: 'Open Dyslexic', Arial, sans-serif;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.player-play-button.playing {
+  background-color: rgba(231, 76, 60, 0.9);
+}
+
+.player-stop-button {
+  background-color: rgba(149, 165, 166, 0.9);
+}
+
+.player-play-button:hover,
+.player-stop-button:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.player-play-button.playing:hover {
+  background-color: rgba(231, 76, 60, 1);
+}
+
+.player-stop-button:hover {
+  background-color: rgba(149, 165, 166, 1);
+}
+
+@keyframes player-appear {
+  0% {
+    opacity: 0;
+    transform: translateY(20px) scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 .play-button.playing {

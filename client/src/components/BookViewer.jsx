@@ -421,8 +421,14 @@ const BookViewer = () => {
                   top: `${(((block.y * scaleY) + offsetY) / imageRef.current?.naturalHeight * 100) || 0}%`,
                   width: `${((block.width * scaleX) / imageRef.current?.naturalWidth * 100) || 0}%`,
                   height: `${((block.height * scaleY) / imageRef.current?.naturalHeight * 100) || 0}%`,
+                  cursor: (block.status === 'completed' || block.ocrText) ? 'pointer' : 'default'
                 }}
                 title={block.ocr_text || 'Click to play audio'}
+                onClick={() => {
+                  if (block.status === 'completed' || block.ocrText) {
+                    playTextBlock(block);
+                  }
+                }}
               >
                 {processingBlocks.has(block.id) && (
                   <div className="processing-indicator">
@@ -430,33 +436,59 @@ const BookViewer = () => {
                   </div>
                 )}
                 {(block.status === 'completed' || block.ocrText) && (
-                  <div className="audio-controls">
-                    <button
-                      className={`play-button ${currentPlayingBlock === block.id ? 'playing' : ''}`}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        playTextBlock(block);
-                      }}
-                      title={currentPlayingBlock === block.id && isPlaying ? 'Pause audio' : 'Play audio'}
-                    >
-                      {currentPlayingBlock === block.id && isPlaying ? '⏸️' : '▶️'}
-                    </button>
-                    {currentPlayingBlock === block.id && !isPlaying && currentAudio && (
-                      <button
-                        className="resume-button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          resumeAudio();
-                        }}
-                        title="Resume audio"
-                      >
-                        ▶️
-                      </button>
-                    )}
+                  <div className="clickable-indicator">
+                    🎵
                   </div>
                 )}
               </div>
             ))}
+            
+            {/* Fixed Audio Player */}
+            {currentPlayingBlock && (
+              <div className="fixed-audio-player">
+                <div className="player-content">
+                  <div className="player-text">
+                    {currentPlayingText && currentPlayingText.length > 40 
+                      ? currentPlayingText.substring(0, 40) + '...' 
+                      : currentPlayingText || 'Loading...'}
+                  </div>
+                  <div className="player-controls">
+                    <button
+                      className={`player-play-button ${isPlaying ? 'playing' : ''}`}
+                      onClick={() => {
+                        if (isPlaying) {
+                          if (currentAudio) {
+                            currentAudio.pause();
+                          }
+                        } else if (currentAudio) {
+                          resumeAudio();
+                        }
+                      }}
+                      title={isPlaying ? 'Pause' : 'Play'}
+                    >
+                      {isPlaying ? '⏸️' : '▶️'}
+                    </button>
+                    <button
+                      className="player-stop-button"
+                      onClick={() => {
+                        if (currentAudio) {
+                          currentAudio.pause();
+                          currentAudio.currentTime = 0;
+                        }
+                        setCurrentPlayingBlock(null);
+                        setCurrentPlayingText('');
+                        setCurrentAudio(null);
+                        setIsPlaying(false);
+                        setHighlightedCharIndex(-1);
+                      }}
+                      title="Stop"
+                    >
+                      ⏹️
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
