@@ -17,23 +17,7 @@ author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "workflow.run"
-args = "TheReader Development"
-
-[[workflows.workflow.tasks]]
-task = "workflow.run"
 args = "TheReader Production"
-
-[[workflows.workflow]]
-name = "TheReader Development"
-author = "agent"
-
-[workflows.workflow.metadata]
-outputType = "webview"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "npm run server:dev & npm run client:dev & wait"
-waitForPort = 5000
 
 [[workflows.workflow]]
 name = "TheReader Production"
@@ -50,10 +34,6 @@ waitForPort = 5000
 [[ports]]
 localPort = 5000
 externalPort = 80
-
-[[ports]]
-localPort = 5001
-externalPort = 3000
 
 [deployment]
 deploymentTarget = "autoscale"
