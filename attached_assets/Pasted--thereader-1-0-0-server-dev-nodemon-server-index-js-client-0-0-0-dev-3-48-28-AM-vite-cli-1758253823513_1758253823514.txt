@@ -1,0 +1,138 @@
+
+
+> thereader@1.0.0 server:dev
+> nodemon server/index.js
+
+
+> client@0.0.0 dev
+3:48:28 AM [vite] (client) hmr update /src/components/BookViewer.jsx (x2)
+Error fetching session status: DrizzleQueryError: Failed query: select "id", "book_id", "page_number", "image_path", "created_at" from "pages" where "pages"."book_id" = $1 order by "pages"."page_number"
+params: NaN
+    at NeonPreparedQuery.queryWithCache (file:///home/runner/workspace/node_modules/drizzle-orm/pg-core/session.js:41:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async NeonPreparedQuery.execute (file:///home/runner/workspace/node_modules/drizzle-orm/neon-serverless/session.js:109:20)
+    at async Object.getBookPages (file:///home/runner/workspace/server/database-replit.js:52:12)
+    at async file:///home/runner/workspace/server/index.js:316:19 {
+  query: 'select "id", "book_id", "page_number", "image_path", "created_at" from "pages" where "pages"."book_id" = $1 order by "pages"."page_number"',
+  params: [ NaN ],
+  cause: error: invalid input syntax for type integer: "NaN"
+      at file:///home/runner/workspace/node_modules/@neondatabase/serverless/index.mjs:1087:33
+      at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+      at async file:///home/runner/workspace/node_modules/drizzle-orm/neon-serverless/session.js:110:14
+      at async NeonPreparedQuery.queryWithCache (file:///home/runner/workspace/node_modules/drizzle-orm/pg-core/session.js:39:16)
+      at async NeonPreparedQuery.execute (file:///home/runner/workspace/node_modules/drizzle-orm/neon-serverless/session.js:109:20)
+      at async Object.getBookPages (file:///home/runner/workspace/server/database-replit.js:52:12)
+      at async file:///home/runner/workspace/server/index.js:316:19 {
+    length: 146,
+    severity: 'ERROR',
+    code: '22P02',
+    detail: undefined,
+    hint: undefined,
+    position: undefined,
+    internalPosition: undefined,
+    internalQuery: undefined,
+    where: "unnamed portal parameter $1 = '...'",
+    schema: undefined,
+    table: undefined,
+    column: undefined,
+    dataType: undefined,
+    constraint: undefined,
+    file: 'numutils.c',
+    line: '617',
+    routine: 'pg_strtoint32_safe'
+  }
+}
+Error fetching session status: DrizzleQueryError: Failed query: select "id", "book_id", "page_number", "image_path", "created_at" from "pages" where "pages"."book_id" = $1 order by "pages"."page_number"
+params: NaN
+    at NeonPreparedQuery.queryWithCache (file:///home/runner/workspace/node_modules/drizzle-orm/pg-core/session.js:41:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async NeonPreparedQuery.execute (file:///home/runner/workspace/node_modules/drizzle-orm/neon-serverless/session.js:109:20)
+    at async Object.getBookPages (file:///home/runner/workspace/server/database-replit.js:52:12)
+    at async file:///home/runner/workspace/server/index.js:316:19 {
+  query: 'select "id", "book_id", "page_number", "image_path", "created_at" from "pages" where "pages"."book_id" = $1 order by "pages"."page_number"',
+  params: [ NaN ],
+  cause: error: invalid input syntax for type integer: "NaN"
+      at file:///home/runner/workspace/node_modules/@neondatabase/serverless/index.mjs:1087:33
+      at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+      at async file:///home/runner/workspace/node_modules/drizzle-orm/neon-serverless/session.js:110:14
+      at async NeonPreparedQuery.queryWithCache (file:///home/runner/workspace/node_modules/drizzle-orm/pg-core/session.js:39:16)
+      at async NeonPreparedQuery.execute (file:///home/runner/workspace/node_modules/drizzle-orm/neon-serverless/session.js:109:20)
+      at async Object.getBookPages (file:///home/runner/workspace/server/database-replit.js:52:12)
+      at async file:///home/runner/workspace/server/index.js:316:19 {
+    length: 146,
+    severity: 'ERROR',
+    code: '22P02',
+    detail: undefined,
+    hint: undefined,
+    position: undefined,
+    internalPosition: undefined,
+    internalQuery: undefined,
+    where: "unnamed portal parameter $1 = '...'",
+    schema: undefined,
+    table: undefined,
+    column: undefined,
+    dataType: undefined,
+    constraint: undefined,
+    file: 'numutils.c',
+    line: '617',
+    routine: 'pg_strtoint32_safe'
+  }
+}
+Error fetching session status: DrizzleQueryError: Failed query: select "id", "book_id", "page_number", "image_path", "created_at" from "pages" where "pages"."book_id" = $1 order by "pages"."page_number"
+params: NaN
+    at NeonPreparedQuery.queryWithCache (file:///home/runner/workspace/node_modules/drizzle-orm/pg-core/session.js:41:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async NeonPreparedQuery.execute (file:///home/runner/workspace/node_modules/drizzle-orm/neon-serverless/session.js:109:20)
+    at async Object.getBookPages (file:///home/runner/workspace/server/database-replit.js:52:12)
+    at async file:///home/runner/workspace/server/index.js:316:19 {
+  query: 'select "id", "book_id", "page_number", "image_path", "created_at" from "pages" where "pages"."book_id" = $1 order by "pages"."page_number"',
+  params: [ NaN ],
+  cause: error: invalid input syntax for type integer: "NaN"
+      at file:///home/runner/workspace/node_modules/@neondatabase/serverless/index.mjs:1087:33
+      at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+      at async file:///home/runner/workspace/node_modules/drizzle-orm/neon-serverless/session.js:110:14
+      at async NeonPreparedQuery.queryWithCache (file:///home/runner/workspace/node_modules/drizzle-orm/pg-core/session.js:39:16)
+      at async NeonPreparedQuery.execute (file:///home/runner/workspace/node_modules/drizzle-orm/neon-serverless/session.js:109:20)
+      at async Object.getBookPages (file:///home/runner/workspace/server/database-replit.js:52:12)
+      at async file:///home/runner/workspace/server/index.js:316:19 {
+    length: 146,
+    severity: 'ERROR',
+    code: '22P02',
+    detail: undefined,
+    hint: undefined,
+    position: undefined,
+    internalPosition: undefined,
+    internalQuery: undefined,
+    where: "unnamed portal parameter $1 = '...'",
+    schema: undefined,
+    table: undefined,
+    column: undefined,
+    dataType: undefined,
+    constraint: undefined,
+    file: 'numutils.c',
+    line: '617',
+    routine: 'pg_strtoint32_safe'
+  }
+}
+Error fetching session status: DrizzleQueryError: Failed query: select "id", "book_id", "page_number", "image_path", "created_at" from "pages" where "pages"."book_id" = $1 order by "pages"."page_number"
+params: NaN
+    at NeonPreparedQuery.queryWithCache (file:///home/runner/workspace/node_modules/drizzle-orm/pg-core/session.js:41:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async NeonPreparedQuery.execute (file:///home/runner/workspace/node_modules/drizzle-orm/neon-serverless/session.js:109:20)
+    at async Object.getBookPages (file:///home/runner/workspace/server/database-replit.js:52:12)
+    at async file:///home/runner/workspace/server/index.js:316:19 {
+  query: 'select "id", "book_id", "page_number", "image_path", "created_at" from "pages" where "pages"."book_id" = $1 order by "pages"."page_number"',
+  params: [ NaN ],
+  cause: error: invalid input syntax for type integer: "NaN"
+      at file:///home/runner/workspace/node_modules/@neondatabase/serverless/index.mjs:1087:33
+      at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+      at async file:///home/runner/workspace/node_modules/drizzle-orm/neon-serverless/session.js:110:14
+      at async NeonPreparedQuery.queryWithCache (file:///home/runner/workspace/node_modules/drizzle-orm/pg-core/session.js:39:16)
+      at async NeonPreparedQuery.execute (file:///home/runner/workspace/node_modules/drizzle-orm/neon-serverless/session.js:109:20)
+      at async Object.getBookPages (file:///home/runner/workspace/server/database-replit.js:52:12)
+      at async file:///home/runner/workspace/server/index.js:316:19 {
+    length: 146,
+    severity: 'ERROR',
+    code: '22P02',
+    detail: undefined,
+    hint: undefined,

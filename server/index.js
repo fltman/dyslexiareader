@@ -313,10 +313,18 @@ app.get('/api/sessions/:sessionId/status', async (req, res) => {
       return res.status(404).json({ error: 'Session not found' });
     }
 
-    const pages = await dbHelpers.getBookPages(session.book_id);
+    // Fix: Use correct field name and add validation
+    const bookId = session.bookId || session.book_id;
+    
+    if (!bookId || isNaN(parseInt(bookId))) {
+      console.error('Invalid book_id in session:', bookId, 'Session:', session);
+      return res.status(400).json({ error: 'Invalid session - missing book ID' });
+    }
+
+    const pages = await dbHelpers.getBookPages(bookId);
     res.json({
       sessionId: req.params.sessionId,
-      bookId: session.book_id,
+      bookId: bookId,
       status: session.status,
       pageCount: pages.length,
       pages
