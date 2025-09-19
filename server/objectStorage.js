@@ -22,14 +22,27 @@ export class ObjectStorageService {
   async uploadFile(buffer, fileName, contentType = 'application/octet-stream') {
     try {
       const objectKey = `uploads/${fileName}`;
+      console.log(`🔄 Uploading: key="${objectKey}", size=${buffer.length} bytes`);
+      
       const uploadResult = await this.client.uploadFromBytes(objectKey, buffer);
       
       if (!uploadResult.ok) {
-        console.error(`Upload failed for ${objectKey}:`, uploadResult.error);
+        console.error(`❌ Upload failed for ${objectKey}:`, uploadResult.error);
         throw new Error(uploadResult.error || 'Upload failed');
       }
       
-      console.log(`✅ File uploaded to Object Storage: ${objectKey}`);
+      console.log(`✅ File uploaded to Object Storage: key="${objectKey}"`);
+      
+      // Test if we can list objects to see what's actually there
+      try {
+        const listResult = await this.client.list({ prefix: 'uploads/' });
+        if (listResult.ok) {
+          console.log(`📋 Current objects with 'uploads/' prefix:`, listResult.value.map(obj => obj.name));
+        }
+      } catch (listError) {
+        console.log(`⚠️ Could not list objects:`, listError);
+      }
+      
       // Return the object path that can be used to access the file
       return `/objects/${objectKey}`;
     } catch (error) {
@@ -41,10 +54,23 @@ export class ObjectStorageService {
   // Download and stream an object to the response
   async downloadObject(objectKey, res) {
     try {
+      console.log(`🔍 Trying to download: key="${objectKey}"`);
+      
       const { ok, value: stream, error } = await this.client.downloadAsStream(objectKey);
       
       if (!ok) {
-        console.error(`Object not found: ${objectKey}`);
+        console.error(`❌ Object not found: key="${objectKey}", error="${error}"`);
+        
+        // List what's actually in the bucket to debug
+        try {
+          const listResult = await this.client.list({ prefix: 'uploads/' });
+          if (listResult.ok) {
+            console.log(`📋 Available objects:`, listResult.value.map(obj => obj.name));
+          }
+        } catch (listError) {
+          console.log(`⚠️ Could not list objects for debugging:`, listError);
+        }
+        
         throw new ObjectNotFoundError();
       }
 
