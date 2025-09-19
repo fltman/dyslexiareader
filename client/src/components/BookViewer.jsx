@@ -49,10 +49,11 @@ const BookViewer = () => {
       } else {
         // Clear current text blocks if no cache available
         setTextBlocks([]);
+        // Always fetch from API to ensure text blocks are loaded
         fetchTextBlocks(pageId);
       }
     }
-  }, [currentPage, pages, textBlocksCache]);
+  }, [currentPage, pages]); // Remove textBlocksCache from deps to avoid infinite loops
 
   const fetchBook = async () => {
     try {
@@ -118,6 +119,13 @@ const BookViewer = () => {
       const response = await fetch(`/api/pages/${pageId}/textblocks`);
       if (response.ok) {
         const blocks = await response.json();
+
+        // Cache the results
+        setTextBlocksCache(prev => ({
+          ...prev,
+          [pageId]: blocks
+        }));
+
         // Only update if this is still the current page to prevent race conditions
         if (pages[currentPage]?.id === pageId) {
           setTextBlocks(blocks);
