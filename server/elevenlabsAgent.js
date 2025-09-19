@@ -68,9 +68,7 @@ class ElevenLabsAgentService {
                 knowledge_base: [knowledgeBaseId]
               },
               language: 'sv',
-              voice: {
-                voice_id: 'iwNZQzqCFIBqLR6sgFpN' // Same voice as TTS
-              }
+              voice: 'iwNZQzqCFIBqLR6sgFpN' // Same voice as TTS
             }
           },
           platform_settings: {
