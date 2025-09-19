@@ -56,7 +56,9 @@ export class ObjectStorageService {
       console.log(`🔍 Trying to download: key="${objectKey}"`);
       
       // Try downloadAsBytes instead of downloadAsStream for better reliability
+      console.log(`🔄 Attempting downloadAsBytes for: ${objectKey}`);
       const downloadResult = await this.client.downloadAsBytes(objectKey);
+      console.log(`📥 Download result:`, { ok: downloadResult.ok, valueLength: downloadResult.value?.length, error: downloadResult.error });
       
       if (!downloadResult.ok) {
         console.error(`❌ Object not found via bytes: key="${objectKey}"`);
@@ -66,6 +68,8 @@ export class ObjectStorageService {
         await new Promise(resolve => setTimeout(resolve, 500)); // 500ms delay
         
         const retryResult = await this.client.downloadAsBytes(objectKey);
+        console.log(`🔄 Retry result:`, { ok: retryResult.ok, valueLength: retryResult.value?.length, error: retryResult.error });
+        
         if (!retryResult.ok) {
           // List what's actually in the bucket to debug
           try {
@@ -81,7 +85,7 @@ export class ObjectStorageService {
         }
         
         // Retry succeeded, use that result
-        console.log(`✅ Retry successful for: ${objectKey}`);
+        console.log(`✅ Retry successful for: ${objectKey} (${retryResult.value.length} bytes)`);
         const bytes = retryResult.value;
         
         // Set appropriate headers
@@ -97,6 +101,7 @@ export class ObjectStorageService {
       }
 
       console.log(`✅ Downloaded successfully: ${objectKey} (${downloadResult.value.length} bytes)`);
+      console.log(`📊 Download value type: ${typeof downloadResult.value}, constructor: ${downloadResult.value.constructor.name}`);
       const bytes = downloadResult.value;
 
       // Set appropriate headers
