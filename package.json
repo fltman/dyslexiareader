@@ -21,6 +21,7 @@
     "@aws-sdk/lib-storage": "^3.891.0",
     "@elevenlabs/elevenlabs-js": "^2.15.0",
     "@google-cloud/storage": "^7.17.1",
+    "@google-cloud/vision": "^5.3.3",
     "@neondatabase/serverless": "^1.0.1",
     "@replit/object-storage": "^1.0.0",
     "@uppy/aws-s3": "^5.0.1",
