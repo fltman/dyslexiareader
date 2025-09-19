@@ -859,13 +859,28 @@ app.post('/api/textblocks/:blockId/speak', async (req, res) => {
 
     // Check if we already have cached audio for this text block
     if (textBlock.audioUrl && textBlock.alignmentData) {
-      console.log('♻️ Using cached audio for text block:', blockId);
-      return res.json({
-        success: true,
-        audio_url: textBlock.audioUrl,
-        text: textBlock.ocrText,
-        alignment: JSON.parse(textBlock.alignmentData),
-        normalized_alignment: textBlock.normalizedAlignmentData ? JSON.parse(textBlock.normalizedAlignmentData) : null
+      console.log('♻️ Using cached audio for text block:', blockId, 'URL:', textBlock.audioUrl);
+
+      // Verify the audio file actually exists
+      const audioPath = path.join(__dirname, 'public', textBlock.audioUrl);
+      if (fs.existsSync(audioPath)) {
+        console.log('✅ Cached audio file exists, returning cached result');
+        return res.json({
+          success: true,
+          audio_url: textBlock.audioUrl,
+          text: textBlock.ocrText,
+          alignment: JSON.parse(textBlock.alignmentData),
+          normalized_alignment: textBlock.normalizedAlignmentData ? JSON.parse(textBlock.normalizedAlignmentData) : null
+        });
+      } else {
+        console.log('❌ Cached audio file missing, regenerating:', audioPath);
+        // Clear the invalid cache entries
+        await dbHelpers.updateTextBlockAudio(blockId, null, null, null);
+      }
+    } else {
+      console.log('🚫 No cached audio found for block:', blockId, {
+        hasAudioUrl: !!textBlock.audioUrl,
+        hasAlignmentData: !!textBlock.alignmentData
       });
     }
 
@@ -896,7 +911,8 @@ app.post('/api/textblocks/:blockId/speak', async (req, res) => {
 
       // Convert base64 audio to file and serve it
       const audioBuffer = Buffer.from(ttsResult.audioBase64, 'base64');
-      const audioFileName = `tts_${blockId}_${Date.now()}.mp3`;
+      // Use deterministic filename for better caching
+      const audioFileName = `tts_block_${blockId}.mp3`;
       const audioPath = path.join(__dirname, 'public', 'audio', audioFileName);
 
       // Ensure audio directory exists
