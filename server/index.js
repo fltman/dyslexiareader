@@ -1268,9 +1268,6 @@ app.post('/api/books/:bookId/agent', async (req, res) => {
 
     // Check if agent already exists in the database
     const agentExists = !!book.agentId;
-    if (agentExists) {
-      console.log(`📱 Agent already exists for book: ${book.title} (${book.agentId}) - updating knowledge base`);
-    }
 
     // Get book's existing full text or extract from pages
     let fullText = book.fullText;
