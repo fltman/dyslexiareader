@@ -51,6 +51,10 @@ waitForPort = 5000
 localPort = 5000
 externalPort = 80
 
+[[ports]]
+localPort = 40543
+externalPort = 3000
+
 [deployment]
 deploymentTarget = "autoscale"
 build = ["bash", "-c", "cd client && npm run build"]
