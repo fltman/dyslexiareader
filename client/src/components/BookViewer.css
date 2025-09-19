@@ -786,12 +786,12 @@
   font-family: 'Open Dyslexic', Arial, sans-serif;
   font-size: 1.5rem;
   line-height: 1.6;
-  color: #ffffff;
   text-align: left;
   letter-spacing: 0.01em;
   word-spacing: 0.15em;
   max-width: 100%;
   display: block;
+  /* Remove global color - let word-level colors take precedence */
 }
 
 /* Default text color - grey for unread */
