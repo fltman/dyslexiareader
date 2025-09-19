@@ -38,7 +38,7 @@ const BookViewer = () => {
 
   const fetchBook = async () => {
     try {
-      const response = await fetch(`http://localhost:5001/api/books/${bookId}`);
+      const response = await fetch(`/api/books/${bookId}`);
       const data = await response.json();
       setBook(data);
       setPages(data.pages || []);
@@ -51,7 +51,7 @@ const BookViewer = () => {
 
   const fetchTextBlocks = async (pageId) => {
     try {
-      const response = await fetch(`http://localhost:5001/api/pages/${pageId}/textblocks`);
+      const response = await fetch(`/api/pages/${pageId}/textblocks`);
       const blocks = await response.json();
       setTextBlocks(blocks);
     } catch (error) {
@@ -67,7 +67,7 @@ const BookViewer = () => {
 
     try {
       // Use OpenAI to detect text blocks and extract text in one call
-      const response = await fetch(`http://localhost:5001/api/pages/${pages[currentPage].id}/detect-text-blocks`, {
+      const response = await fetch(`/api/pages/${pages[currentPage].id}/detect-text-blocks`, {
         method: 'POST'
       });
 
@@ -100,7 +100,7 @@ const BookViewer = () => {
     setProcessingBlocks(prev => new Set(prev).add(block.id));
 
     try {
-      const response = await fetch(`http://localhost:5001/api/textblocks/${block.id}/process`, {
+      const response = await fetch(`/api/textblocks/${block.id}/process`, {
         method: 'POST'
       });
 
@@ -136,7 +136,7 @@ const BookViewer = () => {
     console.log('Playing text:', block.ocr_text);
 
     try {
-      const response = await fetch(`http://localhost:5001/api/textblocks/${block.id}/speak`, {
+      const response = await fetch(`/api/textblocks/${block.id}/speak`, {
         method: 'POST'
       });
 
@@ -146,7 +146,7 @@ const BookViewer = () => {
 
         // Play audio with error handling and synchronization
         if (result.audio_url) {
-          const fullAudioUrl = `http://localhost:5001${result.audio_url}`;
+          const fullAudioUrl = result.audio_url;
           console.log('Playing audio from:', fullAudioUrl);
           const audio = new Audio(fullAudioUrl);
 
@@ -342,7 +342,7 @@ const BookViewer = () => {
           <div className="page-container">
             <img
               ref={imageRef}
-              src={`http://localhost:5001${pages[currentPage].image_path}`}
+              src={pages[currentPage].image_path}
               alt={`Page ${currentPage + 1}`}
               className="page-image"
               crossOrigin="anonymous"
@@ -425,7 +425,7 @@ const BookViewer = () => {
                 onClick={() => handlePageSelect(index)}
               >
                 <img
-                  src={`http://localhost:5001${page.image_path}`}
+                  src={page.image_path}
                   alt={`Page ${index + 1}`}
                 />
                 <div className="page-number">{index + 1}</div>

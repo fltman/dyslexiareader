@@ -22,7 +22,7 @@ const BooksView = () => {
 
   const fetchBooks = async () => {
     try {
-      const response = await fetch('http://localhost:5001/api/books');
+      const response = await fetch('/api/books');
       const data = await response.json();
       setBooks(data);
       setLoading(false);
@@ -59,7 +59,7 @@ const BooksView = () => {
 
     setDeleting(true);
     try {
-      const response = await fetch(`http://localhost:5001/api/books/${deleteModal.book.id}`, {
+      const response = await fetch(`/api/books/${deleteModal.book.id}`, {
         method: 'DELETE'
       });
 
@@ -109,7 +109,7 @@ const BooksView = () => {
             <div className="book-cover">
               {book.cover ? (
                 <img
-                  src={`http://localhost:5001${book.cover}`}
+                  src={book.cover}
                   alt={book.title || 'Book'}
                   onError={(e) => {
                     e.target.style.display = 'none';

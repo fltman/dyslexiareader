@@ -32,7 +32,7 @@ const AddBookView = () => {
 
     try {
       setInitializing(true);
-      const response = await fetch('http://localhost:5001/api/books', {
+      const response = await fetch('/api/books', {
         method: 'POST'
       });
       const data = await response.json();
@@ -54,7 +54,7 @@ const AddBookView = () => {
     if (!sessionId) return;
 
     try {
-      const response = await fetch(`http://localhost:5001/api/sessions/${sessionId}/status`);
+      const response = await fetch(`/api/sessions/${sessionId}/status`);
       const data = await response.json();
 
       if (data.pages && data.pages.length !== pages.length) {
@@ -78,7 +78,7 @@ const AddBookView = () => {
 
     try {
       setProcessing(true);
-      const response = await fetch(`http://localhost:5001/api/sessions/${sessionId}/complete`, {
+      const response = await fetch(`/api/sessions/${sessionId}/complete`, {
         method: 'POST'
       });
 
@@ -167,7 +167,7 @@ const AddBookView = () => {
                   <div className="page-number">Page {page.page_number}</div>
                   <div className="page-preview">
                     <img
-                      src={`http://localhost:5001${page.image_path}`}
+                      src={page.image_path}
                       alt={`Page ${page.page_number}`}
                     />
                   </div>

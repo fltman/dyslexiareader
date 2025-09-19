@@ -1,0 +1,240 @@
+AddBookView.jsx:35  POST http://localhost:5001/api/books net::ERR_CONNECTION_REFUSED
+initializeBook @ AddBookView.jsx:35
+(anonymous) @ AddBookView.jsx:18
+react_stack_bottom_frame @ react-dom-client.development.js:23953
+runWithFiberInDEV @ react-dom-client.development.js:1519
+commitHookEffectListMount @ react-dom-client.development.js:11905
+commitHookPassiveMountEffects @ react-dom-client.development.js:12026
+commitPassiveMountOnFiber @ react-dom-client.development.js:13841
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:13815
+commitPassiveMountOnFiber @ react-dom-client.development.js:13957
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:13815
+commitPassiveMountOnFiber @ react-dom-client.development.js:13834
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:13815
+commitPassiveMountOnFiber @ react-dom-client.development.js:13834
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:13815
+commitPassiveMountOnFiber @ react-dom-client.development.js:13957
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:13815
+commitPassiveMountOnFiber @ react-dom-client.development.js:13957
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:13815
+commitPassiveMountOnFiber @ react-dom-client.development.js:13957
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:13815
+commitPassiveMountOnFiber @ react-dom-client.development.js:13957
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:13815
+commitPassiveMountOnFiber @ react-dom-client.development.js:13834
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:13815
+commitPassiveMountOnFiber @ react-dom-client.development.js:13834
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:13815
+commitPassiveMountOnFiber @ react-dom-client.development.js:13834
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:13815
+commitPassiveMountOnFiber @ react-dom-client.development.js:13957
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:13815
+commitPassiveMountOnFiber @ react-dom-client.development.js:13853
+flushPassiveEffects @ react-dom-client.development.js:15737
+(anonymous) @ react-dom-client.development.js:15379
+performWorkUntilDeadline @ scheduler.development.js:45
+<AddBookView>
+exports.jsxDEV @ react-jsx-dev-runtime.development.js:346
+App @ App.jsx:17
+react_stack_bottom_frame @ react-dom-client.development.js:23863
+renderWithHooksAgain @ react-dom-client.development.js:5629
+renderWithHooks @ react-dom-client.development.js:5541
+updateFunctionComponent @ react-dom-client.development.js:8897
+beginWork @ react-dom-client.development.js:10522
+runWithFiberInDEV @ react-dom-client.development.js:1519
+performUnitOfWork @ react-dom-client.development.js:15132
+workLoopSync @ react-dom-client.development.js:14956
+renderRootSync @ react-dom-client.development.js:14936
+performWorkOnRoot @ react-dom-client.development.js:14419
+performWorkOnRootViaSchedulerTask @ react-dom-client.development.js:16216
+performWorkUntilDeadline @ scheduler.development.js:45
+<App>
+exports.jsxDEV @ react-jsx-dev-runtime.development.js:346
+(anonymous) @ main.jsx:8
+AddBookView.jsx:46 Error initializing book: TypeError: Failed to fetch
+    at initializeBook (AddBookView.jsx:35:30)
+    at AddBookView.jsx:18:7
+    at Object.react_stack_bottom_frame (react-dom-client.development.js:23953:20)
+    at runWithFiberInDEV (react-dom-client.development.js:1519:30)
+    at commitHookEffectListMount (react-dom-client.development.js:11905:29)
+    at commitHookPassiveMountEffects (react-dom-client.development.js:12026:11)
+    at commitPassiveMountOnFiber (react-dom-client.development.js:13841:13)
+    at recursivelyTraversePassiveMountEffects (react-dom-client.development.js:13815:11)
+    at commitPassiveMountOnFiber (react-dom-client.development.js:13957:11)
+    at recursivelyTraversePassiveMountEffects (react-dom-client.development.js:13815:11)
+overrideMethod @ hook.js:608
+initializeBook @ AddBookView.jsx:46
+await in initializeBook
+(anonymous) @ AddBookView.jsx:18
+react_stack_bottom_frame @ react-dom-client.development.js:23953
+runWithFiberInDEV @ react-dom-client.development.js:1519
+commitHookEffectListMount @ react-dom-client.development.js:11905
+commitHookPassiveMountEffects @ react-dom-client.development.js:12026
+commitPassiveMountOnFiber @ react-dom-client.development.js:13841
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:13815
+commitPassiveMountOnFiber @ react-dom-client.development.js:13957
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:13815
+commitPassiveMountOnFiber @ react-dom-client.development.js:13834
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:13815
+commitPassiveMountOnFiber @ react-dom-client.development.js:13834
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:13815
+commitPassiveMountOnFiber @ react-dom-client.development.js:13957
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:13815
+commitPassiveMountOnFiber @ react-dom-client.development.js:13957
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:13815
+commitPassiveMountOnFiber @ react-dom-client.development.js:13957
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:13815
+commitPassiveMountOnFiber @ react-dom-client.development.js:13957
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:13815
+commitPassiveMountOnFiber @ react-dom-client.development.js:13834
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:13815
+commitPassiveMountOnFiber @ react-dom-client.development.js:13834
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:13815
+commitPassiveMountOnFiber @ react-dom-client.development.js:13834
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:13815
+commitPassiveMountOnFiber @ react-dom-client.development.js:13957
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:13815
+commitPassiveMountOnFiber @ react-dom-client.development.js:13853
+flushPassiveEffects @ react-dom-client.development.js:15737
+(anonymous) @ react-dom-client.development.js:15379
+performWorkUntilDeadline @ scheduler.development.js:45
+<AddBookView>
+exports.jsxDEV @ react-jsx-dev-runtime.development.js:346
+App @ App.jsx:17
+react_stack_bottom_frame @ react-dom-client.development.js:23863
+renderWithHooksAgain @ react-dom-client.development.js:5629
+renderWithHooks @ react-dom-client.development.js:5541
+updateFunctionComponent @ react-dom-client.development.js:8897
+beginWork @ react-dom-client.development.js:10522
+runWithFiberInDEV @ react-dom-client.development.js:1519
+performUnitOfWork @ react-dom-client.development.js:15132
+workLoopSync @ react-dom-client.development.js:14956
+renderRootSync @ react-dom-client.development.js:14936
+performWorkOnRoot @ react-dom-client.development.js:14419
+performWorkOnRootViaSchedulerTask @ react-dom-client.development.js:16216
+performWorkUntilDeadline @ scheduler.development.js:45
+<App>
+exports.jsxDEV @ react-jsx-dev-runtime.development.js:346
+(anonymous) @ main.jsx:8
+AddBookView.jsx:35  POST http://localhost:5001/api/books net::ERR_CONNECTION_REFUSED
+initializeBook @ AddBookView.jsx:35
+(anonymous) @ AddBookView.jsx:18
+react_stack_bottom_frame @ react-dom-client.development.js:23953
+runWithFiberInDEV @ react-dom-client.development.js:1519
+commitHookEffectListMount @ react-dom-client.development.js:11905
+commitHookPassiveMountEffects @ react-dom-client.development.js:12026
+reconnectPassiveEffects @ react-dom-client.development.js:14004
+recursivelyTraverseReconnectPassiveEffects @ react-dom-client.development.js:13976
+reconnectPassiveEffects @ react-dom-client.development.js:14051
+recursivelyTraverseReconnectPassiveEffects @ react-dom-client.development.js:13976
+reconnectPassiveEffects @ react-dom-client.development.js:13997
+recursivelyTraverseReconnectPassiveEffects @ react-dom-client.development.js:13976
+reconnectPassiveEffects @ react-dom-client.development.js:13997
+recursivelyTraverseReconnectPassiveEffects @ react-dom-client.development.js:13976
+reconnectPassiveEffects @ react-dom-client.development.js:14051
+recursivelyTraverseReconnectPassiveEffects @ react-dom-client.development.js:13976
+reconnectPassiveEffects @ react-dom-client.development.js:14051
+recursivelyTraverseReconnectPassiveEffects @ react-dom-client.development.js:13976
+reconnectPassiveEffects @ react-dom-client.development.js:14051
+recursivelyTraverseReconnectPassiveEffects @ react-dom-client.development.js:13976
+reconnectPassiveEffects @ react-dom-client.development.js:14051
+recursivelyTraverseReconnectPassiveEffects @ react-dom-client.development.js:13976
+reconnectPassiveEffects @ react-dom-client.development.js:13997
+recursivelyTraverseReconnectPassiveEffects @ react-dom-client.development.js:13976
+reconnectPassiveEffects @ react-dom-client.development.js:13997
+recursivelyTraverseReconnectPassiveEffects @ react-dom-client.development.js:13976
+reconnectPassiveEffects @ react-dom-client.development.js:13997
+recursivelyTraverseReconnectPassiveEffects @ react-dom-client.development.js:13976
+reconnectPassiveEffects @ react-dom-client.development.js:14051
+doubleInvokeEffectsOnFiber @ react-dom-client.development.js:15968
+runWithFiberInDEV @ react-dom-client.development.js:1519
+recursivelyTraverseAndDoubleInvokeEffectsInDEV @ react-dom-client.development.js:15928
+commitDoubleInvokeEffectsInDEV @ react-dom-client.development.js:15977
+flushPassiveEffects @ react-dom-client.development.js:15747
+(anonymous) @ react-dom-client.development.js:15379
+performWorkUntilDeadline @ scheduler.development.js:45
+<AddBookView>
+exports.jsxDEV @ react-jsx-dev-runtime.development.js:346
+App @ App.jsx:17
+react_stack_bottom_frame @ react-dom-client.development.js:23863
+renderWithHooksAgain @ react-dom-client.development.js:5629
+renderWithHooks @ react-dom-client.development.js:5541
+updateFunctionComponent @ react-dom-client.development.js:8897
+beginWork @ react-dom-client.development.js:10522
+runWithFiberInDEV @ react-dom-client.development.js:1519
+performUnitOfWork @ react-dom-client.development.js:15132
+workLoopSync @ react-dom-client.development.js:14956
+renderRootSync @ react-dom-client.development.js:14936
+performWorkOnRoot @ react-dom-client.development.js:14419
+performWorkOnRootViaSchedulerTask @ react-dom-client.development.js:16216
+performWorkUntilDeadline @ scheduler.development.js:45
+<App>
+exports.jsxDEV @ react-jsx-dev-runtime.development.js:346
+(anonymous) @ main.jsx:8
+AddBookView.jsx:46 Error initializing book: TypeError: Failed to fetch
+    at initializeBook (AddBookView.jsx:35:30)
+    at AddBookView.jsx:18:7
+    at Object.react_stack_bottom_frame (react-dom-client.development.js:23953:20)
+    at runWithFiberInDEV (react-dom-client.development.js:1519:30)
+    at commitHookEffectListMount (react-dom-client.development.js:11905:29)
+    at commitHookPassiveMountEffects (react-dom-client.development.js:12026:11)
+    at reconnectPassiveEffects (react-dom-client.development.js:14004:11)
+    at recursivelyTraverseReconnectPassiveEffects (react-dom-client.development.js:13976:9)
+    at reconnectPassiveEffects (react-dom-client.development.js:14051:11)
+    at recursivelyTraverseReconnectPassiveEffects (react-dom-client.development.js:13976:9)
+overrideMethod @ hook.js:608
+initializeBook @ AddBookView.jsx:46
+await in initializeBook
+(anonymous) @ AddBookView.jsx:18
+react_stack_bottom_frame @ react-dom-client.development.js:23953
+runWithFiberInDEV @ react-dom-client.development.js:1519
+commitHookEffectListMount @ react-dom-client.development.js:11905
+commitHookPassiveMountEffects @ react-dom-client.development.js:12026
+reconnectPassiveEffects @ react-dom-client.development.js:14004
+recursivelyTraverseReconnectPassiveEffects @ react-dom-client.development.js:13976
+reconnectPassiveEffects @ react-dom-client.development.js:14051
+recursivelyTraverseReconnectPassiveEffects @ react-dom-client.development.js:13976
+reconnectPassiveEffects @ react-dom-client.development.js:13997
+recursivelyTraverseReconnectPassiveEffects @ react-dom-client.development.js:13976
+reconnectPassiveEffects @ react-dom-client.development.js:13997
+recursivelyTraverseReconnectPassiveEffects @ react-dom-client.development.js:13976
+reconnectPassiveEffects @ react-dom-client.development.js:14051
+recursivelyTraverseReconnectPassiveEffects @ react-dom-client.development.js:13976
+reconnectPassiveEffects @ react-dom-client.development.js:14051
+recursivelyTraverseReconnectPassiveEffects @ react-dom-client.development.js:13976
+reconnectPassiveEffects @ react-dom-client.development.js:14051
+recursivelyTraverseReconnectPassiveEffects @ react-dom-client.development.js:13976
+reconnectPassiveEffects @ react-dom-client.development.js:14051
+recursivelyTraverseReconnectPassiveEffects @ react-dom-client.development.js:13976
+reconnectPassiveEffects @ react-dom-client.development.js:13997
+recursivelyTraverseReconnectPassiveEffects @ react-dom-client.development.js:13976
+reconnectPassiveEffects @ react-dom-client.development.js:13997
+recursivelyTraverseReconnectPassiveEffects @ react-dom-client.development.js:13976
+reconnectPassiveEffects @ react-dom-client.development.js:13997
+recursivelyTraverseReconnectPassiveEffects @ react-dom-client.development.js:13976
+reconnectPassiveEffects @ react-dom-client.development.js:14051
+doubleInvokeEffectsOnFiber @ react-dom-client.development.js:15968
+runWithFiberInDEV @ react-dom-client.development.js:1519
+recursivelyTraverseAndDoubleInvokeEffectsInDEV @ react-dom-client.development.js:15928
+commitDoubleInvokeEffectsInDEV @ react-dom-client.development.js:15977
+flushPassiveEffects @ react-dom-client.development.js:15747
+(anonymous) @ react-dom-client.development.js:15379
+performWorkUntilDeadline @ scheduler.development.js:45
+<AddBookView>
+exports.jsxDEV @ react-jsx-dev-runtime.development.js:346
+App @ App.jsx:17
+react_stack_bottom_frame @ react-dom-client.development.js:23863
+renderWithHooksAgain @ react-dom-client.development.js:5629
+renderWithHooks @ react-dom-client.development.js:5541
+updateFunctionComponent @ react-dom-client.development.js:8897
+beginWork @ react-dom-client.development.js:10522
+runWithFiberInDEV @ react-dom-client.development.js:1519
+performUnitOfWork @ react-dom-client.development.js:15132
+workLoopSync @ react-dom-client.development.js:14956
+renderRootSync @ react-dom-client.development.js:14936
+performWorkOnRoot @ react-dom-client.development.js:14419
+performWorkOnRootViaSchedulerTask @ react-dom-client.development.js:16216
+performWorkUntilDeadline @ scheduler.development.js:45
+<App>
+exports.jsxDEV @ react-jsx-dev-runtime.development.js:346
+(anonymous) @ main.jsx:8
