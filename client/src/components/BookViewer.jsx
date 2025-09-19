@@ -38,6 +38,7 @@ const BookViewer = () => {
 
   useEffect(() => {
     if (pages.length > 0) {
+      console.log('📄 Loading text blocks for page:', currentPage, 'pageId:', pages[currentPage].id);
       fetchTextBlocks(pages[currentPage].id);
     }
   }, [currentPage, pages]);
@@ -61,6 +62,7 @@ const BookViewer = () => {
   };
 
   const fetchTextBlocks = async (pageId) => {
+    console.log('🔍 Fetching text blocks for pageId:', pageId);
     try {
       const response = await fetch(`/api/pages/${pageId}/textblocks`);
       
@@ -69,6 +71,7 @@ const BookViewer = () => {
       }
       
       const blocks = await response.json();
+      console.log('📦 Fetched text blocks:', blocks.length, 'blocks');
       setTextBlocks(blocks);
       
       // Automatically detect text blocks if none exist for this page
