@@ -129,6 +129,15 @@ const BooksView = () => {
             <div className="book-info">
               <h3>{book.title || 'Processing...'}</h3>
               <p>{book.author || 'Unknown Author'}</p>
+              {book.keywords && book.keywords.length > 0 && (
+                <div className="book-keywords">
+                  {book.keywords.slice(0, 4).map((keyword, index) => (
+                    <span key={index} className="keyword-tag">
+                      {keyword.emoji} {keyword.label}
+                    </span>
+                  ))}
+                </div>
+              )}
             </div>
             <button
               className="delete-button"
