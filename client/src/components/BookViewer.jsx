@@ -316,41 +316,64 @@ const BookViewer = () => {
             console.log('Audio can start playing');
           });
 
-          // Create robust highlighting handler
+          // Create optimized highlighting handler with requestAnimationFrame
+          let animationFrameId = null;
           const highlightingHandler = () => {
-            const currentTime = audio.currentTime;
-            const playingText = currentPlayingText || (result.text || textContent);
-            
-            if (!playingText) return;
-            
-            // Robust fallback highlighting using progress
-            let charIndex = -1;
-            if (isFinite(audio.duration) && audio.duration > 0) {
-              const progress = currentTime / audio.duration;
-              charIndex = Math.floor(progress * playingText.length);
-              charIndex = Math.max(0, Math.min(charIndex, playingText.length - 1));
+            // Cancel any pending animation frame
+            if (animationFrameId) {
+              cancelAnimationFrame(animationFrameId);
             }
-            
-            // Try precise alignment data if available
-            if (result.alignment?.characters) {
-              const characters = result.alignment.characters;
-              
-              // Find the character being spoken at current time
-              let alignmentIndex = -1;
-              for (let i = 0; i < characters.length; i++) {
-                if (characters[i].start_time <= currentTime && characters[i].end_time >= currentTime) {
-                  alignmentIndex = i;
-                  break;
+
+            // Use requestAnimationFrame for smoother updates
+            animationFrameId = requestAnimationFrame(() => {
+              const currentTime = audio.currentTime;
+              const playingText = currentPlayingText || (result.text || textContent);
+
+              if (!playingText) return;
+
+              // Robust fallback highlighting using progress
+              let charIndex = -1;
+              if (isFinite(audio.duration) && audio.duration > 0) {
+                const progress = currentTime / audio.duration;
+                charIndex = Math.floor(progress * playingText.length);
+                charIndex = Math.max(0, Math.min(charIndex, playingText.length - 1));
+              }
+
+              // Try precise alignment data if available
+              if (result.alignment?.characters) {
+                const characters = result.alignment.characters;
+
+                // Binary search for better performance with large texts
+                let left = 0;
+                let right = characters.length - 1;
+                let alignmentIndex = -1;
+
+                while (left <= right) {
+                  const mid = Math.floor((left + right) / 2);
+                  if (characters[mid].start_time <= currentTime && characters[mid].end_time >= currentTime) {
+                    alignmentIndex = mid;
+                    break;
+                  } else if (characters[mid].end_time < currentTime) {
+                    left = mid + 1;
+                  } else {
+                    right = mid - 1;
+                  }
+                }
+
+                // Use alignment index if valid and within text bounds
+                if (alignmentIndex >= 0 && alignmentIndex < playingText.length) {
+                  charIndex = alignmentIndex;
                 }
               }
-              
-              // Use alignment index if valid and within text bounds
-              if (alignmentIndex >= 0 && alignmentIndex < playingText.length) {
-                charIndex = alignmentIndex;
-              }
-            }
-            
-            setHighlightedCharIndex(charIndex);
+
+              // Only update if the character index actually changed
+              setHighlightedCharIndex((prev) => {
+                if (prev !== charIndex) {
+                  return charIndex;
+                }
+                return prev;
+              });
+            });
           };
           
           // Store handler reference for cleanup
@@ -367,6 +390,10 @@ const BookViewer = () => {
           };
           
           const endedHandler = () => {
+            // Clean up animation frame
+            if (animationFrameId) {
+              cancelAnimationFrame(animationFrameId);
+            }
             setIsPlaying(false);
             setCurrentPlayingBlock(null);
             setHighlightedCharIndex(-1);
@@ -453,46 +480,73 @@ const BookViewer = () => {
           });
           
           audio.addEventListener('ended', () => {
+            // Clean up animation frame
+            if (titleAnimationFrameId) {
+              cancelAnimationFrame(titleAnimationFrameId);
+            }
             setIsPlaying(false);
             setCurrentPlayingBlock(null);
             setCurrentPlayingText('');
             setHighlightedCharIndex(-1);
           });
           
-          // Create robust highlighting handler for title
+          // Create optimized highlighting handler for title with requestAnimationFrame
+          let titleAnimationFrameId = null;
           const titleHighlightingHandler = () => {
-            const currentTime = audio.currentTime;
-            
-            if (!titleText) return;
-            
-            // Robust fallback highlighting using progress
-            let charIndex = -1;
-            if (isFinite(audio.duration) && audio.duration > 0) {
-              const progress = currentTime / audio.duration;
-              charIndex = Math.floor(progress * titleText.length);
-              charIndex = Math.max(0, Math.min(charIndex, titleText.length - 1));
+            // Cancel any pending animation frame
+            if (titleAnimationFrameId) {
+              cancelAnimationFrame(titleAnimationFrameId);
             }
-            
-            // Try precise alignment data if available
-            if (result.alignment?.characters) {
-              const characters = result.alignment.characters;
-              
-              // Find the character being spoken at current time
-              let alignmentIndex = -1;
-              for (let i = 0; i < characters.length; i++) {
-                if (characters[i].start_time <= currentTime && characters[i].end_time >= currentTime) {
-                  alignmentIndex = i;
-                  break;
+
+            // Use requestAnimationFrame for smoother updates
+            titleAnimationFrameId = requestAnimationFrame(() => {
+              const currentTime = audio.currentTime;
+
+              if (!titleText) return;
+
+              // Robust fallback highlighting using progress
+              let charIndex = -1;
+              if (isFinite(audio.duration) && audio.duration > 0) {
+                const progress = currentTime / audio.duration;
+                charIndex = Math.floor(progress * titleText.length);
+                charIndex = Math.max(0, Math.min(charIndex, titleText.length - 1));
+              }
+
+              // Try precise alignment data if available
+              if (result.alignment?.characters) {
+                const characters = result.alignment.characters;
+
+                // Binary search for better performance
+                let left = 0;
+                let right = characters.length - 1;
+                let alignmentIndex = -1;
+
+                while (left <= right) {
+                  const mid = Math.floor((left + right) / 2);
+                  if (characters[mid].start_time <= currentTime && characters[mid].end_time >= currentTime) {
+                    alignmentIndex = mid;
+                    break;
+                  } else if (characters[mid].end_time < currentTime) {
+                    left = mid + 1;
+                  } else {
+                    right = mid - 1;
+                  }
+                }
+
+                // Use alignment index if valid and within text bounds
+                if (alignmentIndex >= 0 && alignmentIndex < titleText.length) {
+                  charIndex = alignmentIndex;
                 }
               }
-              
-              // Use alignment index if valid and within text bounds
-              if (alignmentIndex >= 0 && alignmentIndex < titleText.length) {
-                charIndex = alignmentIndex;
-              }
-            }
-            
-            setHighlightedCharIndex(charIndex);
+
+              // Only update if the character index actually changed
+              setHighlightedCharIndex((prev) => {
+                if (prev !== charIndex) {
+                  return charIndex;
+                }
+                return prev;
+              });
+            });
           };
           
           // Store handler reference for cleanup and add listener
@@ -606,14 +660,13 @@ const BookViewer = () => {
               <div className="subtitle-overlay">
                 <div className="subtitle-text">
                   {currentPlayingText.split('').map((char, index) => {
-                    const isHighlighted = index === highlightedCharIndex;
-                    if (isHighlighted) {
-                      console.log('🔆 Highlighting character:', char, 'at index:', index);
-                    }
+                    const isRead = index <= highlightedCharIndex;
+                    const isCurrent = index === highlightedCharIndex;
                     return (
                       <span
                         key={index}
-                        className={`subtitle-char ${isHighlighted ? 'highlighted-char' : ''}`}
+                        className={`subtitle-char ${isRead ? 'read-char' : ''} ${isCurrent ? 'current-char' : ''}`}
+                        data-char-index={index}
                       >
                         {char}
                       </span>

@@ -793,20 +793,51 @@
 }
 
 .subtitle-char {
-  transition: all 0.15s ease-in-out;
+  display: inline-block;
+  transition: background-color 0.15s ease-in-out, color 0.15s ease-in-out;
   border-radius: 3px;
-  padding: 1px 2px;
+  padding: 2px 3px;
+  margin: 0 1px;
+  min-width: 0.5em;
+  text-align: center;
+  position: relative;
 }
 
-.subtitle-char.highlighted-char {
+/* Already read text */
+.subtitle-char.read-char {
+  background-color: rgba(255, 255, 0, 0.3);
+  color: #000000;
+}
+
+/* Currently being spoken character */
+.subtitle-char.current-char {
   background-color: #ffff00;
   color: #000000;
   font-weight: 700;
-  transform: scale(1.1);
+  box-shadow: 0 0 8px rgba(255, 255, 0, 0.6);
+}
+
+/* Prevent layout shift by maintaining consistent dimensions */
+.subtitle-char.current-char::after {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  border: 2px solid rgba(255, 255, 0, 0.5);
   border-radius: 4px;
-  padding: 2px 1px;
-  box-shadow: 0 0 10px rgba(255, 255, 0, 0.8);
-  text-shadow: none;
+  pointer-events: none;
+  animation: current-char-pulse 0.5s ease-in-out infinite;
+}
+
+@keyframes current-char-pulse {
+  0%, 100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
 }
 
 @keyframes subtitle-appear {
@@ -849,11 +880,12 @@
   .subtitle-char {
     transition: none;
   }
-  
-  .subtitle-char.highlighted-char {
-    transform: none;
+
+  .subtitle-char.current-char::after {
+    animation: none;
+    opacity: 1;
   }
-  
+
   .subtitle-overlay {
     animation: none;
   }
