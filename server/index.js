@@ -11,6 +11,8 @@ import OpenAI from 'openai';
 import { ElevenLabsClient } from '@elevenlabs/elevenlabs-js';
 import fs from 'fs';
 import { dbHelpers } from './database-replit.js';
+import { books } from '../shared/schema.js';
+import { eq } from 'drizzle-orm';
 import { ObjectStorageService } from './objectStorage.js';
 
 dotenv.config();
@@ -138,8 +140,9 @@ app.post('/api/books', async (req, res) => {
     const sessionId = uuidv4();
     await dbHelpers.createScanningSession(sessionId, bookId);
 
-    // Use external URL if provided, otherwise fallback to localhost
-    const baseUrl = process.env.EXTERNAL_URL || `http://localhost:${PORT}`;
+    // Use Replit domain or external URL if provided, otherwise fallback to localhost  
+    const baseUrl = process.env.EXTERNAL_URL || 
+                    (process.env.REPLIT_DEV_DOMAIN ? `https://${process.env.REPLIT_DEV_DOMAIN}` : `http://localhost:${PORT}`);
     const mobileUrl = `${baseUrl}/camera.html?session=${sessionId}`;
     const qrCodeDataUrl = await QRCode.toDataURL(mobileUrl);
 
@@ -570,12 +573,8 @@ app.delete('/api/books/:id', async (req, res) => {
     }
 
     // Database will cascade delete pages, text_blocks, and scanning_sessions
-    const changes = await new Promise((resolve, reject) => {
-      db.run('DELETE FROM books WHERE id = ?', [bookId], function(err) {
-        if (err) reject(err);
-        else resolve(this.changes);
-      });
-    });
+    const result = await db.delete(books).where(eq(books.id, parseInt(bookId)));
+    const changes = result.rowCount || 0;
 
     if (changes === 0) {
       return res.status(404).json({ error: 'Book not found' });
