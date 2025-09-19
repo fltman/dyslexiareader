@@ -38,18 +38,7 @@ const AgentChat = ({ bookId, bookTitle }) => {
     }
   }, [bookId]);
 
-  // Load ElevenLabs widget script
-  useEffect(() => {
-    if (!document.getElementById('elevenlabs-widget-script')) {
-      const script = document.createElement('script');
-      script.id = 'elevenlabs-widget-script';
-      script.src = 'https://unpkg.com/@elevenlabs/convai-widget-embed';
-      script.async = true;
-      script.type = 'text/javascript';
-      document.head.appendChild(script);
-    }
-  }, []);
-
+  
   return (
     <elevenlabs-convai agent-id="agent_2701k5hmygdyegps36rmfm75xts3"></elevenlabs-convai><script src="https://unpkg.com/@elevenlabs/convai-widget-embed" async type="text/javascript"></script>
     <div className="agent-chat">
@@ -62,13 +51,7 @@ const AgentChat = ({ bookId, bookTitle }) => {
         </div>
       )}
 
-      {!isLoading && !error && (
-        <div className="agent-widget-container">
-          {/* Simple hardcoded ElevenLabs widget */}
-          <elevenlabs-convai agent-id={agentId}></elevenlabs-convai>
-        </div>
-      )}
-
+  
       {error && (
         <div className="agent-error">
           <p>{error}</p>
