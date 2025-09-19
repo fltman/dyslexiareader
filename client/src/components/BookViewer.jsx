@@ -18,7 +18,6 @@ const BookViewer = () => {
   const [scaleY, setScaleY] = useState(1.0);
   const [offsetX, setOffsetX] = useState(0);
   const [offsetY, setOffsetY] = useState(0);
-  const [showScalingControls, setShowScalingControls] = useState(false);
   const [currentAudio, setCurrentAudio] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentPlayingBlock, setCurrentPlayingBlock] = useState(null);
@@ -375,84 +374,9 @@ const BookViewer = () => {
               <option value="2">2x (Faster)</option>
             </select>
           </div>
-          <button
-            onClick={() => setShowScalingControls(!showScalingControls)}
-            className="scaling-toggle-button"
-          >
-            ⚙️ Adjust Scaling
-          </button>
         </div>
       </div>
 
-      {showScalingControls && (
-        <div className="scaling-controls">
-          <div className="scaling-control">
-            <label htmlFor="scaleX">X Scale: {scaleX.toFixed(2)}</label>
-            <input
-              id="scaleX"
-              type="range"
-              min="0.5"
-              max="2.0"
-              step="0.01"
-              value={scaleX}
-              onChange={(e) => setScaleX(parseFloat(e.target.value))}
-              className="scale-slider"
-            />
-          </div>
-          <div className="scaling-control">
-            <label htmlFor="scaleY">Y Scale: {scaleY.toFixed(2)}</label>
-            <input
-              id="scaleY"
-              type="range"
-              min="0.5"
-              max="2.0"
-              step="0.01"
-              value={scaleY}
-              onChange={(e) => setScaleY(parseFloat(e.target.value))}
-              className="scale-slider"
-            />
-          </div>
-          <div className="scaling-control">
-            <label htmlFor="offsetX">X Offset: {offsetX}px</label>
-            <input
-              id="offsetX"
-              type="range"
-              min="-200"
-              max="200"
-              step="1"
-              value={offsetX}
-              onChange={(e) => setOffsetX(parseInt(e.target.value))}
-              className="offset-slider"
-            />
-          </div>
-          <div className="scaling-control">
-            <label htmlFor="offsetY">Y Offset: {offsetY}px</label>
-            <input
-              id="offsetY"
-              type="range"
-              min="-200"
-              max="200"
-              step="1"
-              value={offsetY}
-              onChange={(e) => setOffsetY(parseInt(e.target.value))}
-              className="offset-slider"
-            />
-          </div>
-          <div className="scaling-control">
-            <button
-              onClick={() => {
-                setScaleX(1.0);
-                setScaleY(1.0);
-                setOffsetX(0);
-                setOffsetY(0);
-              }}
-              className="reset-scaling-button"
-            >
-              Reset All
-            </button>
-          </div>
-        </div>
-      )}
 
       <div className="book-viewer-content">
         <div className="page-display">
