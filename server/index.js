@@ -184,6 +184,9 @@ app.post('/api/sessions/:sessionId/pages', upload.single('image'), async (req, r
     const uniqueFilename = `${Date.now()}-${Math.round(Math.random() * 1E9)}${fileExtension}`;
 
     // Upload file using Replit Object Storage
+    console.log(`📁 Processing upload: ${uniqueFilename}, size: ${req.file.buffer.length} bytes, mimetype: ${req.file.mimetype}`);
+    console.log(`📄 Buffer info: isBuffer=${Buffer.isBuffer(req.file.buffer)}, constructor=${req.file.buffer.constructor.name}`);
+    
     const imageUrl = await objectStorageService.uploadFile(req.file.buffer, uniqueFilename, req.file.mimetype);
     console.log('✅ File uploaded to Replit Object Storage:', imageUrl);
 

@@ -22,9 +22,18 @@ export class ObjectStorageService {
   async uploadFile(buffer, fileName, contentType = 'application/octet-stream') {
     try {
       const objectKey = `uploads/${fileName}`;
-      console.log(`🔄 Uploading: key="${objectKey}", size=${buffer.length} bytes`);
+      console.log(`🔄 Uploading: key="${objectKey}", input size=${buffer.length} bytes`);
+      console.log(`📄 Upload buffer info: isBuffer=${Buffer.isBuffer(buffer)}, constructor=${buffer.constructor.name}`);
       
-      const uploadResult = await this.client.uploadFromBytes(objectKey, buffer);
+      // Ensure we have a proper Uint8Array for the Object Storage client
+      let uploadBuffer = buffer;
+      if (Buffer.isBuffer(buffer)) {
+        console.log(`🔄 Converting Buffer to Uint8Array for upload...`);
+        uploadBuffer = new Uint8Array(buffer);
+        console.log(`✅ Converted: new size=${uploadBuffer.length} bytes`);
+      }
+      
+      const uploadResult = await this.client.uploadFromBytes(objectKey, uploadBuffer);
       
       if (!uploadResult.ok) {
         console.error(`❌ Upload failed for ${objectKey}:`, uploadResult.error);
@@ -32,16 +41,6 @@ export class ObjectStorageService {
       }
       
       console.log(`✅ File uploaded to Object Storage: key="${objectKey}"`);
-      
-      // Test if we can list objects to see what's actually there
-      try {
-        const listResult = await this.client.list({ prefix: 'uploads/' });
-        if (listResult.ok) {
-          console.log(`📋 Current objects with 'uploads/' prefix:`, listResult.value.map(obj => obj.name));
-        }
-      } catch (listError) {
-        console.log(`⚠️ Could not list objects:`, listError);
-      }
       
       // Return the object path that can be used to access the file
       return `/objects/${objectKey}`;

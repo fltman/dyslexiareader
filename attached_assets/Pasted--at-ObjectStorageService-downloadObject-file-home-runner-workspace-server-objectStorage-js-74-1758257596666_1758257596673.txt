@@ -1,0 +1,95 @@
+    at ObjectStorageService.downloadObject (file:///home/runner/workspace/server/objectStorage.js:74:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async file:///home/runner/workspace/server/index.js:81:5
+🔍 Trying to download: key="uploads/1758257284422-469328304.jpg"
+❌ Object not found: key="uploads/1758257284422-469328304.jpg", error="undefined"
+📋 Available objects: [
+  'uploads/1758256042404-750382279.jpg',
+  'uploads/1758256250842-488612808.jpg',
+  'uploads/1758256540612-345541378.jpg',
+  'uploads/1758256965786-429267863.jpg',
+  'uploads/1758257284422-469328304.jpg'
+]
+Error downloading file: ObjectNotFoundError: Object not found
+    at ObjectStorageService.downloadObject (file:///home/runner/workspace/server/objectStorage.js:74:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async file:///home/runner/workspace/server/index.js:81:5
+Error serving object: ObjectNotFoundError: Object not found
+    at ObjectStorageService.downloadObject (file:///home/runner/workspace/server/objectStorage.js:74:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async file:///home/runner/workspace/server/index.js:81:5
+🔍 Trying to download: key="uploads/1758257284422-469328304.jpg"
+❌ Object not found: key="uploads/1758257284422-469328304.jpg", error="undefined"
+4:49:40 AM [vite] http proxy error: /api
+Error: connect ECONNREFUSED 127.0.0.1:5001
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16) (x2)
+✅ OpenAI initialized
+✅ ElevenLabs initialized
+Using Replit PostgreSQL database
+Using Replit Object Storage
+Server running on port 5001
+Environment: development
+🔍 Trying to download: key="uploads/1758257284422-469328304.jpg"
+✅ Downloaded successfully: uploads/1758257284422-469328304.jpg (1 bytes)
+🔍 Trying to download: key="uploads/1758257284422-469328304.jpg"
+✅ Downloaded successfully: uploads/1758257284422-469328304.jpg (1 bytes)
+🔄 Uploading: key="uploads/1758257517313-72054305.jpg", size=3663740 bytes
+✅ File uploaded to Object Storage: key="uploads/1758257517313-72054305.jpg"
+📋 Current objects with 'uploads/' prefix: [
+  'uploads/1758256042404-750382279.jpg',
+  'uploads/1758256250842-488612808.jpg',
+  'uploads/1758256540612-345541378.jpg',
+  'uploads/1758256965786-429267863.jpg',
+  'uploads/1758257284422-469328304.jpg',
+  'uploads/1758257517313-72054305.jpg'
+]
+✅ File uploaded to Replit Object Storage: /objects/uploads/1758257517313-72054305.jpg
+🔍 Trying to download: key="uploads/1758257517313-72054305.jpg"
+✅ Downloaded successfully: uploads/1758257517313-72054305.jpg (1 bytes)
+🔍 Trying to download: key="uploads/1758257517313-72054305.jpg"
+✅ Downloaded successfully: uploads/1758257517313-72054305.jpg (1 bytes)
+Error completing book scan: InternalServerError: 500 The server had an error processing your request. Sorry about that! You can retry your request, or contact us through our help center at help.openai.com if you keep seeing this error. (Please include the request ID req_4136e0b69c9643f0a7f0b573b65f2a72 in your email.)
+    at APIError.generate (file:///home/runner/workspace/node_modules/openai/core/error.mjs:62:20)
+    at OpenAI.makeStatusError (file:///home/runner/workspace/node_modules/openai/client.mjs:160:32)
+    at OpenAI.makeRequest (file:///home/runner/workspace/node_modules/openai/client.mjs:328:30)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async file:///home/runner/workspace/server/index.js:262:24 {
+  status: 500,
+  headers: Headers {
+    date: 'Fri, 19 Sep 2025 04:52:45 GMT',
+    'content-type': 'application/json',
+    'content-length': '369',
+    connection: 'keep-alive',
+    'access-control-expose-headers': 'X-Request-ID',
+    'openai-processing-ms': '321',
+    'x-ratelimit-limit-input-images': '50000',
+    'x-ratelimit-limit-requests': '10000',
+    'x-ratelimit-limit-tokens': '2000000',
+    'x-ratelimit-remaining-input-images': '49999',
+    'x-ratelimit-remaining-requests': '9999',
+    'x-ratelimit-remaining-tokens': '1999130',
+    'x-ratelimit-reset-input-images': '1ms',
+    'x-ratelimit-reset-requests': '6ms',
+    'x-ratelimit-reset-tokens': '26ms',
+    'x-request-id': 'req_4136e0b69c9643f0a7f0b573b65f2a72',
+    'x-envoy-upstream-service-time': '1364',
+    'x-openai-proxy-wasm': 'v0.1',
+    'cf-cache-status': 'DYNAMIC',
+    'set-cookie': '__cf_bm=tnn60zkbVn5bgTCOZIW72g2JGj7RBe0J76ZP7OfGatI-1758257565-1.0.1.1-Jn0Q5rfYSjqR7GtegzeE6B7AraujuwumQzFGItcyBzI6TfT2zHwHKHW7JQHpsQ2.B8O9bfxUTjAgaEiz5CQYIdv4k0OSpjGeoUL4g_nK6UE; path=/; expires=Fri, 19-Sep-25 05:22:45 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None, _cfuvid=haTY4DvUe2dFm0RMxvhIIqUs9nZCrP75RgxQcTnUwaA-1758257565630-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None',
+    'strict-transport-security': 'max-age=31536000; includeSubDomains; preload',
+    'x-content-type-options': 'nosniff',
+    server: 'cloudflare',
+    'cf-ray': '981679861b30678c-ATL',
+    'alt-svc': 'h3=":443"; ma=86400'
+  },
+  requestID: 'req_4136e0b69c9643f0a7f0b573b65f2a72',
+  error: {
+    message: 'The server had an error processing your request. Sorry about that! You can retry your request, or contact us through our help center at help.openai.com if you keep seeing this error. (Please include the request ID req_4136e0b69c9643f0a7f0b573b65f2a72 in your email.)',
+    type: 'server_error',
+    param: null,
+    code: null
+  },
+  code: null,
+  param: null,
+  type: 'server_error'
+}
