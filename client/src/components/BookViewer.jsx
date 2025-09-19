@@ -11,6 +11,7 @@ const BookViewer = () => {
   const [pages, setPages] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
   const [textBlocks, setTextBlocks] = useState([]);
+  const [textBlocksCache, setTextBlocksCache] = useState({}); // Cache for instant loading
   const [isDetecting, setIsDetecting] = useState(false);
   const [processingBlocks, setProcessingBlocks] = useState(new Set());
   const [loading, setLoading] = useState(true);
@@ -38,12 +39,20 @@ const BookViewer = () => {
 
   useEffect(() => {
     if (pages.length > 0) {
-      console.log('📄 Loading text blocks for page:', currentPage, 'pageId:', pages[currentPage].id);
-      // Clear current text blocks immediately to avoid showing wrong page's blocks
-      setTextBlocks([]);
-      fetchTextBlocks(pages[currentPage].id);
+      const pageId = pages[currentPage].id;
+      console.log('📄 Loading text blocks for page:', currentPage, 'pageId:', pageId);
+
+      // Check cache first for instant loading
+      if (textBlocksCache[pageId]) {
+        console.log('⚡ Loading text blocks from cache');
+        setTextBlocks(textBlocksCache[pageId]);
+      } else {
+        // Clear current text blocks if no cache available
+        setTextBlocks([]);
+        fetchTextBlocks(pageId);
+      }
     }
-  }, [currentPage, pages]);
+  }, [currentPage, pages, textBlocksCache]);
 
   const fetchBook = async () => {
     try {
@@ -131,6 +140,12 @@ const BookViewer = () => {
       const blocks = await response.json();
       console.log('📦 Fetched text blocks:', blocks.length, 'blocks');
       
+      // Cache the results for instant loading
+      setTextBlocksCache(prev => ({
+        ...prev,
+        [pageId]: blocks
+      }));
+
       // Only update if this is still the current page to prevent race conditions
       if (pages[currentPage]?.id === pageId) {
         setTextBlocks(blocks);
@@ -201,6 +216,12 @@ const BookViewer = () => {
         console.log('✅ Auto-detection completed:', result);
 
         if (result.success && result.blocks?.length > 0) {
+          // Cache the newly detected blocks
+          setTextBlocksCache(prev => ({
+            ...prev,
+            [pageId]: result.blocks
+          }));
+
           // Blocks are already saved by the backend, refresh text blocks for current page only
           if (pages[currentPage]?.id === pageId) {
             setTextBlocks(result.blocks);
