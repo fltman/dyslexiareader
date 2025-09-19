@@ -17,7 +17,7 @@ const BookViewer = () => {
   const [scaleX, setScaleX] = useState(1.0);
   const [scaleY, setScaleY] = useState(1.0);
   const [offsetX, setOffsetX] = useState(0);
-  const [offsetY, setOffsetY] = useState(95);
+  const [offsetY, setOffsetY] = useState(0);
   const [showScalingControls, setShowScalingControls] = useState(false);
   const [currentAudio, setCurrentAudio] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
