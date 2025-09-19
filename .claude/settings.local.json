@@ -37,7 +37,9 @@
       "Bash(git remote set-url:*)",
       "Bash(git pull:*)",
       "Bash(git checkout:*)",
-      "WebFetch(domain:elevenlabs.io)"
+      "WebFetch(domain:elevenlabs.io)",
+      "Bash(git fetch:*)",
+      "Bash(git merge:*)"
     ],
     "deny": [],
     "ask": []
