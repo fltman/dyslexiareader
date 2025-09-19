@@ -1,6 +1,6 @@
 # Overview
 
-TheReader is a dyslexia-friendly web application that helps users scan text from books and images, converting them to speech with synchronized highlighting. The application provides a full-stack solution with mobile-first design, AI-powered text detection using OpenAI GPT-4o, and text-to-speech capabilities via ElevenLabs. It's specifically designed for people with dyslexia, featuring accessibility-first principles including high contrast, large touch targets, OpenDyslexic font, and reduced motion support.
+TheReader is a dyslexia-friendly web application that helps users scan text from books and images, converting them to speech with synchronized highlighting. The application provides a full-stack solution with mobile-first design, AI-powered text detection using Google Cloud Vision API for precise OCR coordination (with OpenAI GPT-4o fallback), and text-to-speech capabilities via ElevenLabs. It's specifically designed for people with dyslexia, featuring accessibility-first principles including high contrast, large touch targets, OpenDyslexic font, and reduced motion support.
 
 # User Preferences
 
@@ -36,7 +36,8 @@ Preferred communication style: Simple, everyday language.
 # External Dependencies
 
 ## AI and Machine Learning Services
-- **OpenAI GPT-4o**: Used for optical character recognition (OCR) and text extraction from images
+- **Google Cloud Vision API**: Primary OCR service using Document Text Detection for accurate text recognition and coordinate extraction with semantic block grouping
+- **OpenAI GPT-4o**: Fallback OCR service for text extraction when Google Cloud Vision is unavailable
 - **ElevenLabs**: Provides text-to-speech conversion with character-level synchronization for audio highlighting
 - **Tesseract.js**: Client-side OCR capabilities as fallback or supplementary text recognition
 

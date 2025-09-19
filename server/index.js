@@ -46,6 +46,15 @@ if (process.env.ELEVENLABS_API_KEY) {
   console.warn('⚠️  ELEVENLABS_API_KEY not set - text-to-speech will not work');
 }
 
+// Initialize Google Cloud Vision (using REST API with key since client library needs service account)
+let visionApiKey = null;
+if (process.env.GOOGLE_CLOUD_VISION_API_KEY) {
+  visionApiKey = process.env.GOOGLE_CLOUD_VISION_API_KEY;
+  console.log('✅ Google Cloud Vision API key configured');
+} else {
+  console.warn('⚠️  GOOGLE_CLOUD_VISION_API_KEY not set - using OpenAI for text detection');
+}
+
 // Configure multer for image uploads (use memory storage for Replit Object Storage)
 const storage = multer.memoryStorage();
 const objectStorageService = new ObjectStorageService();
@@ -409,7 +418,7 @@ app.post('/api/pages/:pageId/textblocks', async (req, res) => {
   }
 });
 
-// Detect text blocks using OpenAI vision
+// Detect text blocks using Google Cloud Vision API (preferred) or OpenAI (fallback)
 app.post('/api/pages/:pageId/detect-text-blocks', async (req, res) => {
   try {
     const pageId = req.params.pageId;
@@ -445,8 +454,6 @@ app.post('/api/pages/:pageId/detect-text-blocks', async (req, res) => {
     } else {
       throw new Error('No valid image path found for page');
     }
-    
-    const base64Image = imageBuffer.toString('base64');
 
     // Get actual image dimensions using image-size library
     const sizeOf = await import('image-size');
@@ -454,16 +461,137 @@ app.post('/api/pages/:pageId/detect-text-blocks', async (req, res) => {
 
     console.log('Actual image dimensions:', actualImageDimensions);
 
-    // Use OpenAI to detect text blocks and extract coordinates
-    const response = await openai.chat.completions.create({
-      model: "gpt-4o",
-      messages: [
-        {
-          role: "user",
-          content: [
-            {
-              type: "text",
-              text: `Analyze this book page image and identify all text regions. This image is exactly ${actualImageDimensions.width}x${actualImageDimensions.height} pixels.
+    let detectedBlocks = [];
+
+    // Use Google Cloud Vision API if available (preferred for accuracy)
+    if (visionApiKey) {
+      console.log('🔥 Using Google Cloud Vision API for text detection');
+      
+      try {
+        // Use REST API for document text detection
+        const base64Image = imageBuffer.toString('base64');
+        
+        const requestBody = {
+          requests: [{
+            image: { content: base64Image },
+            features: [{ type: 'DOCUMENT_TEXT_DETECTION' }]
+          }]
+        };
+        
+        const response = await fetch(`https://vision.googleapis.com/v1/images:annotate?key=${visionApiKey}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(requestBody)
+        });
+        
+        if (!response.ok) {
+          throw new Error(`Vision API error: ${response.status} ${response.statusText}`);
+        }
+        
+        const visionResult = await response.json();
+        const annotation = visionResult.responses[0];
+        
+        if (annotation.error) {
+          throw new Error(`Vision API error: ${annotation.error.message}`);
+        }
+        
+        const fullTextAnnotation = annotation.fullTextAnnotation;
+        
+        if (fullTextAnnotation && fullTextAnnotation.pages && fullTextAnnotation.pages.length > 0) {
+          console.log('📄 Processing document structure from Google Cloud Vision');
+          
+          const page = fullTextAnnotation.pages[0];
+          detectedBlocks = [];
+          
+          // Process each block (which represents meaningful text regions)
+          for (const block of page.blocks || []) {
+            if (!block.paragraphs || block.paragraphs.length === 0) continue;
+            
+            // Group paragraphs in the same block
+            const blockTexts = [];
+            let minX = Infinity, minY = Infinity, maxX = 0, maxY = 0;
+            let totalConfidence = 0, totalWords = 0;
+            
+            for (const paragraph of block.paragraphs) {
+              if (!paragraph.words || paragraph.words.length === 0) continue;
+              
+              // Extract text from words with proper spacing
+              const paragraphText = paragraph.words.map(word => {
+                const wordText = word.symbols.map(symbol => symbol.text).join('');
+                
+                // Track bounding box
+                if (word.boundingBox && word.boundingBox.vertices) {
+                  const vertices = word.boundingBox.vertices;
+                  const x = Math.min(...vertices.map(v => v.x || 0));
+                  const y = Math.min(...vertices.map(v => v.y || 0));
+                  const maxXWord = Math.max(...vertices.map(v => v.x || 0));
+                  const maxYWord = Math.max(...vertices.map(v => v.y || 0));
+                  
+                  minX = Math.min(minX, x);
+                  minY = Math.min(minY, y);
+                  maxX = Math.max(maxX, maxXWord);
+                  maxY = Math.max(maxY, maxYWord);
+                }
+                
+                // Track confidence
+                if (word.confidence) {
+                  totalConfidence += word.confidence;
+                  totalWords++;
+                }
+                
+                return wordText;
+              }).join(' '); // Add space between words
+              
+              if (paragraphText.trim().length > 0) {
+                blockTexts.push(paragraphText.trim());
+              }
+            }
+            
+            // Create text block if we have content
+            if (blockTexts.length > 0 && minX !== Infinity) {
+              const text = blockTexts.join(' ').trim();
+              
+              // Only include blocks with meaningful content (at least 3 characters)
+              if (text.length >= 3) {
+                detectedBlocks.push({
+                  text: text,
+                  x: minX,
+                  y: minY,
+                  width: maxX - minX,
+                  height: maxY - minY,
+                  confidence: totalWords > 0 ? totalConfidence / totalWords : 0.9
+                });
+              }
+            }
+          }
+        }
+        
+        console.log('Google Cloud Vision detected text blocks:', detectedBlocks);
+        
+      } catch (visionError) {
+        console.error('Google Cloud Vision API error:', visionError);
+        console.log('Falling back to OpenAI...');
+        // Fall through to OpenAI fallback
+      }
+    }
+    
+    // Fallback to OpenAI if Google Cloud Vision is not available or failed
+    if (detectedBlocks.length === 0 && openai) {
+      console.log('🤖 Using OpenAI for text detection (fallback)');
+      
+      const base64Image = imageBuffer.toString('base64');
+      
+      const response = await openai.chat.completions.create({
+        model: "gpt-4o",
+        messages: [
+          {
+            role: "user",
+            content: [
+              {
+                type: "text",
+                text: `Analyze this book page image and identify all text regions. This image is exactly ${actualImageDimensions.width}x${actualImageDimensions.height} pixels.
 
 For each text block (paragraph, heading, or distinct text area), provide:
 1. The text content
@@ -487,65 +615,68 @@ Return the results in JSON format:
 }
 
 Focus on grouping text into meaningful blocks (complete sentences/paragraphs) rather than individual words. Be precise with coordinates using the ${actualImageDimensions.width}x${actualImageDimensions.height} pixel coordinate system.`
-            },
-            {
-              type: "image_url",
-              image_url: {
-                url: `data:image/jpeg;base64,${base64Image}`
+              },
+              {
+                type: "image_url",
+                image_url: {
+                  url: `data:image/jpeg;base64,${base64Image}`
+                }
               }
-            }
-          ]
-        }
-      ],
-      max_tokens: 1500
-    });
+            ]
+          }
+        ],
+        max_tokens: 1500
+      });
 
-    let aiResult = {
-      textBlocks: []
-    };
+      let aiResult = {
+        textBlocks: []
+      };
 
-    try {
-      const content = response.choices[0].message.content;
-      console.log('Raw OpenAI response:', content);
-      
-      // First try to extract JSON from markdown code blocks
-      let jsonString = content;
-      const codeBlockMatch = content.match(/```(?:json)?\s*(\{[\s\S]*?\})\s*```/);
-      if (codeBlockMatch) {
-        jsonString = codeBlockMatch[1];
-      } else {
-        // Fallback: find JSON object directly
-        const jsonMatch = content.match(/\{[\s\S]*\}/);
-        if (jsonMatch) {
-          jsonString = jsonMatch[0];
+      try {
+        const content = response.choices[0].message.content;
+        console.log('Raw OpenAI response:', content);
+        
+        // First try to extract JSON from markdown code blocks
+        let jsonString = content;
+        const codeBlockMatch = content.match(/```(?:json)?\s*(\{[\s\S]*?\})\s*```/);
+        if (codeBlockMatch) {
+          jsonString = codeBlockMatch[1];
+        } else {
+          // Fallback: find JSON object directly
+          const jsonMatch = content.match(/\{[\s\S]*\}/);
+          if (jsonMatch) {
+            jsonString = jsonMatch[0];
+          }
         }
+        
+        console.log('Extracted JSON string:', jsonString.substring(0, 200) + '...');
+        aiResult = JSON.parse(jsonString);
+        
+        detectedBlocks = aiResult.textBlocks || [];
+        console.log('OpenAI detected text blocks:', detectedBlocks);
+        
+      } catch (parseError) {
+        console.error('Error parsing AI response:', parseError);
+        console.error('Failed content snippet:', response.choices[0].message.content.substring(0, 200));
       }
-      
-      console.log('Extracted JSON string:', jsonString.substring(0, 200) + '...');
-      aiResult = JSON.parse(jsonString);
-    } catch (parseError) {
-      console.error('Error parsing AI response:', parseError);
-      console.error('Failed content snippet:', response.choices[0].message.content.substring(0, 200));
     }
-
-    console.log('OpenAI detected text blocks:', aiResult);
 
     // Clear existing text blocks for this page
     await dbHelpers.clearTextBlocks(pageId);
 
     const createdBlocks = [];
 
-    // Save detected blocks to database (no scaling needed since OpenAI used actual dimensions)
-    if (aiResult.textBlocks && aiResult.textBlocks.length > 0) {
-      for (const block of aiResult.textBlocks) {
+    // Save detected blocks to database
+    if (detectedBlocks && detectedBlocks.length > 0) {
+      for (const block of detectedBlocks) {
         console.log('Block to save:', block);
 
         const blockId = await dbHelpers.createTextBlock(
           pageId,
-          block.x,
-          block.y,
-          block.width,
-          block.height
+          Math.round(block.x),
+          Math.round(block.y),
+          Math.round(block.width),
+          Math.round(block.height)
         );
 
         // Update the text block with the detected text immediately
@@ -555,10 +686,10 @@ Focus on grouping text into meaningful blocks (complete sentences/paragraphs) ra
           id: blockId,
           text: block.text,
           confidence: block.confidence,
-          x: block.x,
-          y: block.y,
-          width: block.width,
-          height: block.height
+          x: Math.round(block.x),
+          y: Math.round(block.y),
+          width: Math.round(block.width),
+          height: Math.round(block.height)
         });
       }
     }
@@ -566,7 +697,8 @@ Focus on grouping text into meaningful blocks (complete sentences/paragraphs) ra
     res.json({
       success: true,
       blocks: createdBlocks,
-      totalBlocks: createdBlocks.length
+      totalBlocks: createdBlocks.length,
+      usedGoogleVision: Boolean(visionApiKey && detectedBlocks.length > 0)
     });
 
   } catch (error) {
