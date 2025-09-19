@@ -23,6 +23,13 @@ const BookViewer = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentPlayingBlock, setCurrentPlayingBlock] = useState(null);
   const [highlightedCharIndex, setHighlightedCharIndex] = useState(-1);
+  const [currentPlayingText, setCurrentPlayingText] = useState('');
+  const [currentAlignment, setCurrentAlignment] = useState(null);
+  const [playbackSpeed, setPlaybackSpeed] = useState(() => {
+    // Load saved speed preference from localStorage
+    const saved = localStorage.getItem('readerPlaybackSpeed');
+    return saved ? parseFloat(saved) : 1.0;
+  });
 
   useEffect(() => {
     if (bookId) {
@@ -64,6 +71,12 @@ const BookViewer = () => {
       
       const blocks = await response.json();
       setTextBlocks(blocks);
+      
+      // Automatically detect text blocks if none exist for this page
+      if (blocks.length === 0 && !isDetecting) {
+        console.log('🔍 No text blocks found for page, auto-detecting...');
+        detectTextBlocksAutomatically(pageId);
+      }
     } catch (error) {
       console.error('Error fetching text blocks:', error);
       setTextBlocks([]);
@@ -76,26 +89,58 @@ const BookViewer = () => {
     setIsDetecting(true);
 
     try {
-      // Use OpenAI to detect text blocks and extract text in one call
+      // Use Google Cloud Vision to detect text blocks and extract text in one call
       const response = await fetch(`/api/pages/${pages[currentPage].id}/detect-text-blocks`, {
         method: 'POST'
       });
 
       if (response.ok) {
         const result = await response.json();
-        console.log('OpenAI detected text blocks:', result);
+        console.log('Google Cloud Vision detected text blocks:', result);
 
         if (result.success && result.blocks?.length > 0) {
           // Blocks are already saved by the backend, just refresh the UI
           fetchTextBlocks(pages[currentPage].id);
         } else {
-          console.log('No text blocks detected by OpenAI');
+          console.log('No text blocks detected');
         }
       } else {
         console.error('Error calling text detection API');
       }
     } catch (error) {
       console.error('Error detecting text blocks:', error);
+    }
+
+    setIsDetecting(false);
+  };
+
+  const detectTextBlocksAutomatically = async (pageId) => {
+    if (isDetecting) return;
+
+    setIsDetecting(true);
+
+    try {
+      console.log('🔍 Auto-detecting text blocks for page:', pageId);
+      
+      const response = await fetch(`/api/pages/${pageId}/detect-text-blocks`, {
+        method: 'POST'
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        console.log('✅ Auto-detection completed:', result);
+
+        if (result.success && result.blocks?.length > 0) {
+          // Blocks are already saved by the backend, refresh text blocks for current page only
+          if (pages[currentPage]?.id === pageId) {
+            setTextBlocks(result.blocks);
+          }
+        }
+      } else {
+        console.error('❌ Auto-detection API error');
+      }
+    } catch (error) {
+      console.error('❌ Auto-detection failed:', error);
     }
 
     setIsDetecting(false);
@@ -176,6 +221,10 @@ const BookViewer = () => {
           const fullAudioUrl = result.audio_url;
           console.log('Playing audio from:', fullAudioUrl);
           const audio = new Audio(fullAudioUrl);
+          
+          // Set current text and alignment for subtitle display
+          setCurrentPlayingText(result.text || textContent);
+          setCurrentAlignment(result.alignment);
 
           audio.addEventListener('error', (e) => {
             console.error('Audio playback error:', e);
@@ -192,9 +241,16 @@ const BookViewer = () => {
 
           // Handle synchronized highlighting
           audio.addEventListener('timeupdate', () => {
-            if (result.alignment?.characters) {
+            if (result.alignment?.characters && result.text) {
               const currentTime = audio.currentTime;
               const characters = result.alignment.characters;
+              
+              // Consistency guard: ensure text and alignment lengths match
+              if (characters.length !== result.text.length) {
+                console.warn('⚠️ Text/alignment length mismatch, disabling character highlighting');
+                setHighlightedCharIndex(-1);
+                return;
+              }
 
               // Find the character being spoken at current time
               let charIndex = -1;
@@ -222,9 +278,15 @@ const BookViewer = () => {
             setCurrentPlayingBlock(null);
             setHighlightedCharIndex(-1);
             setCurrentAudio(null);
+            setCurrentPlayingText('');
+            setCurrentAlignment(null);
           });
 
           setCurrentAudio(audio);
+
+          // Apply playback speed
+          audio.playbackRate = playbackSpeed;
+          console.log('🎛️ Audio playback speed set to:', playbackSpeed);
 
           audio.play().catch(error => {
             console.error('Audio play failed:', error);
@@ -245,6 +307,17 @@ const BookViewer = () => {
   const resumeAudio = () => {
     if (currentAudio && !isPlaying) {
       currentAudio.play();
+    }
+  };
+
+  const changePlaybackSpeed = (speed) => {
+    setPlaybackSpeed(speed);
+    localStorage.setItem('readerPlaybackSpeed', speed.toString());
+    
+    // Apply speed to currently playing audio
+    if (currentAudio) {
+      currentAudio.playbackRate = speed;
+      console.log('🎛️ Playback speed changed to:', speed);
     }
   };
 
@@ -283,8 +356,25 @@ const BookViewer = () => {
             disabled={isDetecting}
             className="detect-button"
           >
-            {isDetecting ? 'Detecting...' : '🔍 Detect Text Blocks'}
+{isDetecting ? 'Detecting...' : '🔄 Re-detect Text Blocks'}
           </button>
+          <div className="speed-controls">
+            <label htmlFor="speed-selector" className="speed-label">🎚️ Speed:</label>
+            <select 
+              id="speed-selector"
+              value={playbackSpeed.toString()} 
+              onChange={(e) => changePlaybackSpeed(parseFloat(e.target.value))}
+              className="speed-selector"
+              title="Adjust playback speed"
+            >
+              <option value="0.5">0.5x (Slower)</option>
+              <option value="0.75">0.75x</option>
+              <option value="1">1x (Normal)</option>
+              <option value="1.25">1.25x</option>
+              <option value="1.5">1.5x</option>
+              <option value="2">2x (Faster)</option>
+            </select>
+          </div>
           <button
             onClick={() => setShowScalingControls(!showScalingControls)}
             className="scaling-toggle-button"
@@ -378,6 +468,22 @@ const BookViewer = () => {
                 console.log('Image loaded, ready for detection');
               }}
             />
+
+            {/* Real-time subtitle overlay */}
+            {currentPlayingText && isPlaying && (
+              <div className="subtitle-overlay">
+                <div className="subtitle-text">
+                  {currentPlayingText.split('').map((char, index) => (
+                    <span
+                      key={index}
+                      className={`subtitle-char ${index === highlightedCharIndex ? 'highlighted-char' : ''}`}
+                    >
+                      {char}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {/* Text block overlays */}
             {textBlocks.map((block) => (

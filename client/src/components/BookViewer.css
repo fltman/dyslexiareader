@@ -24,6 +24,7 @@
   display: flex;
   gap: 1rem;
   align-items: center;
+  flex-wrap: wrap;
 }
 
 .back-button {
@@ -384,6 +385,64 @@
   }
 }
 
+/* Cool scanning animation for text detection */
+@keyframes scan-sweep {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+@keyframes detect-pulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(52, 152, 219, 0.7);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0 0 10px rgba(52, 152, 219, 0);
+  }
+}
+
+/* Voice generation wave animation */
+@keyframes voice-wave {
+  0%, 100% {
+    height: 10px;
+    background-color: #3498db;
+  }
+  25% {
+    height: 20px;
+    background-color: #2ecc71;
+  }
+  50% {
+    height: 15px;
+    background-color: #e74c3c;
+  }
+  75% {
+    height: 25px;
+    background-color: #f39c12;
+  }
+}
+
+@keyframes glow-pulse {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(52, 152, 219, 0.8), 0 0 30px rgba(52, 152, 219, 0.6);
+  }
+}
+
 .pages-sidebar {
   width: 300px;
   background-color: #fff;
@@ -616,4 +675,154 @@
 .highlighted-text {
   background-color: rgba(255, 255, 0, 0.6);
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Real-time subtitle overlay */
+.subtitle-overlay {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.85);
+  border-radius: 12px;
+  padding: 16px 24px;
+  max-width: 80%;
+  backdrop-filter: blur(8px);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  animation: subtitle-appear 0.3s ease-out;
+}
+
+.subtitle-text {
+  font-family: 'Open Dyslexic', Arial, sans-serif;
+  font-size: 1.4rem;
+  line-height: 1.6;
+  color: #ffffff;
+  text-align: center;
+  letter-spacing: 0.02em;
+  word-spacing: 0.1em;
+}
+
+.subtitle-char {
+  transition: all 0.15s ease-in-out;
+  border-radius: 3px;
+  padding: 1px 2px;
+}
+
+.subtitle-char.highlighted-char {
+  background: linear-gradient(135deg, #3498db, #2ecc71);
+  color: #ffffff;
+  font-weight: 700;
+  transform: scale(1.1);
+  box-shadow: 0 0 8px rgba(52, 152, 219, 0.6);
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes subtitle-appear {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+/* Responsive subtitle sizing */
+@media (max-width: 768px) {
+  .subtitle-overlay {
+    bottom: 10px;
+    max-width: 90%;
+    padding: 12px 18px;
+  }
+  
+  .subtitle-text {
+    font-size: 1.2rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .subtitle-char {
+    transition: none;
+  }
+  
+  .subtitle-char.highlighted-char {
+    transform: none;
+  }
+  
+  .subtitle-overlay {
+    animation: none;
+  }
+}
+
+/* Speed controls styling */
+.speed-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.speed-label {
+  font-family: 'Open Dyslexic', Arial, sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #2c3e50;
+  white-space: nowrap;
+}
+
+.speed-selector {
+  font-family: 'Open Dyslexic', Arial, sans-serif;
+  font-size: 0.9rem;
+  padding: 6px 12px;
+  border: 2px solid #e0e0e0;
+  border-radius: 6px;
+  background: white;
+  color: #2c3e50;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 120px;
+}
+
+.speed-selector:hover {
+  border-color: #3498db;
+  box-shadow: 0 2px 8px rgba(52, 152, 219, 0.2);
+}
+
+.speed-selector:focus {
+  outline: none;
+  border-color: #3498db;
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+}
+
+/* Responsive design for speed controls */
+@media (max-width: 768px) {
+  .header-controls {
+    gap: 0.5rem;
+  }
+  
+  .speed-controls {
+    padding: 6px 10px;
+  }
+  
+  .speed-label {
+    font-size: 0.8rem;
+  }
+  
+  .speed-selector {
+    font-size: 0.8rem;
+    padding: 4px 8px;
+    min-width: 100px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .speed-selector {
+    transition: none;
+  }
 }
