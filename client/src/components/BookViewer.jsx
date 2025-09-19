@@ -655,23 +655,49 @@ const BookViewer = () => {
               }}
             />
 
-            {/* Real-time subtitle overlay */}
+            {/* Real-time subtitle overlay with word wrapping */}
             {currentPlayingText && isPlaying && (
               <div className="subtitle-overlay">
                 <div className="subtitle-text">
-                  {currentPlayingText.split('').map((char, index) => {
-                    const isRead = index <= highlightedCharIndex;
-                    const isCurrent = index === highlightedCharIndex;
-                    return (
-                      <span
-                        key={index}
-                        className={`subtitle-char ${isRead ? 'read-char' : ''} ${isCurrent ? 'current-char' : ''}`}
-                        data-char-index={index}
-                      >
-                        {char}
-                      </span>
-                    );
-                  })}
+                  {(() => {
+                    // Split text into words and process for better line breaking
+                    const words = currentPlayingText.split(/(\s+)/);
+                    let charCounter = 0;
+                    let wordCount = 0;
+                    const maxWordsPerLine = 8; // Optimal for dyslexic readers
+
+                    return words.map((word, wordIndex) => {
+                      const wordChars = word.split('');
+                      const wordElements = wordChars.map((char, charIndex) => {
+                        const globalIndex = charCounter++;
+                        const isRead = globalIndex <= highlightedCharIndex;
+                        const isCurrent = globalIndex === highlightedCharIndex;
+
+                        return (
+                          <span
+                            key={`${wordIndex}-${charIndex}`}
+                            className={`subtitle-char ${isRead ? 'read-char' : ''} ${isCurrent ? 'current-char' : ''}`}
+                            data-char-index={globalIndex}
+                          >
+                            {char}
+                          </span>
+                        );
+                      });
+
+                      // Add line breaks after punctuation and at regular intervals
+                      const shouldBreak = (
+                        word.match(/[.!?,;:]/) ||
+                        (wordIndex > 0 && !word.match(/^\s+$/) && ++wordCount % maxWordsPerLine === 0)
+                      );
+
+                      return (
+                        <React.Fragment key={wordIndex}>
+                          <span className="subtitle-word">{wordElements}</span>
+                          {shouldBreak && <span className="subtitle-break" />}
+                        </React.Fragment>
+                      );
+                    });
+                  })()}
                 </div>
               </div>
             )}
