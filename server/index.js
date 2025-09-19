@@ -861,9 +861,9 @@ app.post('/api/textblocks/:blockId/speak', async (req, res) => {
     if (textBlock.audioUrl && textBlock.alignmentData) {
       console.log('♻️ Using cached audio for text block:', blockId, 'URL:', textBlock.audioUrl);
 
-      // Verify the audio file actually exists
-      const audioPath = path.join(__dirname, 'public', textBlock.audioUrl);
-      if (fs.existsSync(audioPath)) {
+      // For R2 stored files, assume they exist if we have a URL
+      // R2 URLs start with /objects/
+      if (textBlock.audioUrl.startsWith('/objects/')) {
         console.log('✅ Cached audio file exists, returning cached result');
         return res.json({
           success: true,
@@ -873,9 +873,22 @@ app.post('/api/textblocks/:blockId/speak', async (req, res) => {
           normalized_alignment: textBlock.normalizedAlignmentData ? JSON.parse(textBlock.normalizedAlignmentData) : null
         });
       } else {
-        console.log('❌ Cached audio file missing, regenerating:', audioPath);
-        // Clear the invalid cache entries
-        await dbHelpers.updateTextBlockAudio(blockId, null, null, null);
+        // For legacy local files, check if they exist
+        const audioPath = path.join(__dirname, 'public', textBlock.audioUrl);
+        if (fs.existsSync(audioPath)) {
+          console.log('✅ Legacy cached audio file exists, returning cached result');
+          return res.json({
+            success: true,
+            audio_url: textBlock.audioUrl,
+            text: textBlock.ocrText,
+            alignment: JSON.parse(textBlock.alignmentData),
+            normalized_alignment: textBlock.normalizedAlignmentData ? JSON.parse(textBlock.normalizedAlignmentData) : null
+          });
+        } else {
+          console.log('❌ Cached audio file missing, regenerating:', audioPath);
+          // Clear the invalid cache entries
+          await dbHelpers.updateTextBlockAudio(blockId, null, null, null);
+        }
       }
     } else {
       console.log('🚫 No cached audio found for block:', blockId, {
@@ -909,21 +922,13 @@ app.post('/api/textblocks/:blockId/speak', async (req, res) => {
         return res.status(500).json({ error: 'No audio data received from ElevenLabs API' });
       }
 
-      // Convert base64 audio to file and serve it
+      // Convert base64 audio to buffer and upload to R2
       const audioBuffer = Buffer.from(ttsResult.audioBase64, 'base64');
       // Use deterministic filename for better caching
-      const audioFileName = `tts_block_${blockId}.mp3`;
-      const audioPath = path.join(__dirname, 'public', 'audio', audioFileName);
+      const audioFileName = `audio/tts_block_${blockId}.mp3`;
 
-      // Ensure audio directory exists
-      const audioDir = path.dirname(audioPath);
-      if (!fs.existsSync(audioDir)) {
-        fs.mkdirSync(audioDir, { recursive: true });
-      }
-
-      fs.writeFileSync(audioPath, audioBuffer);
-
-      const audioUrl = `/audio/${audioFileName}`;
+      console.log('☁️ Uploading audio to Cloudflare R2...');
+      const audioUrl = await objectStorageService.uploadFile(audioBuffer, audioFileName, 'audio/mpeg');
 
       // Cache the audio URL and alignment data in database
       await dbHelpers.updateTextBlockAudio(
