@@ -12,18 +12,10 @@ class ElevenLabsAgentService {
       console.log(`📚 Creating knowledge base for book: ${bookTitle}`);
 
       const response = await axios.post(
-        `${this.baseUrl}/convai/knowledge-base/documents`,
+        `${this.baseUrl}/convai/knowledge-base/text`,
         {
-          name: `${bookTitle} (Book ID: ${bookId})`,
-          type: 'text',
-          content: bookText,
-          metadata: {
-            bookId: bookId,
-            bookTitle: bookTitle,
-            createdAt: new Date().toISOString(),
-            source: 'dyslexia-reader',
-            isolation: 'book-specific'
-          }
+          text: bookText,
+          name: `${bookTitle} (Book ID: ${bookId})`
         },
         {
           headers: {
@@ -33,8 +25,8 @@ class ElevenLabsAgentService {
         }
       );
 
-      console.log(`✅ Knowledge base created with ID: ${response.data.document_id}`);
-      return response.data.document_id;
+      console.log(`✅ Knowledge base created with ID: ${response.data.id}`);
+      return response.data.id;
     } catch (error) {
       console.error('Error creating knowledge base:', error.response?.data || error.message);
       throw error;
