@@ -8,9 +8,6 @@ function App() {
   return (
     <Router>
       <div className="App">
-        <header className="app-header">
-          <h1>TheReader</h1>
-        </header>
         <main>
           <Routes>
             <Route path="/" element={<BooksView />} />
