@@ -40,7 +40,29 @@ const AgentChat = ({ bookId, bookTitle }) => {
 
   
   return (
-    
+    <div className="agent-chat">
+      <div className="agent-header">
+        <h3>AI Assistant</h3>
+        <button 
+          onClick={updateAgentKnowledge}
+          disabled={isLoading}
+          className="update-btn"
+        >
+          {isLoading ? 'Updating...' : 'Update Knowledge'}
+        </button>
+      </div>
+      
+      {error && (
+        <div className="error-message">
+          {error}
+        </div>
+      )}
+      
+      <div className="chat-container">
+        <p>Chat with AI about "{bookTitle}"</p>
+        {/* Chat interface will be implemented here */}
+      </div>
+    </div>
   );
 };
 
