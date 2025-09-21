@@ -65,17 +65,20 @@
 }
 
 .process-button {
-  padding: 0.75rem 1.5rem;
+  padding: 0.75rem;
   background-color: #6c757d;
   color: white;
   border: none;
-  border-radius: 8px;
+  border-radius: 50%;
   font-family: 'Open Dyslexic', Arial, sans-serif;
-  font-size: 1rem;
-  font-weight: 700;
+  font-size: 1.2rem;
   cursor: pointer;
   transition: all 0.3s ease;
-  min-height: 48px;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .process-button:hover:not(:disabled) {

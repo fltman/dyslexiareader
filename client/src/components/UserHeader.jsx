@@ -26,21 +26,21 @@ const UserHeader = () => {
             className="home-link"
             title="Home"
           >
-            🏠
+            ⌂
           </Link>
           <Link
             to="/settings"
             className="settings-link"
             title="Settings"
           >
-            ⚙️
+            ⚙
           </Link>
           <button
             onClick={handleLogout}
             className="logout-button"
             title="Sign out"
           >
-            🚪
+            ⇥
           </button>
         </div>
       </div>

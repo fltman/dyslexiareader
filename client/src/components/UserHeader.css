@@ -41,31 +41,10 @@
   white-space: nowrap;
 }
 
-.settings-link, .home-link {
+.settings-link, .home-link, .logout-button {
   background: transparent;
-  color: #34495e;
+  color: #6c757d;
   text-decoration: none;
-  padding: 0.5rem;
-  border-radius: 8px;
-  font-size: 1.5rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  min-height: 48px; /* Accessibility - minimum touch target */
-  min-width: 48px;
-  white-space: nowrap;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.settings-link:hover, .home-link:hover {
-  background: rgba(52, 73, 94, 0.1);
-  transform: scale(1.1);
-}
-
-.logout-button {
-  background: transparent;
-  color: #e74c3c;
   border: none;
   padding: 0.5rem;
   border-radius: 8px;
@@ -80,8 +59,8 @@
   justify-content: center;
 }
 
-.logout-button:hover {
-  background: rgba(231, 76, 60, 0.1);
+.settings-link:hover, .home-link:hover, .logout-button:hover {
+  background: rgba(108, 117, 125, 0.1);
   transform: scale(1.1);
 }
 

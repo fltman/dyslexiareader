@@ -687,17 +687,7 @@ const BookViewer = () => {
     <div className="book-viewer">
       <div className="book-viewer-header">
         <div className="book-info">
-          <h1 
-            className="clickable-title" 
-            onClick={() => playTitleText(book.title)}
-            title="Click to play title"
-          >
-            {book.title}
-          </h1>
-          <div className="page-keywords">
-            {/* Keywords will be extracted from text blocks */}
-          </div>
-          <p>Page {currentPage + 1} of {pages.length}</p>
+          {/* Title and page info removed - already shown in page */}
         </div>
         <div className="header-controls">
           <button
@@ -706,7 +696,7 @@ const BookViewer = () => {
             className="process-button"
             title={isDetecting ? 'Processing...' : 'Process Text Blocks'}
           >
-            {isDetecting ? 'Processing...' : 'Process'}
+            {isDetecting ? '⏳' : '⚙️'}
           </button>
         </div>
       </div>
