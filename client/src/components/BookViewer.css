@@ -64,9 +64,9 @@
   font-size: 1rem;
 }
 
-.detect-button {
+.process-button {
   padding: 0.75rem 1.5rem;
-  background-color: #3498db;
+  background-color: #6c757d;
   color: white;
   border: none;
   border-radius: 8px;
@@ -78,12 +78,12 @@
   min-height: 48px;
 }
 
-.detect-button:hover:not(:disabled) {
-  background-color: #2980b9;
+.process-button:hover:not(:disabled) {
+  background-color: #5a6268;
   transform: translateY(-2px);
 }
 
-.detect-button:disabled {
+.process-button:disabled {
   background-color: #bdc3c7;
   cursor: not-allowed;
   transform: none;

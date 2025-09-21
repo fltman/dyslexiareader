@@ -28,11 +28,7 @@ const BookViewer = () => {
   const [currentPlayingText, setCurrentPlayingText] = useState('');
   const [currentAlignment, setCurrentAlignment] = useState(null);
   const [generatingAudio, setGeneratingAudio] = useState(new Set()); // Track which blocks are generating audio
-  const [playbackSpeed, setPlaybackSpeed] = useState(() => {
-    // Load saved speed preference from localStorage
-    const saved = localStorage.getItem('readerPlaybackSpeed');
-    return saved ? parseFloat(saved) : 1.0;
-  });
+  const [playbackSpeed, setPlaybackSpeed] = useState(1.0);
   const [userPreferences, setUserPreferences] = useState(null);
 
   useEffect(() => {
@@ -57,6 +53,11 @@ const BookViewer = () => {
       if (response.ok) {
         const data = await response.json();
         setUserPreferences(data.preferences);
+
+        // Set playback speed from preferences
+        if (data.preferences?.playbackSpeed) {
+          setPlaybackSpeed(parseFloat(data.preferences.playbackSpeed));
+        }
       }
     } catch (error) {
       console.error('Error loading user preferences:', error);
@@ -662,16 +663,6 @@ const BookViewer = () => {
     }
   };
 
-  const changePlaybackSpeed = (speed) => {
-    setPlaybackSpeed(speed);
-    localStorage.setItem('readerPlaybackSpeed', speed.toString());
-    
-    // Apply speed to currently playing audio
-    if (currentAudio) {
-      currentAudio.playbackRate = speed;
-      console.log('🎛️ Playback speed changed to:', speed);
-    }
-  };
 
   const handlePageSelect = (pageIndex) => {
     setCurrentPage(pageIndex);
@@ -695,9 +686,6 @@ const BookViewer = () => {
   return (
     <div className="book-viewer">
       <div className="book-viewer-header">
-        <button onClick={() => navigate('/')} className="back-button" title="Back to Books">
-          ←
-        </button>
         <div className="book-info">
           <h1 
             className="clickable-title" 
@@ -715,28 +703,11 @@ const BookViewer = () => {
           <button
             onClick={detectTextBlocks}
             disabled={isDetecting}
-            className="detect-button"
-            title={isDetecting ? 'Detecting...' : 'Re-detect Text Blocks'}
+            className="process-button"
+            title={isDetecting ? 'Processing...' : 'Process Text Blocks'}
           >
-            {isDetecting ? '⏳' : '🔍'}
+            {isDetecting ? 'Processing...' : 'Process'}
           </button>
-          <div className="speed-controls">
-            <label htmlFor="speed-selector" className="speed-label">🎚️ Speed:</label>
-            <select 
-              id="speed-selector"
-              value={playbackSpeed.toString()} 
-              onChange={(e) => changePlaybackSpeed(parseFloat(e.target.value))}
-              className="speed-selector"
-              title="Adjust playback speed"
-            >
-              <option value="0.5">0.5x (Slower)</option>
-              <option value="0.75">0.75x</option>
-              <option value="1">1x (Normal)</option>
-              <option value="1.25">1.25x</option>
-              <option value="1.5">1.5x</option>
-              <option value="2">2x (Faster)</option>
-            </select>
-          </div>
         </div>
       </div>
 
@@ -893,7 +864,6 @@ const BookViewer = () => {
 
         <div className="pages-sidebar">
           <div className="pages-header">
-            <h3>Pages</h3>
             {(isDetecting || processingBlocks.size > 0) && (
               <div className="detection-progress">
                 <div className="detection-spinner"></div>

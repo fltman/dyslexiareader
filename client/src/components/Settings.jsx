@@ -360,6 +360,28 @@ const Settings = () => {
               </small>
             </div>
 
+            <div className="form-group">
+              <label htmlFor="playbackSpeed">Playback Speed</label>
+              <select
+                id="playbackSpeed"
+                value={preferences.playbackSpeed || '1.0'}
+                onChange={(e) => setPreferences(prev => ({
+                  ...prev,
+                  playbackSpeed: e.target.value
+                }))}
+                disabled={isLoading}
+              >
+                <option value="0.5">0.5x (Slower)</option>
+                <option value="0.75">0.75x</option>
+                <option value="1.0">1x (Normal)</option>
+                <option value="1.25">1.25x</option>
+                <option value="1.5">1.5x</option>
+                <option value="2.0">2x (Faster)</option>
+              </select>
+              <small className="form-help">
+                Default playback speed for text-to-speech audio
+              </small>
+            </div>
 
             <button
               type="submit"
