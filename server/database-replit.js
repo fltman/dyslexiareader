@@ -229,5 +229,17 @@ export const dbHelpers = {
 
     const preferences = await this.getUserPreferences(userId);
     return { ...user, preferences };
+  },
+
+  // Update user password
+  async updateUserPassword(userId, passwordHash) {
+    const result = await db.update(users)
+      .set({
+        passwordHash,
+        updatedAt: new Date()
+      })
+      .where(eq(users.id, userId))
+      .returning();
+    return result[0];
   }
 };

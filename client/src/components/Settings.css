@@ -1,0 +1,347 @@
+/* Settings - Dyslexia-Friendly Styling */
+
+.settings-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: 'OpenDyslexic', serif;
+  background-color: #f8f9fa;
+  min-height: 100vh;
+}
+
+.settings-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.settings-header h1 {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #2c3e50;
+  margin: 0 0 1rem 0;
+}
+
+.settings-subtitle {
+  font-size: 1.2rem;
+  color: #6c757d;
+  margin: 0;
+}
+
+.settings-content {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+.settings-section {
+  background: white;
+  border: 2px solid #e1e8ed;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.settings-section h2 {
+  font-size: 1.75rem;
+  font-weight: bold;
+  color: #2c3e50;
+  margin: 0 0 1.5rem 0;
+  border-bottom: 2px solid #e1e8ed;
+  padding-bottom: 0.5rem;
+}
+
+/* Account Information */
+.account-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.info-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e1e8ed;
+}
+
+.info-item label {
+  font-weight: bold;
+  color: #495057;
+  min-width: 80px;
+}
+
+.info-item span {
+  color: #2c3e50;
+  font-size: 1.1rem;
+}
+
+/* Forms */
+.password-form,
+.preferences-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-group label {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #495057;
+}
+
+.form-group input,
+.form-group select {
+  padding: 0.75rem 1rem;
+  border: 2px solid #e1e8ed;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-family: 'OpenDyslexic', serif;
+  background-color: white;
+  transition: border-color 0.3s ease;
+  min-height: 48px; /* Accessibility - minimum touch target */
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: #4a90e2;
+  box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
+}
+
+.form-group input:disabled,
+.form-group select:disabled {
+  background-color: #f8f9fa;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.form-help {
+  font-size: 0.9rem;
+  color: #6c757d;
+  font-style: italic;
+}
+
+/* Range input styling */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 8px;
+  background: #e1e8ed;
+  border-radius: 4px;
+  outline: none;
+  border: none;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  background: #4a90e2;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  background: #4a90e2;
+  border-radius: 50%;
+  cursor: pointer;
+  border: none;
+}
+
+.range-value {
+  font-weight: bold;
+  color: #4a90e2;
+  margin-left: 1rem;
+}
+
+/* Checkbox styling */
+.checkbox-group {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  padding: 0.75rem;
+  border: 1px solid #e1e8ed;
+  border-radius: 8px;
+  background-color: #f8f9fa;
+  transition: background-color 0.3s ease;
+  min-height: 48px; /* Accessibility - minimum touch target */
+}
+
+.checkbox-label:hover {
+  background-color: #e9ecef;
+}
+
+.checkbox-label input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  cursor: pointer;
+}
+
+.checkbox-label span {
+  font-size: 1.1rem;
+  color: #495057;
+}
+
+/* Buttons */
+.settings-button {
+  padding: 0.75rem 2rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  font-family: 'OpenDyslexic', serif;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-height: 48px; /* Accessibility - minimum touch target */
+  align-self: flex-start;
+}
+
+.settings-button.primary {
+  background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
+  color: white;
+}
+
+.settings-button.primary:hover:not(:disabled) {
+  background: linear-gradient(135deg, #357abd 0%, #2968a3 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(74, 144, 226, 0.3);
+}
+
+.settings-button:disabled {
+  background: #6c757d;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Messages */
+.success-message {
+  background-color: #d4edda;
+  color: #155724;
+  padding: 1rem;
+  border: 2px solid #c3e6cb;
+  border-radius: 8px;
+  font-weight: bold;
+  margin-bottom: 2rem;
+}
+
+.error-message {
+  background-color: #f8d7da;
+  color: #721c24;
+  padding: 1rem;
+  border: 2px solid #f5c6cb;
+  border-radius: 8px;
+  font-weight: bold;
+  margin-bottom: 2rem;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .settings-container {
+    padding: 1rem;
+  }
+
+  .settings-header h1 {
+    font-size: 2rem;
+  }
+
+  .settings-subtitle {
+    font-size: 1rem;
+  }
+
+  .settings-section {
+    padding: 1.5rem;
+  }
+
+  .settings-section h2 {
+    font-size: 1.5rem;
+  }
+
+  .info-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .info-item label {
+    min-width: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .settings-container {
+    padding: 0.5rem;
+  }
+
+  .settings-section {
+    padding: 1rem;
+  }
+
+  .settings-button {
+    width: 100%;
+  }
+}
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+  .settings-container {
+    background-color: #ffffff;
+  }
+
+  .settings-section {
+    border-color: #000000;
+  }
+
+  .settings-header h1,
+  .settings-section h2 {
+    color: #000000;
+  }
+
+  .form-group input,
+  .form-group select {
+    border-color: #000000;
+  }
+
+  .settings-button.primary {
+    background: #000000;
+    border: 2px solid #000000;
+  }
+
+  .settings-button.primary:hover:not(:disabled) {
+    background: #333333;
+  }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .settings-button,
+  .form-group input,
+  .form-group select,
+  .checkbox-label {
+    transition: none;
+  }
+
+  .settings-button.primary:hover:not(:disabled) {
+    transform: none;
+  }
+}

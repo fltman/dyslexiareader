@@ -41,6 +41,29 @@
   white-space: nowrap;
 }
 
+.settings-link {
+  background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%);
+  color: white;
+  text-decoration: none;
+  padding: 0.5rem 1.5rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: bold;
+  font-family: 'OpenDyslexic', serif;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-height: 48px; /* Accessibility - minimum touch target */
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+}
+
+.settings-link:hover {
+  background: linear-gradient(135deg, #5a6268 0%, #495057 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(108, 117, 125, 0.3);
+}
+
 .logout-button {
   background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
   color: white;
@@ -91,6 +114,10 @@
     font-size: 1rem;
   }
 
+  .settings-link {
+    padding: 0.75rem 2rem;
+  }
+
   .logout-button {
     padding: 0.75rem 2rem;
   }
@@ -113,6 +140,11 @@
   }
 
   .welcome-text {
+    font-size: 0.9rem;
+  }
+
+  .settings-link {
+    padding: 0.5rem 1rem;
     font-size: 0.9rem;
   }
 

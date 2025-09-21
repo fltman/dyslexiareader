@@ -6,6 +6,7 @@ import UserHeader from './components/UserHeader';
 import BooksView from './components/BooksView';
 import AddBookView from './components/AddBookView';
 import BookViewer from './components/BookViewer';
+import Settings from './components/Settings';
 
 // Protected route wrapper
 const ProtectedRoute = ({ children }) => {
@@ -51,6 +52,11 @@ const AppRoutes = () => {
             <Route path="/book/:bookId" element={
               <ProtectedRoute>
                 <BookViewer />
+              </ProtectedRoute>
+            } />
+            <Route path="/settings" element={
+              <ProtectedRoute>
+                <Settings />
               </ProtectedRoute>
             } />
           </Routes>

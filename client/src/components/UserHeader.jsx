@@ -1,4 +1,5 @@
 import { useAuth } from '../contexts/AuthContext';
+import { Link } from 'react-router-dom';
 import './UserHeader.css';
 
 const UserHeader = () => {
@@ -20,6 +21,13 @@ const UserHeader = () => {
         <h1 className="app-title">TheReader</h1>
         <div className="user-info">
           <span className="welcome-text">Welcome, {displayName}</span>
+          <Link
+            to="/settings"
+            className="settings-link"
+            title="Settings"
+          >
+            Settings
+          </Link>
           <button
             onClick={handleLogout}
             className="logout-button"
