@@ -42,17 +42,20 @@
 
         .camera-container {
             position: relative;
-            max-width: 100%;
+            width: 100%;
+            max-width: 400px;
             margin-bottom: 2rem;
+            display: flex;
+            justify-content: center;
         }
 
         #video {
             width: 100%;
             max-width: 400px;
+            aspect-ratio: 3/4; /* Portrait aspect ratio */
+            object-fit: cover;
             border-radius: 12px;
             background: #34495e;
-            aspect-ratio: 9/16; /* Force portrait aspect ratio */
-            object-fit: cover;
         }
 
         .controls {
@@ -212,9 +215,9 @@
                 stream = await navigator.mediaDevices.getUserMedia({
                     video: {
                         facingMode: 'environment', // Use back camera if available
-                        width: { ideal: 720, max: 1920 },
-                        height: { ideal: 1280, max: 1920 }, // Portrait orientation
-                        aspectRatio: { ideal: 0.5625 } // 9:16 portrait aspect ratio
+                        width: { ideal: 720, min: 480 },
+                        height: { ideal: 1280, min: 640 }, // Portrait orientation
+                        aspectRatio: { ideal: 3/4 } // Prefer portrait aspect ratio
                     }
                 });
                 video.srcObject = stream;
@@ -250,7 +253,7 @@
                     formData.append('image', blob, `page-${Date.now()}.jpg`);
 
                     try {
-                        const response = await fetch(`http://localhost:5001/api/sessions/${sessionId}/pages`, {
+                        const response = await fetch(`/api/sessions/${sessionId}/pages`, {
                             method: 'POST',
                             body: formData
                         });
@@ -305,7 +308,7 @@
                 finishBtn.disabled = true;
                 finishBtn.textContent = 'Processing with AI...';
 
-                const response = await fetch(`http://localhost:5001/api/sessions/${sessionId}/complete`, {
+                const response = await fetch(`/api/sessions/${sessionId}/complete`, {
                     method: 'POST'
                 });
 
