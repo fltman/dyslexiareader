@@ -40,86 +40,80 @@
             margin-bottom: 1rem;
         }
 
-        .camera-container {
-            position: relative;
-            width: 100%;
-            max-width: 400px;
-            margin-bottom: 2rem;
-            display: flex;
-            justify-content: center;
-        }
-
-        #video {
-            width: 100%;
-            max-width: 400px;
-            aspect-ratio: 3/4; /* Portrait aspect ratio */
-            object-fit: cover;
-            border-radius: 12px;
-            background: #34495e;
-        }
-
         .controls {
             display: flex;
             flex-direction: column;
-            gap: 1rem;
+            gap: 1.5rem;
             width: 100%;
             max-width: 400px;
             align-items: center;
         }
 
+        .page-count {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #f39c12;
+            text-align: center;
+            padding: 1rem;
+            background: rgba(243, 156, 18, 0.1);
+            border-radius: 12px;
+            width: 100%;
+        }
+
+        /* Hidden file input */
+        #cameraInput {
+            display: none;
+        }
+
         .camera-button {
-            width: 80px;
-            height: 80px;
-            border: 4px solid #fff;
+            width: 100px;
+            height: 100px;
+            border: 6px solid #fff;
             background-color: #3498db;
             border-radius: 50%;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 2rem;
+            font-size: 3rem;
             transition: all 0.3s ease;
             color: white;
+            box-shadow: 0 4px 20px rgba(52, 152, 219, 0.4);
         }
 
         .camera-button:hover {
             background-color: #2980b9;
             transform: scale(1.05);
+            box-shadow: 0 6px 30px rgba(52, 152, 219, 0.6);
         }
 
         .camera-button:active {
             transform: scale(0.95);
         }
 
-        .page-count {
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: #f39c12;
-        }
-
-        .finish-button {
-            padding: 1rem 2rem;
-            background-color: #27ae60;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-family: 'Open Dyslexic', Arial, sans-serif;
-            font-size: 1.1rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            min-height: 48px;
-        }
-
-        .finish-button:hover {
-            background-color: #229954;
-            transform: translateY(-2px);
-        }
-
-        .finish-button:disabled {
+        .camera-button:disabled {
             background-color: #7f8c8d;
             cursor: not-allowed;
-            transform: none;
+            opacity: 0.6;
+        }
+
+        .info-text {
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.7);
+            text-align: center;
+            margin-top: 1rem;
+            line-height: 1.5;
+        }
+
+        .success-message {
+            color: #27ae60;
+            font-weight: 700;
+            text-align: center;
+            margin: 1rem 0;
+            padding: 1rem;
+            background: rgba(39, 174, 96, 0.1);
+            border-radius: 8px;
+            display: none;
         }
 
         .error {
@@ -127,6 +121,9 @@
             font-weight: 700;
             text-align: center;
             margin: 1rem 0;
+            padding: 1rem;
+            background: rgba(231, 76, 60, 0.1);
+            border-radius: 8px;
         }
 
         .loading {
@@ -134,25 +131,66 @@
             text-align: center;
             font-size: 1.1rem;
             color: #f39c12;
+            margin: 1rem 0;
         }
 
-        .preview {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            width: 60px;
-            height: 80px;
-            border: 2px solid #3498db;
+        .recent-photos {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 0.5rem;
+            width: 100%;
+            max-width: 400px;
+            margin-top: 2rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+        }
+
+        .recent-photo {
+            aspect-ratio: 3/4;
             border-radius: 4px;
-            background: rgba(0,0,0,0.5);
-            display: none;
+            overflow: hidden;
+            background: #34495e;
+            position: relative;
         }
 
-        .preview img {
+        .recent-photo img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            border-radius: 2px;
+        }
+
+        .recent-photo .page-number {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 2px 6px;
+            font-size: 0.75rem;
+            border-radius: 4px 0 0 0;
+        }
+
+        .instructions {
+            background: rgba(52, 152, 219, 0.1);
+            border: 1px solid rgba(52, 152, 219, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .instructions h3 {
+            color: #3498db;
+            margin-bottom: 0.75rem;
+            font-size: 1.1rem;
+        }
+
+        .instructions p {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.5;
+            font-size: 0.95rem;
         }
 
         @media (max-width: 480px) {
@@ -161,9 +199,14 @@
             }
 
             .camera-button {
-                width: 70px;
-                height: 70px;
-                font-size: 1.5rem;
+                width: 80px;
+                height: 80px;
+                font-size: 2.5rem;
+                border-width: 4px;
+            }
+
+            .page-count {
+                font-size: 1.2rem;
             }
         }
     </style>
@@ -171,35 +214,63 @@
 <body>
     <div class="header">
         <h1>📖 TheReader</h1>
-        <div class="status">Scan book pages with your camera</div>
-    </div>
-
-    <div class="camera-container">
-        <video id="video" autoplay playsinline></video>
-        <div class="preview" id="preview"></div>
+        <div class="status">Take photos of book pages</div>
     </div>
 
     <div class="controls">
-        <div class="page-count" id="pageCount">Pages: 0</div>
-        <button class="camera-button" id="captureBtn">📷</button>
-        <button class="finish-button" id="finishBtn" disabled>Done - Process Book</button>
+        <div class="page-count" id="pageCount">📚 0 pages captured</div>
+
+        <!-- Hidden file input that triggers native camera -->
+        <input
+            type="file"
+            id="cameraInput"
+            accept="image/*"
+            capture="environment"
+        />
+
+        <!-- Visible camera button -->
+        <label for="cameraInput" class="camera-button" id="cameraBtn">
+            📷
+        </label>
+
+        <div class="info-text">
+            Tap the camera button to take a photo<br>
+            Return to the main app when done
+        </div>
     </div>
 
-    <div class="error" id="error"></div>
-    <div class="loading" id="loading">Processing...</div>
+    <div class="instructions">
+        <h3>📸 Tips for best results:</h3>
+        <p>
+            • Hold your phone steady<br>
+            • Ensure good lighting<br>
+            • Capture the entire page<br>
+            • Take one page at a time
+        </p>
+    </div>
+
+    <div class="success-message" id="successMessage">
+        ✅ Page uploaded successfully!
+    </div>
+
+    <div class="error" id="error" style="display: none;"></div>
+    <div class="loading" id="loading">Uploading page...</div>
+
+    <div class="recent-photos" id="recentPhotos" style="display: none;">
+        <!-- Recent photos will be added here -->
+    </div>
 
     <script>
-        const video = document.getElementById('video');
-        const captureBtn = document.getElementById('captureBtn');
-        const finishBtn = document.getElementById('finishBtn');
+        const cameraInput = document.getElementById('cameraInput');
         const pageCount = document.getElementById('pageCount');
         const errorDiv = document.getElementById('error');
         const loadingDiv = document.getElementById('loading');
-        const preview = document.getElementById('preview');
+        const successMessage = document.getElementById('successMessage');
+        const recentPhotos = document.getElementById('recentPhotos');
 
-        let stream = null;
         let pageNum = 0;
         let sessionId = null;
+        const capturedPages = [];
 
         // Get session ID from URL
         const urlParams = new URLSearchParams(window.location.search);
@@ -207,159 +278,114 @@
 
         if (!sessionId) {
             showError('Invalid session. Please scan the QR code again.');
+            document.getElementById('cameraBtn').style.display = 'none';
         }
 
-        // Initialize camera
-        async function initCamera() {
-            try {
-                stream = await navigator.mediaDevices.getUserMedia({
-                    video: {
-                        facingMode: 'environment', // Use back camera if available
-                        width: { ideal: 720, min: 480 },
-                        height: { ideal: 1280, min: 640 }, // Portrait orientation
-                        aspectRatio: { ideal: 3/4 } // Prefer portrait aspect ratio
-                    }
-                });
-                video.srcObject = stream;
+        // Handle file selection from native camera
+        cameraInput.addEventListener('change', async (event) => {
+            const file = event.target.files[0];
+            if (!file) return;
 
-                video.addEventListener('loadedmetadata', () => {
-                    video.play();
-                });
-            } catch (err) {
-                console.error('Error accessing camera:', err);
-                showError('Camera access denied. Please allow camera permissions and refresh.');
-            }
-        }
-
-        // Capture photo
-        async function capturePhoto() {
-            if (!stream || !sessionId) return;
+            // Show loading
+            loadingDiv.style.display = 'block';
+            successMessage.style.display = 'none';
+            errorDiv.style.display = 'none';
 
             try {
-                loadingDiv.style.display = 'block';
-                captureBtn.disabled = true;
+                // Upload the image
+                const formData = new FormData();
+                formData.append('image', file, `page-${Date.now()}.jpg`);
 
-                // Create canvas to capture frame
-                const canvas = document.createElement('canvas');
-                const context = canvas.getContext('2d');
-
-                canvas.width = video.videoWidth;
-                canvas.height = video.videoHeight;
-                context.drawImage(video, 0, 0);
-
-                // Convert to blob
-                canvas.toBlob(async (blob) => {
-                    const formData = new FormData();
-                    formData.append('image', blob, `page-${Date.now()}.jpg`);
-
-                    try {
-                        const response = await fetch(`/api/sessions/${sessionId}/pages`, {
-                            method: 'POST',
-                            body: formData
-                        });
-
-                        const result = await response.json();
-
-                        if (result.success) {
-                            pageNum++;
-                            pageCount.textContent = `Pages: ${pageNum}`;
-                            finishBtn.disabled = pageNum === 0;
-
-                            // Show preview
-                            showPreview(canvas.toDataURL());
-
-                            // Clear error
-                            errorDiv.textContent = '';
-                        } else {
-                            showError('Failed to upload page. Try again.');
-                        }
-                    } catch (uploadError) {
-                        console.error('Upload error:', uploadError);
-                        showError('Network error. Check your connection.');
-                    }
-
-                    loadingDiv.style.display = 'none';
-                    captureBtn.disabled = false;
-                }, 'image/jpeg', 0.8);
-
-            } catch (error) {
-                console.error('Capture error:', error);
-                showError('Failed to capture photo.');
-                loadingDiv.style.display = 'none';
-                captureBtn.disabled = false;
-            }
-        }
-
-        // Show preview of captured image
-        function showPreview(dataUrl) {
-            preview.innerHTML = `<img src="${dataUrl}" alt="Last capture">`;
-            preview.style.display = 'block';
-            setTimeout(() => {
-                preview.style.display = 'none';
-            }, 3000);
-        }
-
-        // Complete book scanning
-        async function finishScanning() {
-            if (!sessionId || pageNum === 0) return;
-
-            try {
-                loadingDiv.style.display = 'block';
-                finishBtn.disabled = true;
-                finishBtn.textContent = 'Processing with AI...';
-
-                const response = await fetch(`/api/sessions/${sessionId}/complete`, {
-                    method: 'POST'
+                const response = await fetch(`/api/sessions/${sessionId}/pages`, {
+                    method: 'POST',
+                    body: formData
                 });
 
                 const result = await response.json();
 
                 if (result.success) {
-                    // Show success and redirect info
-                    document.body.innerHTML = `
-                        <div style="text-align: center; padding: 2rem;">
-                            <h1>✅ Book Processed!</h1>
-                            <p style="font-size: 1.2rem; margin: 1rem 0;">
-                                Title: <strong>${result.suggestions.title}</strong><br>
-                                Category: <strong>${result.suggestions.category}</strong>
-                            </p>
-                            <p style="color: #3498db; font-size: 1.1rem;">
-                                Return to your computer to view the book!
-                            </p>
-                        </div>
-                    `;
+                    pageNum++;
+                    updatePageCount();
+                    showSuccess();
+
+                    // Add to recent photos
+                    addRecentPhoto(file, pageNum);
+
+                    // Clear the input so the same file can be selected again
+                    cameraInput.value = '';
                 } else {
-                    showError('Failed to process book. Try again.');
-                    finishBtn.disabled = false;
-                    finishBtn.textContent = 'Done - Process Book';
+                    showError('Failed to upload page. Please try again.');
                 }
             } catch (error) {
-                console.error('Finish error:', error);
-                showError('Failed to complete processing.');
-                finishBtn.disabled = false;
-                finishBtn.textContent = 'Done - Process Book';
+                console.error('Upload error:', error);
+                showError('Network error. Check your connection.');
+            } finally {
+                loadingDiv.style.display = 'none';
             }
+        });
 
-            loadingDiv.style.display = 'none';
+        function updatePageCount() {
+            const emoji = pageNum === 0 ? '📚' : pageNum === 1 ? '📖' : '📚';
+            const pageText = pageNum === 1 ? 'page' : 'pages';
+            pageCount.textContent = `${emoji} ${pageNum} ${pageText} captured`;
+            pageCount.style.animation = 'pulse 0.5s ease';
+            setTimeout(() => {
+                pageCount.style.animation = '';
+            }, 500);
+        }
+
+        function showSuccess() {
+            successMessage.style.display = 'block';
+            setTimeout(() => {
+                successMessage.style.display = 'none';
+            }, 3000);
         }
 
         function showError(message) {
             errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+            setTimeout(() => {
+                errorDiv.style.display = 'none';
+            }, 5000);
         }
 
-        // Event listeners
-        captureBtn.addEventListener('click', capturePhoto);
-        finishBtn.addEventListener('click', finishScanning);
-
-        // Initialize
-        initCamera();
-
-        // Cleanup on page unload
-        window.addEventListener('beforeunload', () => {
-            if (stream) {
-                stream.getTracks().forEach(track => track.stop());
+        function addRecentPhoto(file, pageNumber) {
+            // Show recent photos section
+            if (recentPhotos.style.display === 'none') {
+                recentPhotos.style.display = 'grid';
             }
-        });
+
+            // Create preview
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const photoDiv = document.createElement('div');
+                photoDiv.className = 'recent-photo';
+                photoDiv.innerHTML = `
+                    <img src="${e.target.result}" alt="Page ${pageNumber}">
+                    <div class="page-number">${pageNumber}</div>
+                `;
+
+                // Add to beginning of recent photos
+                recentPhotos.insertBefore(photoDiv, recentPhotos.firstChild);
+
+                // Keep only last 6 photos
+                while (recentPhotos.children.length > 6) {
+                    recentPhotos.removeChild(recentPhotos.lastChild);
+                }
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // Add pulse animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes pulse {
+                0% { transform: scale(1); }
+                50% { transform: scale(1.05); }
+                100% { transform: scale(1); }
+            }
+        `;
+        document.head.appendChild(style);
     </script>
 </body>
 </html>
