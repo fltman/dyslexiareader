@@ -4,7 +4,7 @@ import { useAuth } from '../contexts/AuthContext';
 import './Settings.css';
 
 const Settings = () => {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState('');
@@ -44,10 +44,16 @@ const Settings = () => {
 
   const loadPreferences = async () => {
     try {
+      const token = localStorage.getItem('token');
+      const headers = {};
+      
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+      }
+
       const response = await fetch('/api/auth/preferences', {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        }
+        headers,
+        credentials: 'include'
       });
 
       if (response.ok) {
@@ -58,6 +64,9 @@ const Settings = () => {
             ...data.preferences
           }));
         }
+      } else if (response.status === 401 || response.status === 403) {
+        console.warn('Authentication failed in Settings, logging out');
+        logout();
       }
     } catch (error) {
       console.error('Error loading preferences:', error);
@@ -82,12 +91,19 @@ const Settings = () => {
     setIsLoading(true);
 
     try {
+      const token = localStorage.getItem('token');
+      const headers = {
+        'Content-Type': 'application/json'
+      };
+      
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+      }
+
       const response = await fetch('/api/auth/password', {
         method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        },
+        headers,
+        credentials: 'include',
         body: JSON.stringify({
           currentPassword: passwordForm.currentPassword,
           newPassword: passwordForm.newPassword
@@ -103,6 +119,10 @@ const Settings = () => {
           newPassword: '',
           confirmPassword: ''
         });
+      } else if (response.status === 401 || response.status === 403) {
+        console.warn('Authentication failed in Settings password change, logging out');
+        logout();
+        return;
       } else {
         setError(data.error || 'Failed to update password');
       }
@@ -120,12 +140,19 @@ const Settings = () => {
     setIsLoading(true);
 
     try {
+      const token = localStorage.getItem('token');
+      const headers = {
+        'Content-Type': 'application/json'
+      };
+      
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+      }
+
       const response = await fetch('/api/auth/profile', {
         method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        },
+        headers,
+        credentials: 'include',
         body: JSON.stringify({
           firstName: nameForm.firstName.trim(),
           lastName: nameForm.lastName.trim()
@@ -137,6 +164,10 @@ const Settings = () => {
       if (response.ok) {
         setMessage('Name updated successfully!');
         // Update the auth context would happen automatically on next load
+      } else if (response.status === 401 || response.status === 403) {
+        console.warn('Authentication failed in Settings profile update, logging out');
+        logout();
+        return;
       } else {
         setError(data.error || 'Failed to update name');
       }
@@ -154,12 +185,19 @@ const Settings = () => {
     setIsLoading(true);
 
     try {
+      const token = localStorage.getItem('token');
+      const headers = {
+        'Content-Type': 'application/json'
+      };
+      
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+      }
+
       const response = await fetch('/api/auth/preferences', {
         method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        },
+        headers,
+        credentials: 'include',
         body: JSON.stringify(preferences)
       });
 
@@ -167,6 +205,10 @@ const Settings = () => {
 
       if (response.ok) {
         setMessage('Preferences updated successfully!');
+      } else if (response.status === 401 || response.status === 403) {
+        console.warn('Authentication failed in Settings preferences update, logging out');
+        logout();
+        return;
       } else {
         setError(data.error || 'Failed to update preferences');
       }

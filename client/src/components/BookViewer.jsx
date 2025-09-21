@@ -6,7 +6,7 @@ import './BookViewer.css';
 const BookViewer = () => {
   const { bookId } = useParams();
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const imageRef = useRef(null);
 
   const [book, setBook] = useState(null);
@@ -46,10 +46,16 @@ const BookViewer = () => {
 
   const loadUserPreferences = async () => {
     try {
+      const token = localStorage.getItem('token');
+      const headers = {};
+      
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+      }
+
       const response = await fetch('/api/auth/preferences', {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        }
+        headers,
+        credentials: 'include'
       });
 
       if (response.ok) {
@@ -60,6 +66,9 @@ const BookViewer = () => {
         if (data.preferences?.playbackSpeed) {
           setPlaybackSpeed(parseFloat(data.preferences.playbackSpeed));
         }
+      } else if (response.status === 401 || response.status === 403) {
+        console.warn('Authentication failed in BookViewer, logging out');
+        logout();
       }
     } catch (error) {
       console.error('Error loading user preferences:', error);

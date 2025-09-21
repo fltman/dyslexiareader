@@ -21,21 +21,33 @@ const UserHeader = () => {
   useEffect(() => {
     const checkElevenLabsSettings = async () => {
       try {
+        const token = localStorage.getItem('token');
+        const headers = {};
+        
+        // Add Authorization header if token exists
+        if (token) {
+          headers['Authorization'] = `Bearer ${token}`;
+        }
+
         const response = await fetch('/api/auth/preferences', {
-          headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`
-          }
+          headers,
+          credentials: 'include' // Include cookies as fallback
         });
+
         if (response.ok) {
           const data = await response.json();
           const prefs = data.preferences || {};
-          const hasSettings = prefs.elevenLabsApiKey && prefs.elevenLabsVoiceId;
+          const hasSettings = prefs.elevenlabsApiKey && prefs.elevenlabsVoiceId;
           setHasElevenLabsSettings(hasSettings);
 
           // Show dialog automatically if settings are missing
           if (!hasSettings) {
             setShowSettingsDialog(true);
           }
+        } else if (response.status === 401 || response.status === 403) {
+          // Authentication failed - trigger logout to clear invalid state
+          console.warn('Authentication failed in UserHeader, logging out');
+          logout();
         }
       } catch (error) {
         console.error('Error checking ElevenLabs settings:', error);
@@ -46,7 +58,7 @@ const UserHeader = () => {
     if (user) {
       checkElevenLabsSettings();
     }
-  }, [user]);
+  }, [user, logout]);
 
   return (
     <header className="user-header">
