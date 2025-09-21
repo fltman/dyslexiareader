@@ -57,6 +57,10 @@ const Register = ({ onSwitchToLogin }) => {
   return (
     <div className="login-container">
       <div className="login-card">
+        <div className="login-logo-container">
+          <img src="/logo.png" alt="The Magical Everything Reader" className="login-logo" />
+          <div className="pulsating-orb"></div>
+        </div>
         <h1>Create Account</h1>
         <p className="login-subtitle">Join for a personalized dyslexia-friendly reading experience</p>
 
