@@ -697,9 +697,9 @@ const BookViewer = () => {
               onClick={detectTextBlocks}
               disabled={isDetecting}
               className="process-button-overlay"
-              title={isDetecting ? 'Processing...' : 'Process Text Blocks'}
+              title={isDetecting ? 'Processing...' : 'Scan Text Blocks'}
             >
-              {isDetecting ? '⏳' : '⚙'}
+              {isDetecting ? '⏳' : '⟲'}
             </button>
             <img
               ref={imageRef}
