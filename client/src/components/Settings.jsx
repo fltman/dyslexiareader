@@ -60,12 +60,12 @@ const Settings = () => {
         const data = await response.json();
         if (data.preferences) {
           const processedPreferences = { ...data.preferences };
-          
-          // Ensure playbackSpeed is properly formatted for the select element
-          if (processedPreferences.playbackSpeed) {
-            processedPreferences.playbackSpeed = parseFloat(processedPreferences.playbackSpeed).toString();
+
+          // Ensure playbackSpeed is a string for the select element
+          if (processedPreferences.playbackSpeed !== undefined && processedPreferences.playbackSpeed !== null) {
+            processedPreferences.playbackSpeed = String(processedPreferences.playbackSpeed);
           }
-          
+
           setPreferences(prev => ({
             ...prev,
             ...processedPreferences
@@ -415,10 +415,10 @@ const Settings = () => {
               <label htmlFor="playbackSpeed">Playback Speed</label>
               <select
                 id="playbackSpeed"
-                value={preferences.playbackSpeed || '1.0'}
+                value={String(preferences.playbackSpeed || '1.0')}
                 onChange={(e) => setPreferences(prev => ({
                   ...prev,
-                  playbackSpeed: parseFloat(e.target.value)
+                  playbackSpeed: e.target.value
                 }))}
                 disabled={isLoading}
               >
