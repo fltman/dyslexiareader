@@ -61,9 +61,11 @@ const Settings = () => {
         if (data.preferences) {
           const processedPreferences = { ...data.preferences };
 
-          // Ensure playbackSpeed is a string for the select element
+          // Ensure playbackSpeed is properly formatted for the select element
           if (processedPreferences.playbackSpeed !== undefined && processedPreferences.playbackSpeed !== null) {
-            processedPreferences.playbackSpeed = String(processedPreferences.playbackSpeed);
+            // Convert to number first, then format with one decimal place
+            const speed = parseFloat(processedPreferences.playbackSpeed);
+            processedPreferences.playbackSpeed = speed.toFixed(1);
           }
 
           setPreferences(prev => ({
@@ -415,7 +417,7 @@ const Settings = () => {
               <label htmlFor="playbackSpeed">Playback Speed</label>
               <select
                 id="playbackSpeed"
-                value={String(preferences.playbackSpeed || '1.0')}
+                value={preferences.playbackSpeed ? parseFloat(preferences.playbackSpeed).toFixed(1) : '1.0'}
                 onChange={(e) => setPreferences(prev => ({
                   ...prev,
                   playbackSpeed: e.target.value
