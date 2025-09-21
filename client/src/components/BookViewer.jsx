@@ -531,6 +531,7 @@ const BookViewer = () => {
         headers: {
           'Content-Type': 'application/json'
         },
+        credentials: 'include',
         body: JSON.stringify({
           text: titleText,
           speed: playbackSpeed

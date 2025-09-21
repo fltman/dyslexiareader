@@ -202,6 +202,42 @@ app.get('/api/books', authenticateToken, async (req, res) => {
     const { filter } = req.query;
     let books = await dbHelpers.getAllBooks(req.userId);
 
+    // Add text content for search functionality
+    for (const book of books) {
+      try {
+        // Get all pages for the book
+        const pages = await dbHelpers.getPagesByBookId(book.id);
+        let searchableText = '';
+
+        // Extract text from all text blocks
+        for (const page of pages) {
+          const textBlocks = await dbHelpers.getTextBlocksByPageId(page.id);
+          for (const block of textBlocks) {
+            if (block.text) {
+              searchableText += block.text + ' ';
+            }
+          }
+        }
+
+        // Limit the searchable text to the first 500 words for performance
+        const words = searchableText.trim().split(/\s+/);
+        book.searchableText = words.slice(0, 500).join(' ').toLowerCase();
+
+        // Also make keywords searchable
+        if (book.keywords && Array.isArray(book.keywords)) {
+          book.keywordText = book.keywords.map(kw =>
+            (kw.label || kw).toLowerCase()
+          ).join(' ');
+        } else {
+          book.keywordText = '';
+        }
+      } catch (error) {
+        console.error(`Error extracting text for book ${book.id}:`, error);
+        book.searchableText = '';
+        book.keywordText = '';
+      }
+    }
+
     if (filter && filter !== 'all') {
       books = books.filter(book =>
         book.category && book.category.toLowerCase() === filter.toLowerCase()
@@ -548,11 +584,22 @@ app.post('/api/sessions/:sessionId/complete', async (req, res) => {
       await dbHelpers.updateBook(bookId, {
         title: aiSuggestions.title,
         category: aiSuggestions.category,
+        categories: aiSuggestions.categories || [aiSuggestions.category], // Use multiple categories if available
+        keywords: aiSuggestions.keywords || [], // Save keywords with emojis
+        author: aiSuggestions.author || null, // Save author if detected
         cover: firstPageImagePath,
         status: 'completed',
         fullText: fullBookText,
         agentId: agentId,
         knowledgeBaseId: knowledgeBaseId
+      });
+
+      console.log('📚 Book saved with metadata:', {
+        title: aiSuggestions.title,
+        category: aiSuggestions.category,
+        categories: aiSuggestions.categories?.length || 0,
+        keywords: aiSuggestions.keywords?.length || 0,
+        author: aiSuggestions.author || 'Not detected'
       });
 
       // Close scanning session
@@ -1081,10 +1128,26 @@ app.delete('/api/books/cleanup', authenticateToken, async (req, res) => {
 });
 
 // Text-to-speech with timestamps endpoint
-app.post('/api/textblocks/:blockId/speak', async (req, res) => {
+app.post('/api/textblocks/:blockId/speak', authenticateToken, async (req, res) => {
   try {
     const blockId = req.params.blockId;
-    console.log('🎵 TTS ENDPOINT CALLED for block:', blockId);
+    console.log('🎵 TTS ENDPOINT CALLED for block:', blockId, 'by user:', req.user.id);
+
+    // Get user's ElevenLabs preferences
+    const userWithPrefs = await getUserWithPreferences(req.user.id);
+    if (!userWithPrefs || !userWithPrefs.elevenlabsApiKey || !userWithPrefs.elevenlabsVoiceId) {
+      console.log('❌ User missing required ElevenLabs preferences');
+      return res.status(400).json({
+        error: 'ElevenLabs API key and Voice ID are required. Please configure them in Settings.',
+        code: 'ELEVENLABS_CONFIG_REQUIRED'
+      });
+    }
+
+    console.log('✅ Using user ElevenLabs preferences:', {
+      hasApiKey: !!userWithPrefs.elevenlabsApiKey,
+      voiceId: userWithPrefs.elevenlabsVoiceId,
+      agentId: userWithPrefs.elevenlabsAgentId || 'none'
+    });
 
     // Get text block from database using Drizzle ORM
     const textBlock = await dbHelpers.getTextBlockById(blockId);
@@ -1175,9 +1238,14 @@ app.post('/api/textblocks/:blockId/speak', async (req, res) => {
     console.log('Converting text to speech with timestamps:', textBlock.ocrText);
 
     try {
-      // Use ElevenLabs to convert text to speech with timestamps
-      // Using specified voice ID
-      const ttsResult = await elevenlabs.textToSpeech.convertWithTimestamps("iwNZQzqCFIBqLR6sgFpN", {
+      // Create user-specific ElevenLabs client with their API key
+      const userElevenLabs = new ElevenLabsClient({
+        apiKey: userWithPrefs.elevenlabsApiKey
+      });
+
+      // Use user's voice ID to convert text to speech with timestamps
+      console.log('🗣️ Using user voice ID:', userWithPrefs.elevenlabsVoiceId);
+      const ttsResult = await userElevenLabs.textToSpeech.convertWithTimestamps(userWithPrefs.elevenlabsVoiceId, {
         text: textBlock.ocrText,
         voice_settings: {
           stability: 0.5,
@@ -1254,6 +1322,87 @@ app.post('/api/textblocks/:blockId/speak', async (req, res) => {
   } catch (error) {
     console.error('Error in text-to-speech endpoint:', error);
     res.status(500).json({ error: 'Failed to process text-to-speech request' });
+  }
+});
+
+// Direct TTS endpoint for titles and simple text
+app.post('/api/tts/direct', authenticateToken, async (req, res) => {
+  try {
+    const { text, speed } = req.body;
+    console.log('🎵 DIRECT TTS ENDPOINT CALLED for text:', text?.substring(0, 50) + '...', 'by user:', req.user.id);
+
+    if (!text) {
+      return res.status(400).json({ error: 'Text is required' });
+    }
+
+    // Get user's ElevenLabs preferences
+    const userWithPrefs = await getUserWithPreferences(req.user.id);
+    if (!userWithPrefs || !userWithPrefs.elevenlabsApiKey || !userWithPrefs.elevenlabsVoiceId) {
+      console.log('❌ User missing required ElevenLabs preferences');
+      return res.status(400).json({
+        error: 'ElevenLabs API key and Voice ID are required. Please configure them in Settings.',
+        code: 'ELEVENLABS_CONFIG_REQUIRED'
+      });
+    }
+
+    console.log('✅ Using user ElevenLabs preferences for direct TTS:', {
+      hasApiKey: !!userWithPrefs.elevenlabsApiKey,
+      voiceId: userWithPrefs.elevenlabsVoiceId
+    });
+
+    try {
+      // Create user-specific ElevenLabs client with their API key
+      const userElevenLabs = new ElevenLabsClient({
+        apiKey: userWithPrefs.elevenlabsApiKey
+      });
+
+      // Use user's voice ID to convert text to speech with timestamps
+      console.log('🗣️ Using user voice ID for direct TTS:', userWithPrefs.elevenlabsVoiceId);
+      const ttsResult = await userElevenLabs.textToSpeech.convertWithTimestamps(userWithPrefs.elevenlabsVoiceId, {
+        text: text,
+        voice_settings: {
+          stability: 0.5,
+          similarity_boost: 0.75
+        }
+      });
+
+      console.log('ElevenLabs Direct TTS result:', {
+        hasAudio: !!ttsResult.audioBase64,
+        hasAlignment: !!ttsResult.alignment,
+        characterCount: ttsResult.alignment?.characters?.length || 0
+      });
+
+      // Check if we have audio data
+      if (!ttsResult.audioBase64) {
+        console.error('No audio data received from ElevenLabs for direct TTS');
+        return res.status(500).json({ error: 'No audio data received from ElevenLabs API' });
+      }
+
+      // Convert base64 audio to buffer and upload to R2
+      const audioBuffer = Buffer.from(ttsResult.audioBase64, 'base64');
+      const contentUuid = generateContentUUID(text);
+      const audioFileName = `audio/direct_tts_${contentUuid}.mp3`;
+
+      console.log('☁️ Uploading direct TTS audio to Cloudflare R2...');
+      const audioUrl = await objectStorageService.uploadFile(audioBuffer, audioFileName, 'audio/mpeg');
+
+      // Return direct audio URL for immediate playback
+      res.json({
+        success: true,
+        audioUrl: audioUrl,
+        text: text,
+        alignment: ttsResult.alignment,
+        normalized_alignment: ttsResult.normalized_alignment
+      });
+
+    } catch (elevenLabsError) {
+      console.error('ElevenLabs API error in direct TTS:', elevenLabsError);
+      res.status(500).json({ error: 'Failed to generate speech' });
+    }
+
+  } catch (error) {
+    console.error('Error in direct TTS endpoint:', error);
+    res.status(500).json({ error: 'Failed to process direct TTS request' });
   }
 });
 
@@ -1338,11 +1487,22 @@ app.get('/api/books/:bookId/fulltext', authenticateToken, async (req, res) => {
 // Create an agent for a book
 app.post('/api/books/:bookId/agent', authenticateToken, async (req, res) => {
   try {
-    if (!elevenlabsAgent) {
-      return res.status(503).json({ error: 'ElevenLabs not configured' });
+    const bookId = req.params.bookId;
+
+    // Get user's ElevenLabs preferences
+    const userWithPrefs = await getUserWithPreferences(req.user.id);
+    if (!userWithPrefs || !userWithPrefs.elevenlabsApiKey) {
+      console.log('❌ User missing required ElevenLabs preferences for agent creation');
+      return res.status(400).json({
+        error: 'ElevenLabs API key is required. Please configure it in Settings.',
+        code: 'ELEVENLABS_CONFIG_REQUIRED'
+      });
     }
 
-    const bookId = req.params.bookId;
+    console.log('✅ Using user ElevenLabs preferences for agent:', {
+      hasApiKey: !!userWithPrefs.elevenlabsApiKey,
+      hasAgentId: !!userWithPrefs.elevenlabsAgentId
+    });
 
     // Get book info and verify ownership
     const book = await dbHelpers.getBookById(bookId, req.userId);
@@ -1389,16 +1549,23 @@ app.post('/api/books/:bookId/agent', authenticateToken, async (req, res) => {
 
     console.log(`📚 ${agentExists ? 'Updating' : 'Creating'} agent for book: ${book.title} (${fullText.length} characters)`);
 
-    // Update agent knowledge base for this book
-    const agentData = await elevenlabsAgent.updateBookKnowledge(
+    // Create user-specific ElevenLabs agent service
+    const userElevenLabsAgent = new ElevenLabsAgentSDKService(userWithPrefs.elevenlabsApiKey);
+
+    // Use user's agent ID if available, otherwise use hardcoded fallback
+    const targetAgentId = userWithPrefs.elevenlabsAgentId || 'agent_2701k5hmygdyegps36rmfm75xts3';
+    console.log('🤖 Using agent ID:', targetAgentId, userWithPrefs.elevenlabsAgentId ? '(user-specific)' : '(fallback)');
+
+    // Update agent knowledge base for this book using user's API key
+    const agentData = await userElevenLabsAgent.updateBookKnowledge(
       bookId,
       book.title,
       fullText
     );
 
-    // Store the knowledge base ID in the database (agent ID is hardcoded)
+    // Store the knowledge base ID in the database
     await dbHelpers.updateBook(bookId, {
-      agentId: agentData.agentId, // Always the same hardcoded agent
+      agentId: agentData.agentId,
       knowledgeBaseId: agentData.knowledgeBaseId
     });
 

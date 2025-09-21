@@ -22,12 +22,14 @@ const BooksView = () => {
 
   const fetchBooks = async () => {
     try {
-      const response = await fetch('/api/books');
-      
+      const response = await fetch('/api/books', {
+        credentials: 'include'
+      });
+
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      
+
       const data = await response.json();
       setBooks(data);
       setLoading(false);
@@ -46,9 +48,14 @@ const BooksView = () => {
     const filtered = books.filter(book => {
       const searchLower = searchTerm.toLowerCase();
       return (
+        // Search in basic metadata
         (book.title && book.title.toLowerCase().includes(searchLower)) ||
         (book.author && book.author.toLowerCase().includes(searchLower)) ||
-        (book.category && book.category.toLowerCase().includes(searchLower))
+        (book.category && book.category.toLowerCase().includes(searchLower)) ||
+        // Search in keywords
+        (book.keywordText && book.keywordText.includes(searchLower)) ||
+        // Search in extracted text content from Google Vision
+        (book.searchableText && book.searchableText.includes(searchLower))
       );
     });
     setFilteredBooks(filtered);
@@ -96,7 +103,7 @@ const BooksView = () => {
       <div className="search-container">
         <input
           type="text"
-          placeholder="Search books by title, author, or category..."
+          placeholder="Search books by title, author, keywords, or content..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           className="search-input"
