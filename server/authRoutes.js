@@ -81,6 +81,14 @@ router.post('/register', authLimiter, validate(registerSchema), async (req, res)
       .set({ lastLoginAt: new Date() })
       .where(eq(users.id, user.id));
 
+    // Set token in httpOnly cookie
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+    });
+
     res.status(201).json({
       message: 'User registered successfully',
       user: {
@@ -149,6 +157,14 @@ router.post('/login', authLimiter, validate(loginSchema), async (req, res) => {
     await db.update(users)
       .set({ lastLoginAt: new Date() })
       .where(eq(users.id, user.id));
+
+    // Set token in httpOnly cookie
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+    });
 
     res.json({
       message: 'Login successful',
@@ -410,6 +426,9 @@ router.put('/preferences', authenticateToken, validate(preferencesSchema), async
  */
 router.post('/logout', authenticateToken, async (req, res) => {
   try {
+    // Clear the token cookie
+    res.clearCookie('token');
+    
     // In a more advanced implementation, you might maintain a token blacklist
     // For now, we just acknowledge the logout
     res.json({

@@ -154,17 +154,7 @@ app.get('/api/test', (req, res) => {
   res.json({ message: 'API routing is working' });
 });
 
-// Test auth route without middleware
-app.get('/api/auth/test', (req, res) => {
-  console.log('Auth test route called successfully');
-  res.json({ message: 'Auth route is working' });
-});
-
-// Test with exact me route path
-app.get('/api/auth/me-debug', (req, res) => {
-  console.log('Auth me-debug route called successfully');
-  res.json({ message: 'Auth me-debug route is working' });
-});
+// Test auth routes removed - handled by authRoutes.js
 
 // Working auth endpoint that we know works
 app.get('/api/user-info', authenticateToken, async (req, res) => {
