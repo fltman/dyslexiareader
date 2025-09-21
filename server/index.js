@@ -17,6 +17,16 @@ import { books } from '../shared/schema.js';
 import { eq } from 'drizzle-orm';
 import { ObjectStorageService } from './objectStorage.js';
 import ElevenLabsAgentSDKService from './elevenlabsAgentSDK.js';
+import cookieParser from 'cookie-parser';
+import {
+  generateToken,
+  hashPassword,
+  comparePassword,
+  authenticateToken,
+  optionalAuth,
+  isValidEmail,
+  isValidPassword
+} from './middleware/auth.js';
 
 dotenv.config();
 
@@ -91,8 +101,12 @@ const upload = multer({
 });
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: process.env.CLIENT_URL || 'http://localhost:5173',
+  credentials: true
+}));
 app.use(express.json());
+app.use(cookieParser());
 
 // Add CORS headers specifically for image serving
 app.use('/uploads', (req, res, next) => {
@@ -130,10 +144,10 @@ app.get('/favicon.ico', (req, res) => {
 });
 
 // Routes
-app.get('/api/books', async (req, res) => {
+app.get('/api/books', authenticateToken, async (req, res) => {
   try {
     const { filter } = req.query;
-    let books = await dbHelpers.getAllBooks();
+    let books = await dbHelpers.getAllBooks(req.userId);
 
     if (filter && filter !== 'all') {
       books = books.filter(book =>
@@ -148,9 +162,9 @@ app.get('/api/books', async (req, res) => {
   }
 });
 
-app.get('/api/books/:id', async (req, res) => {
+app.get('/api/books/:id', authenticateToken, async (req, res) => {
   try {
-    const book = await dbHelpers.getBookById(req.params.id);
+    const book = await dbHelpers.getBookById(req.params.id, req.userId);
     if (!book) {
       return res.status(404).json({ error: 'Book not found' });
     }
@@ -164,9 +178,9 @@ app.get('/api/books/:id', async (req, res) => {
 });
 
 // Create new book and scanning session
-app.post('/api/books', async (req, res) => {
+app.post('/api/books', authenticateToken, async (req, res) => {
   try {
-    const bookId = await dbHelpers.createBook();
+    const bookId = await dbHelpers.createBook(req.userId);
     const sessionId = uuidv4();
     await dbHelpers.createScanningSession(sessionId, bookId);
 
@@ -202,8 +216,14 @@ app.post('/api/books', async (req, res) => {
 });
 
 // Get pages for a book
-app.get('/api/books/:id/pages', async (req, res) => {
+app.get('/api/books/:id/pages', authenticateToken, async (req, res) => {
   try {
+    // First verify the book belongs to the user
+    const book = await dbHelpers.getBookById(req.params.id, req.userId);
+    if (!book) {
+      return res.status(404).json({ error: 'Book not found' });
+    }
+
     const pages = await dbHelpers.getBookPages(req.params.id);
     res.json(pages);
   } catch (error) {
@@ -936,9 +956,15 @@ app.post('/api/textblocks/:blockId/process', async (req, res) => {
 });
 
 // Delete a specific book
-app.delete('/api/books/:id', async (req, res) => {
+app.delete('/api/books/:id', authenticateToken, async (req, res) => {
   try {
     const bookId = req.params.id;
+
+    // First verify the book belongs to the user
+    const book = await dbHelpers.getBookById(bookId, req.userId);
+    if (!book) {
+      return res.status(404).json({ error: 'Book not found' });
+    }
 
     // Get book pages to delete image files
     const pages = await dbHelpers.getBookPages(bookId);
@@ -988,7 +1014,7 @@ app.delete('/api/books/:id', async (req, res) => {
 });
 
 // Clean up empty books endpoint
-app.delete('/api/books/cleanup', async (req, res) => {
+app.delete('/api/books/cleanup', authenticateToken, async (req, res) => {
   try {
     const deletedCount = await dbHelpers.cleanupEmptyBooks();
     res.json({
@@ -1196,12 +1222,12 @@ if (process.env.NODE_ENV === 'production') {
 // =======================
 
 // Get all text from a book for knowledge base
-app.get('/api/books/:bookId/fulltext', async (req, res) => {
+app.get('/api/books/:bookId/fulltext', authenticateToken, async (req, res) => {
   try {
     const bookId = req.params.bookId;
 
-    // Get book info
-    const book = await dbHelpers.getBookById(bookId);
+    // Get book info and verify ownership
+    const book = await dbHelpers.getBookById(bookId, req.userId);
     if (!book) {
       return res.status(404).json({ error: 'Book not found' });
     }
@@ -1252,7 +1278,7 @@ app.get('/api/books/:bookId/fulltext', async (req, res) => {
 });
 
 // Create an agent for a book
-app.post('/api/books/:bookId/agent', async (req, res) => {
+app.post('/api/books/:bookId/agent', authenticateToken, async (req, res) => {
   try {
     if (!elevenlabsAgent) {
       return res.status(503).json({ error: 'ElevenLabs not configured' });
@@ -1260,8 +1286,8 @@ app.post('/api/books/:bookId/agent', async (req, res) => {
 
     const bookId = req.params.bookId;
 
-    // Get book info
-    const book = await dbHelpers.getBookById(bookId);
+    // Get book info and verify ownership
+    const book = await dbHelpers.getBookById(bookId, req.userId);
     if (!book) {
       return res.status(404).json({ error: 'Book not found' });
     }
@@ -1333,7 +1359,7 @@ app.post('/api/books/:bookId/agent', async (req, res) => {
 });
 
 // Get agent widget configuration for a book
-app.get('/api/books/:bookId/agent/widget', async (req, res) => {
+app.get('/api/books/:bookId/agent/widget', authenticateToken, async (req, res) => {
   try {
     if (!elevenlabsAgent) {
       return res.status(503).json({ error: 'ElevenLabs not configured' });
@@ -1355,6 +1381,168 @@ app.get('/api/books/:bookId/agent/widget', async (req, res) => {
   } catch (error) {
     console.error('Error getting widget config:', error);
     res.status(500).json({ error: 'Failed to get widget config' });
+  }
+});
+
+// Authentication endpoints
+app.post('/api/auth/register', async (req, res) => {
+  try {
+    const { email, password, firstName, lastName } = req.body;
+
+    // Validate input
+    if (!email || !password) {
+      return res.status(400).json({ error: 'Email and password are required' });
+    }
+
+    if (!isValidEmail(email)) {
+      return res.status(400).json({ error: 'Invalid email format' });
+    }
+
+    if (!isValidPassword(password)) {
+      return res.status(400).json({ error: 'Password must be at least 6 characters long' });
+    }
+
+    // Check if user already exists
+    const existingUser = await dbHelpers.getUserByEmail(email);
+    if (existingUser) {
+      return res.status(409).json({ error: 'User already exists with this email' });
+    }
+
+    // Hash password and create user
+    const passwordHash = await hashPassword(password);
+    const user = await dbHelpers.createUser(email, passwordHash, firstName, lastName);
+
+    // Create default preferences for the user
+    await dbHelpers.createUserPreferences(user.id);
+
+    // Generate JWT token
+    const token = generateToken(user.id);
+
+    // Set token in httpOnly cookie
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+    });
+
+    res.status(201).json({
+      success: true,
+      user: {
+        id: user.id,
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName
+      },
+      token
+    });
+  } catch (error) {
+    console.error('Error registering user:', error);
+    res.status(500).json({ error: 'Failed to register user' });
+  }
+});
+
+app.post('/api/auth/login', async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    // Validate input
+    if (!email || !password) {
+      return res.status(400).json({ error: 'Email and password are required' });
+    }
+
+    // Get user by email
+    const user = await dbHelpers.getUserByEmail(email);
+    if (!user) {
+      return res.status(401).json({ error: 'Invalid email or password' });
+    }
+
+    // Verify password
+    const isValidPassword = await comparePassword(password, user.passwordHash);
+    if (!isValidPassword) {
+      return res.status(401).json({ error: 'Invalid email or password' });
+    }
+
+    // Update last login time
+    await dbHelpers.updateUserLastLogin(user.id);
+
+    // Generate JWT token
+    const token = generateToken(user.id);
+
+    // Set token in httpOnly cookie
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+    });
+
+    res.json({
+      success: true,
+      user: {
+        id: user.id,
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName
+      },
+      token
+    });
+  } catch (error) {
+    console.error('Error logging in user:', error);
+    res.status(500).json({ error: 'Failed to login' });
+  }
+});
+
+app.post('/api/auth/logout', (req, res) => {
+  res.clearCookie('token');
+  res.json({ success: true, message: 'Logged out successfully' });
+});
+
+// Get current user info
+app.get('/api/auth/me', authenticateToken, async (req, res) => {
+  try {
+    const user = await dbHelpers.getUserWithPreferences(req.userId);
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    res.json({
+      success: true,
+      user: {
+        id: user.id,
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        preferences: user.preferences
+      }
+    });
+  } catch (error) {
+    console.error('Error getting user info:', error);
+    res.status(500).json({ error: 'Failed to get user info' });
+  }
+});
+
+// User preferences endpoints
+app.get('/api/user/preferences', authenticateToken, async (req, res) => {
+  try {
+    const preferences = await dbHelpers.getUserPreferences(req.userId);
+    res.json({ success: true, preferences });
+  } catch (error) {
+    console.error('Error getting user preferences:', error);
+    res.status(500).json({ error: 'Failed to get preferences' });
+  }
+});
+
+app.put('/api/user/preferences', authenticateToken, async (req, res) => {
+  try {
+    const preferences = req.body;
+    await dbHelpers.updateUserPreferences(req.userId, preferences);
+
+    const updatedPreferences = await dbHelpers.getUserPreferences(req.userId);
+    res.json({ success: true, preferences: updatedPreferences });
+  } catch (error) {
+    console.error('Error updating user preferences:', error);
+    res.status(500).json({ error: 'Failed to update preferences' });
   }
 });
 

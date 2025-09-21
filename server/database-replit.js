@@ -1,23 +1,38 @@
 // TheReader database helper functions using Replit PostgreSQL integration
 import { db } from './db.js';
-import { books, pages, scanningSessions, textBlocks } from '../shared/schema.js';
-import { eq, desc } from 'drizzle-orm';
+import { books, pages, scanningSessions, textBlocks, users, userPreferences } from '../shared/schema.js';
+import { eq, desc, and } from 'drizzle-orm';
 
 export const dbHelpers = {
   // Book operations
-  async getAllBooks() {
+  async getAllBooks(userId = null) {
+    if (userId) {
+      return await db.select().from(books)
+        .where(eq(books.userId, userId))
+        .orderBy(desc(books.createdAt));
+    }
+    // For backward compatibility - will be removed
     return await db.select().from(books).orderBy(desc(books.createdAt));
   },
 
-  async getBookById(id) {
-    const result = await db.select().from(books).where(eq(books.id, parseInt(id)));
+  async getBookById(id, userId = null) {
+    const conditions = [eq(books.id, parseInt(id))];
+    if (userId) {
+      conditions.push(eq(books.userId, userId));
+    }
+    const result = await db.select().from(books)
+      .where(conditions.length > 1 ? and(...conditions) : conditions[0]);
     return result[0] || null;
   },
 
-  async createBook() {
-    const result = await db.insert(books).values({
+  async createBook(userId = null) {
+    const bookData = {
       status: 'processing'
-    }).returning();
+    };
+    if (userId) {
+      bookData.userId = userId;
+    }
+    const result = await db.insert(books).values(bookData).returning();
     return result[0].id;
   },
 
@@ -151,5 +166,68 @@ export const dbHelpers = {
         normalizedAlignmentData
       })
       .where(eq(textBlocks.id, parseInt(blockId)));
+  },
+
+  // User operations
+  async createUser(email, passwordHash, firstName = null, lastName = null) {
+    const result = await db.insert(users).values({
+      email,
+      passwordHash,
+      firstName,
+      lastName
+    }).returning();
+    return result[0];
+  },
+
+  async getUserByEmail(email) {
+    const result = await db.select().from(users).where(eq(users.email, email));
+    return result[0] || null;
+  },
+
+  async getUserById(id) {
+    const result = await db.select().from(users).where(eq(users.id, parseInt(id)));
+    return result[0] || null;
+  },
+
+  async updateUserLastLogin(userId) {
+    await db.update(users)
+      .set({ lastLoginAt: new Date() })
+      .where(eq(users.id, userId));
+  },
+
+  // User preferences operations
+  async getUserPreferences(userId) {
+    const result = await db.select().from(userPreferences)
+      .where(eq(userPreferences.userId, userId));
+    return result[0] || null;
+  },
+
+  async createUserPreferences(userId, preferences = {}) {
+    const result = await db.insert(userPreferences).values({
+      userId,
+      ...preferences
+    }).returning();
+    return result[0];
+  },
+
+  async updateUserPreferences(userId, preferences) {
+    const existing = await this.getUserPreferences(userId);
+
+    if (existing) {
+      await db.update(userPreferences)
+        .set({ ...preferences, updatedAt: new Date() })
+        .where(eq(userPreferences.userId, userId));
+    } else {
+      await this.createUserPreferences(userId, preferences);
+    }
+  },
+
+  // Get user with preferences
+  async getUserWithPreferences(userId) {
+    const user = await this.getUserById(userId);
+    if (!user) return null;
+
+    const preferences = await this.getUserPreferences(userId);
+    return { ...user, preferences };
   }
 };

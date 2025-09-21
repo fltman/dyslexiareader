@@ -1,9 +1,42 @@
 // TheReader database schema for Replit PostgreSQL integration
-import { pgTable, serial, text, integer, timestamp, jsonb } from 'drizzle-orm/pg-core';
+import { pgTable, serial, text, integer, timestamp, jsonb, boolean, decimal } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm';
+
+// Users table
+export const users = pgTable('users', {
+  id: serial('id').primaryKey(),
+  email: text('email').unique().notNull(),
+  passwordHash: text('password_hash').notNull(),
+  firstName: text('first_name'),
+  lastName: text('last_name'),
+  isActive: boolean('is_active').default(true),
+  emailVerified: boolean('email_verified').default(false),
+  lastLoginAt: timestamp('last_login_at'),
+  createdAt: timestamp('created_at').defaultNow(),
+  updatedAt: timestamp('updated_at').defaultNow(),
+});
+
+// User preferences table for ElevenLabs and other settings
+export const userPreferences = pgTable('user_preferences', {
+  id: serial('id').primaryKey(),
+  userId: integer('user_id').references(() => users.id, { onDelete: 'cascade' }).notNull(),
+  elevenlabsApiKey: text('elevenlabs_api_key'), // User's own API key (encrypted)
+  elevenlabsVoiceId: text('elevenlabs_voice_id'),
+  elevenlabsAgentId: text('elevenlabs_agent_id'),
+  playbackSpeed: decimal('playback_speed', { precision: 3, scale: 2 }).default('1.0'),
+  preferredLanguage: text('preferred_language').default('en'),
+  dyslexiaMode: boolean('dyslexia_mode').default(true),
+  highContrast: boolean('high_contrast').default(false),
+  reducedMotion: boolean('reduced_motion').default(false),
+  fontSize: text('font_size').default('medium'), // 'small', 'medium', 'large', 'xl'
+  lineSpacing: text('line_spacing').default('normal'), // 'tight', 'normal', 'relaxed'
+  createdAt: timestamp('created_at').defaultNow(),
+  updatedAt: timestamp('updated_at').defaultNow(),
+});
 
 export const books = pgTable('books', {
   id: serial('id').primaryKey(),
+  userId: integer('user_id').references(() => users.id, { onDelete: 'cascade' }).notNull(),
   title: text('title'),
   author: text('author'),
   category: text('category'), // Keep for backward compatibility
@@ -14,6 +47,7 @@ export const books = pgTable('books', {
   fullText: text('full_text'),
   agentId: text('agent_id'),
   knowledgeBaseId: text('knowledge_base_id'),
+  isPublic: boolean('is_public').default(false), // For sharing books
   createdAt: timestamp('created_at').defaultNow(),
   updatedAt: timestamp('updated_at').defaultNow(),
 });
@@ -55,7 +89,26 @@ export const textBlocks = pgTable('text_blocks', {
 });
 
 // Relations
-export const booksRelations = relations(books, ({ many }) => ({
+export const usersRelations = relations(users, ({ many, one }) => ({
+  books: many(books),
+  preferences: one(userPreferences, {
+    fields: [users.id],
+    references: [userPreferences.userId],
+  }),
+}));
+
+export const userPreferencesRelations = relations(userPreferences, ({ one }) => ({
+  user: one(users, {
+    fields: [userPreferences.userId],
+    references: [users.id],
+  }),
+}));
+
+export const booksRelations = relations(books, ({ many, one }) => ({
+  user: one(users, {
+    fields: [books.userId],
+    references: [users.id],
+  }),
   pages: many(pages),
   scanningSessions: many(scanningSessions),
 }));
@@ -83,6 +136,10 @@ export const textBlocksRelations = relations(textBlocks, ({ one }) => ({
 }));
 
 // Export types (commented out for JavaScript compatibility)
+// export type User = typeof users.$inferSelect;
+// export type InsertUser = typeof users.$inferInsert;
+// export type UserPreferences = typeof userPreferences.$inferSelect;
+// export type InsertUserPreferences = typeof userPreferences.$inferInsert;
 // export type Book = typeof books.$inferSelect;
 // export type InsertBook = typeof books.$inferInsert;
 // export type Page = typeof pages.$inferSelect;
