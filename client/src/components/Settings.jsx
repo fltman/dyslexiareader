@@ -198,16 +198,29 @@ const Settings = () => {
       const headers = {
         'Content-Type': 'application/json'
       };
-      
+
       if (token) {
         headers['Authorization'] = `Bearer ${token}`;
+      }
+
+      // Create preferences object, excluding masked API key
+      const preferencesToSave = { ...preferences };
+
+      // Don't send API key if it's the masked placeholder
+      if (preferencesToSave.elevenlabsApiKey === '***masked***') {
+        delete preferencesToSave.elevenlabsApiKey;
+      }
+
+      // Don't send Agent ID if it's the masked placeholder
+      if (preferencesToSave.elevenlabsAgentId === '***masked***') {
+        delete preferencesToSave.elevenlabsAgentId;
       }
 
       const response = await fetch('/api/auth/preferences', {
         method: 'PUT',
         headers,
         credentials: 'include',
-        body: JSON.stringify(preferences)
+        body: JSON.stringify(preferencesToSave)
       });
 
       const data = await response.json();
