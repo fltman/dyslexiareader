@@ -32,6 +32,9 @@ Preferred communication style: Simple, everyday language.
 - **Public Access Model**: All scanned content is designed to be publicly accessible for ease of use
 - **Session Management**: QR code-based scanning sessions with expiration handling
 - **SSL Configuration**: Proper SSL handling for database connections with self-signed certificate support
+- **Data Encryption**: AES-256-GCM encryption for sensitive user data including ElevenLabs API keys and agent IDs stored in database
+- **Secret Management**: Replit-managed DATABASE_ENCRYPTION_KEY for secure encryption of user credentials
+- **API Security**: All sensitive fields are masked in API responses to prevent data exposure
 
 # External Dependencies
 
