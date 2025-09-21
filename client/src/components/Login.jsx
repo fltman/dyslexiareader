@@ -28,11 +28,8 @@ const Login = ({ onSwitchToRegister }) => {
   return (
     <div className="login-container">
       <div className="login-card">
-        <div className="login-logo">
-          <img src="/logo.png" alt="The Magical Everything Reader" className="logo-image" />
-        </div>
-        <h1>Welcome to The Magical Everything Reader</h1>
-        <p className="login-subtitle">Sign in to access your dyslexia-friendly reading experience</p>
+        <h1>Sign In</h1>
+        <p className="login-subtitle">Access your dyslexia-friendly reading experience</p>
 
         {error && <div className="error-message">{error}</div>}
 
