@@ -23,10 +23,10 @@ const UserHeader = () => {
           <span className="welcome-text">Welcome, {displayName}</span>
           <Link
             to="/"
-            className="home-link"
+            className="home-link home-icon"
             title="Home"
           >
-            ⌂
+            <span className="icon-home"></span>
           </Link>
           <Link
             to="/settings"
