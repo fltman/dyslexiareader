@@ -46,8 +46,10 @@ const BookViewer = () => {
 
   const loadUserPreferences = async () => {
     try {
-      const response = await fetch('/api/user/preferences', {
-        credentials: 'include'
+      const response = await fetch('/api/auth/preferences', {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
       });
 
       if (response.ok) {

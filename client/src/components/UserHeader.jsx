@@ -21,7 +21,7 @@ const UserHeader = () => {
   useEffect(() => {
     const checkElevenLabsSettings = async () => {
       try {
-        const response = await fetch('/api/user/preferences', {
+        const response = await fetch('/api/auth/preferences', {
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`
           }

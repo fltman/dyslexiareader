@@ -44,8 +44,10 @@ const Settings = () => {
 
   const loadPreferences = async () => {
     try {
-      const response = await fetch('/api/user/preferences', {
-        credentials: 'include'
+      const response = await fetch('/api/auth/preferences', {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
       });
 
       if (response.ok) {
@@ -80,12 +82,12 @@ const Settings = () => {
     setIsLoading(true);
 
     try {
-      const response = await fetch('/api/user/password', {
+      const response = await fetch('/api/auth/password', {
         method: 'PUT',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
         },
-        credentials: 'include',
         body: JSON.stringify({
           currentPassword: passwordForm.currentPassword,
           newPassword: passwordForm.newPassword
@@ -118,12 +120,12 @@ const Settings = () => {
     setIsLoading(true);
 
     try {
-      const response = await fetch('/api/user/profile', {
+      const response = await fetch('/api/auth/profile', {
         method: 'PUT',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
         },
-        credentials: 'include',
         body: JSON.stringify({
           firstName: nameForm.firstName.trim(),
           lastName: nameForm.lastName.trim()
@@ -152,12 +154,12 @@ const Settings = () => {
     setIsLoading(true);
 
     try {
-      const response = await fetch('/api/user/preferences', {
+      const response = await fetch('/api/auth/preferences', {
         method: 'PUT',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
         },
-        credentials: 'include',
         body: JSON.stringify(preferences)
       });
 
