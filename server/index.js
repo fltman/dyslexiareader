@@ -31,6 +31,7 @@ import {
   isValidEmail,
   isValidPassword
 } from './middleware/auth.js';
+import authRoutes from './authRoutes.js';
 
 dotenv.config();
 
@@ -138,6 +139,9 @@ app.use('/audio', express.static(path.join(__dirname, 'public', 'audio')));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Note: Static file serving moved to after API routes to prevent conflicts
+
+// Mount auth routes
+app.use('/api/auth', authRoutes);
 
 // Basic favicon route to prevent 404 errors
 app.get('/favicon.ico', (req, res) => {
