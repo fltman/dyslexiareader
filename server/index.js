@@ -23,7 +23,9 @@ import {
   hashPassword,
   comparePassword,
   authenticateToken,
-  optionalAuth,
+  optionalAuth
+} from './auth.js';
+import {
   isValidEmail,
   isValidPassword
 } from './middleware/auth.js';
