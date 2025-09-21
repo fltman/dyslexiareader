@@ -16,14 +16,14 @@
   filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.4));
   z-index: 2;
   position: relative;
-  transform: rotate(-3deg) translateY(-7rem);
+  transform: rotate(-3deg) translateY(-6rem);
 }
 
 .pulsating-orb {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%) translateY(-7rem);
+  transform: translate(-50%, -50%) translateY(-6rem);
   width: 24rem;
   height: 18rem;
   background: linear-gradient(135deg, rgba(102, 126, 234, 0.8) 0%, rgba(118, 75, 162, 0.8) 100%);
@@ -35,15 +35,15 @@
 
 @keyframes pulse-organic {
   0% {
-    transform: translate(-50%, -50%) translateY(-7rem) scale(1);
+    transform: translate(-50%, -50%) translateY(-6rem) scale(1);
     opacity: 1;
   }
   50% {
-    transform: translate(-50%, -50%) translateY(-7rem) scale(1.1) scaleY(0.9);
+    transform: translate(-50%, -50%) translateY(-6rem) scale(1.1) scaleY(0.9);
     opacity: 1;
   }
   100% {
-    transform: translate(-50%, -50%) translateY(-7rem) scale(1);
+    transform: translate(-50%, -50%) translateY(-6rem) scale(1);
     opacity: 1;
   }
 }
