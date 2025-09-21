@@ -17,6 +17,12 @@ const Settings = () => {
     confirmPassword: ''
   });
 
+  // Name form state
+  const [nameForm, setNameForm] = useState({
+    firstName: '',
+    lastName: ''
+  });
+
   // ElevenLabs preferences state
   const [preferences, setPreferences] = useState({
     elevenlabsApiKey: '',
@@ -24,10 +30,17 @@ const Settings = () => {
     elevenlabsAgentId: ''
   });
 
-  // Load user preferences on mount
+  // Load user preferences on mount and initialize name form
   useEffect(() => {
     loadPreferences();
-  }, []);
+    // Initialize name form with current user data
+    if (user) {
+      setNameForm({
+        firstName: user.firstName || '',
+        lastName: user.lastName || ''
+      });
+    }
+  }, [user]);
 
   const loadPreferences = async () => {
     try {
@@ -98,6 +111,40 @@ const Settings = () => {
     }
   };
 
+  const handleNameSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+    setMessage('');
+    setIsLoading(true);
+
+    try {
+      const response = await fetch('/api/user/profile', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          firstName: nameForm.firstName.trim(),
+          lastName: nameForm.lastName.trim()
+        })
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setMessage('Name updated successfully!');
+        // Update the auth context would happen automatically on next load
+      } else {
+        setError(data.error || 'Failed to update name');
+      }
+    } catch (error) {
+      setError('Failed to update name');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const handlePreferencesSubmit = async (e) => {
     e.preventDefault();
     setError('');
@@ -147,17 +194,51 @@ const Settings = () => {
       <div className="settings-content">
         {/* Account Section */}
         <section className="settings-section">
-          <h2>Account Information</h2>
-          <div className="account-info">
-            <div className="info-item">
-              <label>Name:</label>
-              <span>{displayName}</span>
+          <h2>Personal Information</h2>
+          <form onSubmit={handleNameSubmit} className="name-form">
+            <div className="form-group">
+              <label htmlFor="firstName">First Name</label>
+              <input
+                type="text"
+                id="firstName"
+                value={nameForm.firstName}
+                onChange={(e) => setNameForm(prev => ({
+                  ...prev,
+                  firstName: e.target.value
+                }))}
+                disabled={isLoading}
+                placeholder="Enter your first name"
+              />
             </div>
-            <div className="info-item">
+
+            <div className="form-group">
+              <label htmlFor="lastName">Last Name</label>
+              <input
+                type="text"
+                id="lastName"
+                value={nameForm.lastName}
+                onChange={(e) => setNameForm(prev => ({
+                  ...prev,
+                  lastName: e.target.value
+                }))}
+                disabled={isLoading}
+                placeholder="Enter your last name"
+              />
+            </div>
+
+            <div className="form-group">
               <label>Email:</label>
-              <span>{user?.email}</span>
+              <span className="readonly-field">{user?.email}</span>
             </div>
-          </div>
+
+            <button
+              type="submit"
+              className="settings-button primary"
+              disabled={isLoading}
+            >
+              {isLoading ? 'Updating...' : 'Update Name'}
+            </button>
+          </form>
         </section>
 
         {/* Password Change Section */}
