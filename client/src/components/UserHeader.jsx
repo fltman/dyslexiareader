@@ -1,0 +1,36 @@
+import { useAuth } from '../contexts/AuthContext';
+import './UserHeader.css';
+
+const UserHeader = () => {
+  const { user, logout } = useAuth();
+
+  const handleLogout = async () => {
+    await logout();
+  };
+
+  const displayName = user?.firstName && user?.lastName
+    ? `${user.firstName} ${user.lastName}`
+    : user?.firstName
+    ? user.firstName
+    : user?.email || 'User';
+
+  return (
+    <header className="user-header">
+      <div className="user-header-content">
+        <h1 className="app-title">TheReader</h1>
+        <div className="user-info">
+          <span className="welcome-text">Welcome, {displayName}</span>
+          <button
+            onClick={handleLogout}
+            className="logout-button"
+            title="Sign out"
+          >
+            Sign Out
+          </button>
+        </div>
+      </div>
+    </header>
+  );
+};
+
+export default UserHeader;

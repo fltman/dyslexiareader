@@ -3,6 +3,7 @@
 
 import { db } from './db.js';
 import { sql } from 'drizzle-orm';
+import bcrypt from 'bcryptjs';
 
 async function migrate() {
   console.log('🚀 Starting database migration...');
@@ -76,10 +77,13 @@ async function migrate() {
 
     // Create a default demo user for existing books (optional)
     const demoUserEmail = 'demo@thereader.app';
+    const demoPassword = 'demopassword';
+    const demoPasswordHash = await bcrypt.hash(demoPassword, 10);
+
     const demoUserResult = await db.execute(sql`
       INSERT INTO users (email, password_hash, first_name, last_name)
-      VALUES (${demoUserEmail}, 'demo_password_hash', 'Demo', 'User')
-      ON CONFLICT (email) DO UPDATE SET updated_at = NOW()
+      VALUES (${demoUserEmail}, ${demoPasswordHash}, 'Demo', 'User')
+      ON CONFLICT (email) DO UPDATE SET password_hash = ${demoPasswordHash}, updated_at = NOW()
       RETURNING id
     `);
 

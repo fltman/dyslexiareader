@@ -1,0 +1,158 @@
+/* User Header - Dyslexia-Friendly Styling */
+
+.user-header {
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  border-bottom: 3px solid #e1e8ed;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 1rem 2rem;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.user-header-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+}
+
+.app-title {
+  font-family: 'OpenDyslexic', serif;
+  font-size: 2rem;
+  font-weight: bold;
+  color: #2c3e50;
+  margin: 0;
+  text-decoration: none;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.welcome-text {
+  font-size: 1.1rem;
+  color: #34495e;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.logout-button {
+  background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+  color: white;
+  border: none;
+  padding: 0.5rem 1.5rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: bold;
+  font-family: 'OpenDyslexic', serif;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-height: 48px; /* Accessibility - minimum touch target */
+  white-space: nowrap;
+}
+
+.logout-button:hover {
+  background: linear-gradient(135deg, #c0392b 0%, #a93226 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
+}
+
+.logout-button:active {
+  transform: translateY(0);
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .user-header {
+    padding: 1rem;
+  }
+
+  .user-header-content {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+
+  .app-title {
+    font-size: 1.5rem;
+  }
+
+  .user-info {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .welcome-text {
+    font-size: 1rem;
+  }
+
+  .logout-button {
+    padding: 0.75rem 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .user-header-content {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .app-title {
+    font-size: 1.25rem;
+  }
+
+  .user-info {
+    flex-direction: column;
+    gap: 0.25rem;
+    align-items: flex-end;
+  }
+
+  .welcome-text {
+    font-size: 0.9rem;
+  }
+
+  .logout-button {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
+}
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+  .user-header {
+    border-bottom: 4px solid #000000;
+  }
+
+  .app-title {
+    color: #000000;
+  }
+
+  .welcome-text {
+    color: #000000;
+  }
+
+  .logout-button {
+    background: #cc0000;
+    border: 2px solid #000000;
+  }
+
+  .logout-button:hover {
+    background: #990000;
+  }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .logout-button {
+    transition: none;
+  }
+
+  .logout-button:hover {
+    transform: none;
+  }
+}
