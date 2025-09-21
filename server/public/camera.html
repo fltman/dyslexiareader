@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TheReader - Camera</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Open+Dyslexic:wght@400;700&display=swap');
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Open Dyslexic', Arial, sans-serif;
+            background-color: #2c3e50;
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .status {
+            font-size: 1.1rem;
+            color: #3498db;
+            margin-bottom: 1rem;
+        }
+
+        .camera-container {
+            position: relative;
+            max-width: 100%;
+            margin-bottom: 2rem;
+        }
+
+        #video {
+            width: 100%;
+            max-width: 400px;
+            border-radius: 12px;
+            background: #34495e;
+        }
+
+        .controls {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            width: 100%;
+            max-width: 400px;
+            align-items: center;
+        }
+
+        .camera-button {
+            width: 80px;
+            height: 80px;
+            border: 4px solid #fff;
+            background-color: #3498db;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            transition: all 0.3s ease;
+            color: white;
+        }
+
+        .camera-button:hover {
+            background-color: #2980b9;
+            transform: scale(1.05);
+        }
+
+        .camera-button:active {
+            transform: scale(0.95);
+        }
+
+        .page-count {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #f39c12;
+        }
+
+        .finish-button {
+            padding: 1rem 2rem;
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-family: 'Open Dyslexic', Arial, sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-height: 48px;
+        }
+
+        .finish-button:hover {
+            background-color: #229954;
+            transform: translateY(-2px);
+        }
+
+        .finish-button:disabled {
+            background-color: #7f8c8d;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .error {
+            color: #e74c3c;
+            font-weight: 700;
+            text-align: center;
+            margin: 1rem 0;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            font-size: 1.1rem;
+            color: #f39c12;
+        }
+
+        .preview {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 60px;
+            height: 80px;
+            border: 2px solid #3498db;
+            border-radius: 4px;
+            background: rgba(0,0,0,0.5);
+            display: none;
+        }
+
+        .preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 2px;
+        }
+
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 1.5rem;
+            }
+
+            .camera-button {
+                width: 70px;
+                height: 70px;
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>📖 TheReader</h1>
+        <div class="status">Scan book pages with your camera</div>
+    </div>
+
+    <div class="camera-container">
+        <video id="video" autoplay playsinline></video>
+        <div class="preview" id="preview"></div>
+    </div>
+
+    <div class="controls">
+        <div class="page-count" id="pageCount">Pages: 0</div>
+        <button class="camera-button" id="captureBtn">📷</button>
+        <button class="finish-button" id="finishBtn" disabled>Done - Process Book</button>
+    </div>
+
+    <div class="error" id="error"></div>
+    <div class="loading" id="loading">Processing...</div>
+
+    <script>
+        const video = document.getElementById('video');
+        const captureBtn = document.getElementById('captureBtn');
+        const finishBtn = document.getElementById('finishBtn');
+        const pageCount = document.getElementById('pageCount');
+        const errorDiv = document.getElementById('error');
+        const loadingDiv = document.getElementById('loading');
+        const preview = document.getElementById('preview');
+
+        let stream = null;
+        let pageNum = 0;
+        let sessionId = null;
+
+        // Get session ID from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        sessionId = urlParams.get('session');
+
+        if (!sessionId) {
+            showError('Invalid session. Please scan the QR code again.');
+        }
+
+        // Initialize camera
+        async function initCamera() {
+            try {
+                stream = await navigator.mediaDevices.getUserMedia({
+                    video: {
+                        facingMode: 'environment', // Use back camera if available
+                        width: { ideal: 720 },
+                        height: { ideal: 1280 } // Portrait orientation
+                    }
+                });
+                video.srcObject = stream;
+
+                video.addEventListener('loadedmetadata', () => {
+                    video.play();
+                });
+            } catch (err) {
+                console.error('Error accessing camera:', err);
+                showError('Camera access denied. Please allow camera permissions and refresh.');
+            }
+        }
+
+        // Capture photo
+        async function capturePhoto() {
+            if (!stream || !sessionId) return;
+
+            try {
+                loadingDiv.style.display = 'block';
+                captureBtn.disabled = true;
+
+                // Create canvas to capture frame
+                const canvas = document.createElement('canvas');
+                const context = canvas.getContext('2d');
+
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                context.drawImage(video, 0, 0);
+
+                // Convert to blob
+                canvas.toBlob(async (blob) => {
+                    const formData = new FormData();
+                    formData.append('image', blob, `page-${Date.now()}.jpg`);
+
+                    try {
+                        const response = await fetch(`/api/sessions/${sessionId}/pages`, {
+                            method: 'POST',
+                            body: formData
+                        });
+
+                        const result = await response.json();
+
+                        if (result.success) {
+                            pageNum++;
+                            pageCount.textContent = `Pages: ${pageNum}`;
+                            finishBtn.disabled = pageNum === 0;
+
+                            // Show preview
+                            showPreview(canvas.toDataURL());
+
+                            // Clear error
+                            errorDiv.textContent = '';
+                        } else {
+                            showError('Failed to upload page. Try again.');
+                        }
+                    } catch (uploadError) {
+                        console.error('Upload error:', uploadError);
+                        showError('Network error. Check your connection.');
+                    }
+
+                    loadingDiv.style.display = 'none';
+                    captureBtn.disabled = false;
+                }, 'image/jpeg', 0.8);
+
+            } catch (error) {
+                console.error('Capture error:', error);
+                showError('Failed to capture photo.');
+                loadingDiv.style.display = 'none';
+                captureBtn.disabled = false;
+            }
+        }
+
+        // Show preview of captured image
+        function showPreview(dataUrl) {
+            preview.innerHTML = `<img src="${dataUrl}" alt="Last capture">`;
+            preview.style.display = 'block';
+            setTimeout(() => {
+                preview.style.display = 'none';
+            }, 3000);
+        }
+
+        // Complete book scanning
+        async function finishScanning() {
+            if (!sessionId || pageNum === 0) return;
+
+            try {
+                loadingDiv.style.display = 'block';
+                finishBtn.disabled = true;
+                finishBtn.textContent = 'Processing with AI...';
+
+                const response = await fetch(`/api/sessions/${sessionId}/complete`, {
+                    method: 'POST'
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    // Show success and redirect info
+                    document.body.innerHTML = `
+                        <div style="text-align: center; padding: 2rem;">
+                            <h1>✅ Book Processed!</h1>
+                            <p style="font-size: 1.2rem; margin: 1rem 0;">
+                                Title: <strong>${result.suggestions.title}</strong><br>
+                                Category: <strong>${result.suggestions.category}</strong>
+                            </p>
+                            <p style="color: #3498db; font-size: 1.1rem;">
+                                Return to your computer to view the book!
+                            </p>
+                        </div>
+                    `;
+                } else {
+                    showError('Failed to process book. Try again.');
+                    finishBtn.disabled = false;
+                    finishBtn.textContent = 'Done - Process Book';
+                }
+            } catch (error) {
+                console.error('Finish error:', error);
+                showError('Failed to complete processing.');
+                finishBtn.disabled = false;
+                finishBtn.textContent = 'Done - Process Book';
+            }
+
+            loadingDiv.style.display = 'none';
+        }
+
+        function showError(message) {
+            errorDiv.textContent = message;
+        }
+
+        // Event listeners
+        captureBtn.addEventListener('click', capturePhoto);
+        finishBtn.addEventListener('click', finishScanning);
+
+        // Initialize
+        initCamera();
+
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', () => {
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+            }
+        });
+    </script>
+</body>
+</html>
