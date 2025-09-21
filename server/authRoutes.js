@@ -423,8 +423,9 @@ router.put('/preferences', authenticateToken, validate(preferencesSchema), async
 /**
  * POST /auth/logout
  * User logout (client-side token removal, but we can log the event)
+ * Note: Does not require authentication so expired tokens can still log out
  */
-router.post('/logout', authenticateToken, async (req, res) => {
+router.post('/logout', async (req, res) => {
   try {
     // Clear the token cookie
     res.clearCookie('token');

@@ -54,6 +54,10 @@ export const AuthProvider = ({ children }) => {
 
       if (response.ok) {
         setUser(data.user);
+        // Store token for Bearer auth in other components
+        if (data.token) {
+          localStorage.setItem('token', data.token);
+        }
         return { success: true };
       } else {
         return { success: false, error: data.error };
@@ -78,6 +82,10 @@ export const AuthProvider = ({ children }) => {
 
       if (response.ok) {
         setUser(data.user);
+        // Store token for Bearer auth in other components
+        if (data.token) {
+          localStorage.setItem('token', data.token);
+        }
         return { success: true };
       } else {
         return { success: false, error: data.error };
@@ -96,6 +104,8 @@ export const AuthProvider = ({ children }) => {
     } catch (error) {
       console.error('Logout error:', error);
     } finally {
+      // Clear both localStorage token and user state
+      localStorage.removeItem('token');
       setUser(null);
     }
   };
