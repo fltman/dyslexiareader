@@ -64,7 +64,9 @@ const BookViewer = () => {
 
         // Set playback speed from preferences
         if (data.preferences?.playbackSpeed) {
-          setPlaybackSpeed(parseFloat(data.preferences.playbackSpeed));
+          const speed = parseFloat(data.preferences.playbackSpeed);
+          setPlaybackSpeed(speed);
+          console.log('🎛️ Loaded playback speed from preferences:', speed);
         }
       } else if (response.status === 401 || response.status === 403) {
         console.warn('Authentication failed in BookViewer, logging out');
