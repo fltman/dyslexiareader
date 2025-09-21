@@ -344,7 +344,7 @@ router.get('/preferences', authenticateToken, async (req, res) => {
     const preferences = {
       elevenlabsApiKey: userWithPrefs.elevenlabsApiKey ? '***masked***' : null,
       elevenlabsVoiceId: userWithPrefs.elevenlabsVoiceId,
-      elevenlabsAgentId: userWithPrefs.elevenlabsAgentId ? '***masked***' : null,
+      elevenlabsAgentId: userWithPrefs.elevenlabsAgentId, // Return actual agent ID for frontend widget
       playbackSpeed: userWithPrefs.playbackSpeed,
       preferredLanguage: userWithPrefs.preferredLanguage,
       dyslexiaMode: userWithPrefs.dyslexiaMode,
