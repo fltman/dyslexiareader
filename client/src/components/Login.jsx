@@ -24,18 +24,6 @@ const Login = ({ onSwitchToRegister }) => {
     setIsLoading(false);
   };
 
-  const handleDemoLogin = async () => {
-    setError('');
-    setIsLoading(true);
-
-    const result = await login('demo@thereader.app', 'demopassword');
-
-    if (!result.success) {
-      setError('Demo login failed. Please try manual login.');
-    }
-
-    setIsLoading(false);
-  };
 
   return (
     <div className="login-container">
@@ -80,18 +68,6 @@ const Login = ({ onSwitchToRegister }) => {
             {isLoading ? 'Signing in...' : 'Sign In'}
           </button>
         </form>
-
-        <div className="login-divider">
-          <span>or</span>
-        </div>
-
-        <button
-          onClick={handleDemoLogin}
-          className="login-button demo"
-          disabled={isLoading}
-        >
-          Try Demo Account
-        </button>
 
         <p className="login-switch">
           Don't have an account?{' '}
