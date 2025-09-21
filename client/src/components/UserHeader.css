@@ -102,6 +102,158 @@
 
 /* Removed CSS-based home icon - using logo as home button */
 
+/* Settings warning indicator */
+.settings-link {
+  position: relative;
+}
+
+.settings-indicator {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 12px;
+  height: 12px;
+  background: #e74c3c;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.9);
+  animation: pulse-indicator 2s ease-in-out infinite;
+}
+
+@keyframes pulse-indicator {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.2); opacity: 0.8; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* Settings dialog */
+.settings-dialog-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.settings-dialog {
+  background: white;
+  border-radius: 16px;
+  max-width: 500px;
+  width: 90%;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: slideIn 0.3s ease-out;
+  font-family: 'OpenDyslexic', serif;
+  overflow: hidden;
+}
+
+.settings-dialog-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 1.5rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.settings-dialog-header h3 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.dialog-close {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 2rem;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background-color 0.3s ease;
+}
+
+.dialog-close:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.settings-dialog-body {
+  padding: 2rem;
+}
+
+.settings-dialog-body p {
+  margin: 0 0 1rem 0;
+  color: #34495e;
+  font-size: 1.1rem;
+  line-height: 1.5;
+}
+
+.settings-dialog-body ul {
+  margin: 1rem 0;
+  padding-left: 2rem;
+}
+
+.settings-dialog-body li {
+  color: #34495e;
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+
+.settings-dialog-footer {
+  padding: 1.5rem 2rem 2rem;
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  border-top: 1px solid #e1e8ed;
+}
+
+.dialog-button {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-family: 'OpenDyslexic', serif;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  min-width: 100px;
+}
+
+.dialog-button.secondary {
+  background: #95a5a6;
+  color: white;
+}
+
+.dialog-button.secondary:hover {
+  background: #7f8c8d;
+  transform: translateY(-2px);
+}
+
+.dialog-button.primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.dialog-button.primary:hover {
+  background: linear-gradient(135deg, #5a67d8 0%, #6c5ce7 100%);
+  transform: translateY(-2px);
+}
+
 /* Mobile Responsiveness */
 @media (max-width: 768px) {
   .user-header {
