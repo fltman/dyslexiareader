@@ -10,12 +10,13 @@
 }
 
 .login-logo {
-  height: 8rem;
+  height: 30rem;
   width: auto;
   object-fit: contain;
   filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.2));
   z-index: 2;
   position: relative;
+  transform: rotate(-3deg);
 }
 
 .pulsating-orb {
@@ -23,8 +24,8 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 6rem;
-  height: 4rem;
+  width: 20rem;
+  height: 15rem;
   background: radial-gradient(ellipse, rgba(102, 126, 234, 0.6) 0%, rgba(118, 75, 162, 0.4) 50%, transparent 70%);
   border-radius: 50% / 60%;
   animation: pulse-organic 3s ease-in-out infinite;
