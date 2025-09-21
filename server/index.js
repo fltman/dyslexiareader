@@ -196,12 +196,12 @@ app.get('/api/books', authenticateToken, async (req, res) => {
     for (const book of books) {
       try {
         // Get all pages for the book
-        const pages = await dbHelpers.getPagesByBookId(book.id);
+        const pages = await dbHelpers.getBookPages(book.id);
         let searchableText = '';
 
         // Extract text from all text blocks
         for (const page of pages) {
-          const textBlocks = await dbHelpers.getTextBlocksByPageId(page.id);
+          const textBlocks = await dbHelpers.getTextBlocks(page.id);
           for (const block of textBlocks) {
             const text = block.ocrText || block.ocr_text || block.text;
             if (text) {
@@ -1431,7 +1431,7 @@ app.get('/api/books/:bookId/fulltext', authenticateToken, async (req, res) => {
     }
 
     // Get all pages for the book
-    const pages = await dbHelpers.getPagesByBookId(bookId);
+    const pages = await dbHelpers.getBookPages(bookId);
 
     // For each page, get all text blocks
     let fullText = `Bok: ${book.title}\n`;
