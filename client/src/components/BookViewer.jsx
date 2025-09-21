@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 import './BookViewer.css';
 
 const BookViewer = () => {
   const { bookId } = useParams();
   const navigate = useNavigate();
+  const { user } = useAuth();
   const imageRef = useRef(null);
 
   const [book, setBook] = useState(null);
@@ -31,6 +33,7 @@ const BookViewer = () => {
     const saved = localStorage.getItem('readerPlaybackSpeed');
     return saved ? parseFloat(saved) : 1.0;
   });
+  const [userPreferences, setUserPreferences] = useState(null);
 
   useEffect(() => {
     if (bookId) {
@@ -38,6 +41,27 @@ const BookViewer = () => {
       updateAgentKnowledge();
     }
   }, [bookId]);
+
+  useEffect(() => {
+    if (user) {
+      loadUserPreferences();
+    }
+  }, [user]);
+
+  const loadUserPreferences = async () => {
+    try {
+      const response = await fetch('/api/user/preferences', {
+        credentials: 'include'
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setUserPreferences(data.preferences);
+      }
+    } catch (error) {
+      console.error('Error loading user preferences:', error);
+    }
+  };
 
   // Update agent's knowledge base for current book
   const updateAgentKnowledge = async () => {
@@ -899,7 +923,12 @@ const BookViewer = () => {
 
 
       {/* Book Agent Chat */}
-      <elevenlabs-convai agent-id="agent_2701k5hmygdyegps36rmfm75xts3"></elevenlabs-convai><script src="https://unpkg.com/@elevenlabs/convai-widget-embed" async type="text/javascript"></script>
+      {userPreferences?.elevenlabsAgentId && (
+        <>
+          <elevenlabs-convai agent-id={userPreferences.elevenlabsAgentId}></elevenlabs-convai>
+          <script src="https://unpkg.com/@elevenlabs/convai-widget-embed" async type="text/javascript"></script>
+        </>
+      )}
     </div>
   );
 };
