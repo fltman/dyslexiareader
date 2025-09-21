@@ -204,7 +204,20 @@ router.get('/me', authenticateToken, async (req, res) => {
     }
 
     // Don't send sensitive data to client
-    const { passwordHash, ...userProfile } = userWithPrefs;
+    const { 
+      passwordHash, 
+      elevenlabsApiKey, 
+      elevenlabsAgentId, 
+      ...userProfile 
+    } = userWithPrefs;
+
+    // Add masked indicators for sensitive fields that exist
+    if (userWithPrefs.elevenlabsApiKey) {
+      userProfile.elevenlabsApiKey = '***masked***';
+    }
+    if (userWithPrefs.elevenlabsAgentId) {
+      userProfile.elevenlabsAgentId = '***masked***';
+    }
 
     res.json({
       user: userProfile
@@ -331,7 +344,7 @@ router.get('/preferences', authenticateToken, async (req, res) => {
     const preferences = {
       elevenlabsApiKey: userWithPrefs.elevenlabsApiKey ? '***masked***' : null,
       elevenlabsVoiceId: userWithPrefs.elevenlabsVoiceId,
-      elevenlabsAgentId: userWithPrefs.elevenlabsAgentId,
+      elevenlabsAgentId: userWithPrefs.elevenlabsAgentId ? '***masked***' : null,
       playbackSpeed: userWithPrefs.playbackSpeed,
       preferredLanguage: userWithPrefs.preferredLanguage,
       dyslexiaMode: userWithPrefs.dyslexiaMode,
@@ -363,7 +376,25 @@ router.put('/preferences', authenticateToken, validate(preferencesSchema), async
     // Encrypt ElevenLabs API key if provided
     if (preferences.elevenlabsApiKey) {
       const encryptedKey = encrypt(preferences.elevenlabsApiKey);
+      if (!encryptedKey) {
+        return res.status(500).json({
+          error: 'Failed to encrypt API key. Please try again.',
+          code: 'ENCRYPTION_ERROR'
+        });
+      }
       preferences.elevenlabsApiKey = JSON.stringify(encryptedKey);
+    }
+
+    // Encrypt ElevenLabs Agent ID if provided
+    if (preferences.elevenlabsAgentId) {
+      const encryptedAgentId = encrypt(preferences.elevenlabsAgentId);
+      if (!encryptedAgentId) {
+        return res.status(500).json({
+          error: 'Failed to encrypt Agent ID. Please try again.',
+          code: 'ENCRYPTION_ERROR'
+        });
+      }
+      preferences.elevenlabsAgentId = JSON.stringify(encryptedAgentId);
     }
 
     // Check if preferences exist
@@ -396,7 +427,7 @@ router.put('/preferences', authenticateToken, validate(preferencesSchema), async
     const responsePreferences = {
       elevenlabsApiKey: updatedUserWithPrefs.elevenlabsApiKey ? '***masked***' : null,
       elevenlabsVoiceId: updatedUserWithPrefs.elevenlabsVoiceId,
-      elevenlabsAgentId: updatedUserWithPrefs.elevenlabsAgentId,
+      elevenlabsAgentId: updatedUserWithPrefs.elevenlabsAgentId ? '***masked***' : null,
       playbackSpeed: updatedUserWithPrefs.playbackSpeed,
       preferredLanguage: updatedUserWithPrefs.preferredLanguage,
       dyslexiaMode: updatedUserWithPrefs.dyslexiaMode,

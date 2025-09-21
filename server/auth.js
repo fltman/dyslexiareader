@@ -12,8 +12,15 @@ const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '7d';
 const BCRYPT_ROUNDS = 12;
 
 // Encryption for sensitive data (like user's ElevenLabs API keys)
-const ENCRYPTION_KEY = process.env.ENCRYPTION_KEY || crypto.randomBytes(32);
+const ENCRYPTION_KEY = process.env.DATABASE_ENCRYPTION_KEY;
 const ALGORITHM = 'aes-256-gcm';
+
+if (!ENCRYPTION_KEY) {
+  throw new Error('DATABASE_ENCRYPTION_KEY environment variable is required for encrypting sensitive data');
+}
+
+// Ensure we have a 32-byte key for AES-256
+const keyBuffer = crypto.createHash('sha256').update(ENCRYPTION_KEY).digest();
 
 /**
  * Hash password using bcrypt
@@ -53,19 +60,24 @@ export const verifyToken = (token) => {
 export const encrypt = (text) => {
   if (!text) return null;
 
-  const iv = crypto.randomBytes(16);
-  const cipher = crypto.createCipher(ALGORITHM, ENCRYPTION_KEY);
+  try {
+    const iv = crypto.randomBytes(12); // 12 bytes for GCM
+    const cipher = crypto.createCipheriv(ALGORITHM, keyBuffer, iv);
 
-  let encrypted = cipher.update(text, 'utf8', 'hex');
-  encrypted += cipher.final('hex');
+    let encrypted = cipher.update(text, 'utf8', 'hex');
+    encrypted += cipher.final('hex');
 
-  const authTag = cipher.getAuthTag();
+    const authTag = cipher.getAuthTag();
 
-  return {
-    encrypted,
-    iv: iv.toString('hex'),
-    authTag: authTag.toString('hex')
-  };
+    return {
+      encrypted,
+      iv: iv.toString('hex'),
+      authTag: authTag.toString('hex')
+    };
+  } catch (error) {
+    console.error('Encryption error:', error);
+    return null;
+  }
 };
 
 /**
@@ -75,8 +87,10 @@ export const decrypt = (encryptedData) => {
   if (!encryptedData || !encryptedData.encrypted) return null;
 
   try {
-    const decipher = crypto.createDecipher(ALGORITHM, ENCRYPTION_KEY);
-    decipher.setAuthTag(Buffer.from(encryptedData.authTag, 'hex'));
+    const iv = Buffer.from(encryptedData.iv, 'hex');
+    const authTag = Buffer.from(encryptedData.authTag, 'hex');
+    const decipher = crypto.createDecipheriv(ALGORITHM, keyBuffer, iv);
+    decipher.setAuthTag(authTag);
 
     let decrypted = decipher.update(encryptedData.encrypted, 'hex', 'utf8');
     decrypted += decipher.final('utf8');
@@ -242,6 +256,17 @@ export const getUserWithPreferences = async (userId) => {
       } catch (error) {
         console.error('Error decrypting API key:', error);
         user.elevenlabsApiKey = null;
+      }
+    }
+
+    // Decrypt ElevenLabs Agent ID if present
+    if (user.elevenlabsAgentId) {
+      try {
+        const decryptedAgentId = decrypt(JSON.parse(user.elevenlabsAgentId));
+        user.elevenlabsAgentId = decryptedAgentId;
+      } catch (error) {
+        console.error('Error decrypting Agent ID:', error);
+        user.elevenlabsAgentId = null;
       }
     }
 
