@@ -33,8 +33,15 @@ const Register = ({ onSwitchToLogin }) => {
       return;
     }
 
-    if (formData.password.length < 6) {
-      setError('Password must be at least 6 characters long');
+    // Password validation to match backend requirements
+    if (formData.password.length < 8) {
+      setError('Password must be at least 8 characters long');
+      return;
+    }
+
+    const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/;
+    if (!passwordPattern.test(formData.password)) {
+      setError('Password must contain at least one lowercase letter, one uppercase letter, one number, and one special character');
       return;
     }
 
@@ -120,9 +127,9 @@ const Register = ({ onSwitchToLogin }) => {
               required
               disabled={isLoading}
               autoComplete="new-password"
-              minLength="6"
+              minLength="8"
             />
-            <small className="form-hint">At least 6 characters</small>
+            <small className="form-hint">At least 8 characters with one lowercase, one uppercase, one number, and one special character (@$!%*?&)</small>
           </div>
 
           <div className="form-group">
