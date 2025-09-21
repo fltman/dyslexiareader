@@ -22,18 +22,25 @@ const UserHeader = () => {
         <div className="user-info">
           <span className="welcome-text">Welcome, {displayName}</span>
           <Link
+            to="/"
+            className="home-link"
+            title="Home"
+          >
+            🏠
+          </Link>
+          <Link
             to="/settings"
             className="settings-link"
             title="Settings"
           >
-            Settings
+            ⚙️
           </Link>
           <button
             onClick={handleLogout}
             className="logout-button"
             title="Sign out"
           >
-            Sign Out
+            🚪
           </button>
         </div>
       </div>

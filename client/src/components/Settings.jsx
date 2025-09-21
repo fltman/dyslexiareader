@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import './Settings.css';
 
 const Settings = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
@@ -135,6 +137,13 @@ const Settings = () => {
   return (
     <div className="settings-container">
       <div className="settings-header">
+        <button
+          className="back-button"
+          onClick={() => navigate('/')}
+          title="Back to book overview"
+        >
+          ←
+        </button>
         <h1>Settings</h1>
         <p className="settings-subtitle">Manage your account and reading preferences</p>
       </div>
