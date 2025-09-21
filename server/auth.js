@@ -93,13 +93,18 @@ export const decrypt = (encryptedData) => {
  */
 export const authenticateToken = async (req, res, next) => {
   const authHeader = req.headers['authorization'];
-  const token = authHeader && authHeader.split(' ')[1]; // Bearer TOKEN
+  let token = authHeader && authHeader.split(' ')[1]; // Bearer TOKEN
 
   if (!token) {
-    return res.status(401).json({
-      error: 'Access token required',
-      code: 'TOKEN_REQUIRED'
-    });
+    // Check for token in cookies as fallback
+    const cookieToken = req.cookies?.token;
+    if (!cookieToken) {
+      return res.status(401).json({
+        error: 'Access token required',
+        code: 'TOKEN_REQUIRED'
+      });
+    }
+    token = cookieToken;
   }
 
   const decoded = verifyToken(token);
@@ -132,6 +137,7 @@ export const authenticateToken = async (req, res, next) => {
 
     // Attach user to request
     req.user = user[0];
+    req.userId = user[0].id;
     next();
   } catch (error) {
     console.error('Auth middleware error:', error);
@@ -147,11 +153,15 @@ export const authenticateToken = async (req, res, next) => {
  */
 export const optionalAuth = async (req, res, next) => {
   const authHeader = req.headers['authorization'];
-  const token = authHeader && authHeader.split(' ')[1];
+  let token = authHeader && authHeader.split(' ')[1];
 
   if (!token) {
-    req.user = null;
-    return next();
+    const cookieToken = req.cookies?.token;
+    if (!cookieToken) {
+      req.user = null;
+      return next();
+    }
+    token = cookieToken;
   }
 
   const decoded = verifyToken(token);
@@ -172,7 +182,12 @@ export const optionalAuth = async (req, res, next) => {
       .where(eq(users.id, decoded.userId))
       .limit(1);
 
-    req.user = user.length && user[0].isActive ? user[0] : null;
+    if (user.length && user[0].isActive) {
+      req.user = user[0];
+      req.userId = user[0].id;
+    } else {
+      req.user = null;
+    }
   } catch (error) {
     console.error('Optional auth error:', error);
     req.user = null;
