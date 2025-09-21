@@ -137,13 +137,6 @@ const Settings = () => {
   return (
     <div className="settings-container">
       <div className="settings-header">
-        <button
-          className="back-button"
-          onClick={() => navigate('/')}
-          title="Back to book overview"
-        >
-          ←
-        </button>
         <h1>Settings</h1>
         <p className="settings-subtitle">Manage your account and reading preferences</p>
       </div>
