@@ -134,10 +134,12 @@
   bottom: 0;
   background: rgba(0, 0, 0, 0.5);
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
+  padding-top: 12rem; /* Position below the large header */
   z-index: 1000;
   animation: fadeIn 0.2s ease-out;
+  overflow-y: auto;
 }
 
 .settings-dialog {
@@ -149,6 +151,7 @@
   animation: slideIn 0.3s ease-out;
   font-family: 'OpenDyslexic', serif;
   overflow: hidden;
+  margin-bottom: 2rem; /* Add some space at the bottom */
 }
 
 .settings-dialog-header {
