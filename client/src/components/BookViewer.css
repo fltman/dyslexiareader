@@ -10,14 +10,7 @@
 }
 
 .book-viewer-header {
-  background-color: #fff;
-  padding: 1rem;
-  border-bottom: 2px solid #e0e0e0;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  flex-shrink: 0;
+  display: none;
 }
 
 .header-controls {
@@ -88,6 +81,36 @@
 
 .process-button:disabled {
   background-color: #bdc3c7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.process-button-overlay {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  background: transparent;
+  color: #6c757d;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  border-radius: 50%;
+}
+
+.process-button-overlay:hover:not(:disabled) {
+  color: #495057;
+  transform: scale(1.1);
+}
+
+.process-button-overlay:disabled {
+  color: #bdc3c7;
   cursor: not-allowed;
   transform: none;
 }

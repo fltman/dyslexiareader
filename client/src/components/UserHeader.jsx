@@ -18,7 +18,7 @@ const UserHeader = () => {
   return (
     <header className="user-header">
       <div className="user-header-content">
-        <h1 className="app-title">TheReader</h1>
+        <h1 className="app-title">The Anything Reader</h1>
         <div className="user-info">
           <span className="welcome-text">Welcome, {displayName}</span>
           <Link
@@ -26,7 +26,7 @@ const UserHeader = () => {
             className="home-link"
             title="Home"
           >
-            ⌂
+            ◉
           </Link>
           <Link
             to="/settings"

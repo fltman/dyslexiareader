@@ -686,25 +686,21 @@ const BookViewer = () => {
   return (
     <div className="book-viewer">
       <div className="book-viewer-header">
-        <div className="book-info">
-          {/* Title and page info removed - already shown in page */}
-        </div>
-        <div className="header-controls">
-          <button
-            onClick={detectTextBlocks}
-            disabled={isDetecting}
-            className="process-button"
-            title={isDetecting ? 'Processing...' : 'Process Text Blocks'}
-          >
-            {isDetecting ? '⏳' : '⚙️'}
-          </button>
-        </div>
+        {/* Header simplified - no controls needed */}
       </div>
 
 
       <div className="book-viewer-content">
         <div className="page-display">
           <div className="page-container">
+            <button
+              onClick={detectTextBlocks}
+              disabled={isDetecting}
+              className="process-button-overlay"
+              title={isDetecting ? 'Processing...' : 'Process Text Blocks'}
+            >
+              {isDetecting ? '⏳' : '⚙'}
+            </button>
             <img
               ref={imageRef}
               src={pages[currentPage].imagePath}
