@@ -26,7 +26,7 @@ const UserHeader = () => {
             className="home-link"
             title="Home"
           >
-            ◉
+            ⌂
           </Link>
           <Link
             to="/settings"
