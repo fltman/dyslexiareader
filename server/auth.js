@@ -92,13 +92,16 @@ export const decrypt = (encryptedData) => {
  * Authentication middleware
  */
 export const authenticateToken = async (req, res, next) => {
+  console.log('Auth middleware called for:', req.path);
   const authHeader = req.headers['authorization'];
   let token = authHeader && authHeader.split(' ')[1]; // Bearer TOKEN
 
   if (!token) {
     // Check for token in cookies as fallback
     const cookieToken = req.cookies?.token;
+    console.log('No auth header, checking cookies:', !!cookieToken);
     if (!cookieToken) {
+      console.log('No token found, returning 401');
       return res.status(401).json({
         error: 'Access token required',
         code: 'TOKEN_REQUIRED'
