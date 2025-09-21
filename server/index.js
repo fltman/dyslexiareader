@@ -213,8 +213,9 @@ app.get('/api/books', authenticateToken, async (req, res) => {
         for (const page of pages) {
           const textBlocks = await dbHelpers.getTextBlocksByPageId(page.id);
           for (const block of textBlocks) {
-            if (block.text) {
-              searchableText += block.text + ' ';
+            const text = block.ocrText || block.ocr_text || block.text;
+            if (text) {
+              searchableText += text + ' ';
             }
           }
         }
