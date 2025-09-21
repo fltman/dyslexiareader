@@ -105,6 +105,9 @@ const upload = multer({
   }
 });
 
+// Configure trust proxy for cloud environment (Replit runs behind a proxy)
+app.set('trust proxy', 1);
+
 // Middleware
 app.use(cors({
   origin: process.env.CLIENT_URL || 'http://localhost:5173',
@@ -156,21 +159,27 @@ app.get('/api/test', (req, res) => {
 
 // Test auth routes removed - handled by authRoutes.js
 
-// Working auth endpoint that we know works
-app.get('/api/user-info', authenticateToken, async (req, res) => {
-  console.log('User info route called for user:', req.user.id);
-
+// Auth status endpoint - returns user info if authenticated, null if not
+app.get('/api/user-info', optionalAuth, async (req, res) => {
   try {
-    res.json({
-      success: true,
-      user: {
-        id: req.user.id,
-        email: req.user.email,
-        firstName: req.user.firstName,
-        lastName: req.user.lastName
-      }
-    });
-
+    if (req.user) {
+      console.log('User info route called for authenticated user:', req.user.id);
+      res.json({
+        success: true,
+        user: {
+          id: req.user.id,
+          email: req.user.email,
+          firstName: req.user.firstName,
+          lastName: req.user.lastName
+        }
+      });
+    } else {
+      // No user authenticated - return null instead of 401
+      res.json({
+        success: true,
+        user: null
+      });
+    }
   } catch (error) {
     console.error('Error in user-info:', error);
     res.status(500).json({ error: 'Internal server error' });
