@@ -1,14 +1,15 @@
 /* User Header - Dyslexia-Friendly Styling */
 
 .user-header {
-  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
-  border-bottom: 1px solid #e2e8f0;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  padding: 1.5rem 2rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  padding: 1rem 2rem;
   position: sticky;
   top: 0;
   z-index: 100;
   backdrop-filter: blur(10px);
+  overflow: visible;
 }
 
 .user-header-content {
@@ -20,15 +21,26 @@
   gap: 2rem;
 }
 
-.app-logo {
-  height: 4rem;
-  width: auto;
-  object-fit: contain;
-  transition: transform 0.3s ease;
+.logo-link {
+  display: block;
+  text-decoration: none;
+  position: relative;
+  z-index: 110;
 }
 
-.app-logo:hover {
+.app-logo {
+  height: 6rem;
+  width: auto;
+  object-fit: contain;
+  transition: all 0.3s ease;
+  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.3));
+  margin-top: -1rem;
+  margin-bottom: -1rem;
+}
+
+.logo-link:hover .app-logo {
   transform: scale(1.05);
+  filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.4));
 }
 
 .app-title {
@@ -48,16 +60,17 @@
 
 .welcome-text {
   font-size: 1.1rem;
-  color: #34495e;
+  color: rgba(255, 255, 255, 0.95);
   font-weight: 500;
   white-space: nowrap;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-.settings-link, .home-link, .logout-button {
-  background: transparent;
-  color: #6c757d;
+.settings-link, .logout-button {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.9);
   text-decoration: none;
-  border: none;
+  border: 1px solid rgba(255, 255, 255, 0.2);
   padding: 0.5rem;
   border-radius: 8px;
   font-size: 1.5rem;
@@ -69,52 +82,20 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  backdrop-filter: blur(10px);
 }
 
-.settings-link:hover, .home-link:hover, .logout-button:hover {
-  background: rgba(108, 117, 125, 0.1);
+.settings-link:hover, .logout-button:hover {
+  background: rgba(255, 255, 255, 0.2);
   transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 .logout-button:active {
   transform: translateY(0);
 }
 
-/* CSS-based home icon */
-.icon-home {
-  display: inline-block;
-  width: 20px;
-  height: 20px;
-  position: relative;
-}
-
-.icon-home::before {
-  content: '';
-  position: absolute;
-  width: 0;
-  height: 0;
-  border-left: 10px solid transparent;
-  border-right: 10px solid transparent;
-  border-bottom: 8px solid #6c757d;
-  top: 0;
-  left: 0;
-}
-
-.icon-home::after {
-  content: '';
-  position: absolute;
-  width: 16px;
-  height: 12px;
-  background-color: #6c757d;
-  bottom: 0;
-  left: 2px;
-}
-
-.home-link:hover .icon-home::before,
-.home-link:hover .icon-home::after {
-  border-bottom-color: #495057;
-  background-color: #495057;
-}
+/* Removed CSS-based home icon - using logo as home button */
 
 /* Mobile Responsiveness */
 @media (max-width: 768px) {
