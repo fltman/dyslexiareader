@@ -408,10 +408,10 @@ const Settings = () => {
               <label htmlFor="playbackSpeed">Playback Speed</label>
               <select
                 id="playbackSpeed"
-                value={preferences.playbackSpeed || '1.0'}
+                value={preferences.playbackSpeed || 1.0}
                 onChange={(e) => setPreferences(prev => ({
                   ...prev,
-                  playbackSpeed: e.target.value
+                  playbackSpeed: parseFloat(e.target.value)
                 }))}
                 disabled={isLoading}
               >
