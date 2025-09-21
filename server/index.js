@@ -571,7 +571,7 @@ app.post('/api/sessions/:sessionId/complete', async (req, res) => {
         }
       }
 
-      // Update book with AI suggestions, full text, and agent information
+      // Update book with AI suggestions, full text, and knowledge base ID
       await dbHelpers.updateBook(bookId, {
         title: aiSuggestions.title,
         category: aiSuggestions.category,
@@ -581,8 +581,7 @@ app.post('/api/sessions/:sessionId/complete', async (req, res) => {
         cover: firstPageImagePath,
         status: 'completed',
         fullText: fullBookText,
-        agentId: agentId,
-        knowledgeBaseId: knowledgeBaseId
+        knowledgeBaseId: knowledgeBaseId // Only store knowledge base ID, not agent ID
       });
 
       console.log('📚 Book saved with metadata:', {
@@ -1501,8 +1500,8 @@ app.post('/api/books/:bookId/agent', authenticateToken, async (req, res) => {
       return res.status(404).json({ error: 'Book not found' });
     }
 
-    // Check if agent already exists in the database
-    const agentExists = !!book.agentId;
+    // Check if knowledge base already exists for this book
+    const knowledgeBaseExists = !!book.knowledgeBaseId;
 
     // Get book's existing full text or extract from pages
     let fullText = book.fullText;
@@ -1538,7 +1537,7 @@ app.post('/api/books/:bookId/agent', authenticateToken, async (req, res) => {
       throw new Error('No text content available for this book');
     }
 
-    console.log(`📚 ${agentExists ? 'Updating' : 'Creating'} agent for book: ${book.title} (${fullText.length} characters)`);
+    console.log(`📚 ${knowledgeBaseExists ? 'Updating' : 'Creating'} knowledge base for book: ${book.title} (${fullText.length} characters)`);
 
     // Create user-specific ElevenLabs agent service
     const userElevenLabsAgent = new ElevenLabsAgentSDKService(userWithPrefs.elevenlabsApiKey);
@@ -1554,13 +1553,12 @@ app.post('/api/books/:bookId/agent', authenticateToken, async (req, res) => {
       fullText
     );
 
-    // Store the knowledge base ID in the database
+    // Store only the knowledge base ID in the database (agent ID comes from user preferences)
     await dbHelpers.updateBook(bookId, {
-      agentId: agentData.agentId,
       knowledgeBaseId: agentData.knowledgeBaseId
     });
 
-    console.log(`✅ Agent ${agentExists ? 'updated' : 'created'} and saved to database: ${agentData.agentId}`);
+    console.log(`✅ Knowledge base ${knowledgeBaseExists ? 'updated' : 'created'} for book. Using user's agent: ${agentData.agentId}`);
 
     res.json({
       success: true,
