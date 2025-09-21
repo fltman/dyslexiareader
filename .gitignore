@@ -67,7 +67,7 @@ dist
 
 # Gatsby files
 .cache/
-public
+# public (commented out - we need client/public for React/Vite static assets)
 
 # Storybook build outputs
 .out
