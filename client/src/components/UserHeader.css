@@ -19,6 +19,12 @@
   gap: 2rem;
 }
 
+.app-logo {
+  height: 2.5rem;
+  width: auto;
+  object-fit: contain;
+}
+
 .app-title {
   font-family: 'OpenDyslexic', serif;
   font-size: 2rem;

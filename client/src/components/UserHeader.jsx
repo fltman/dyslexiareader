@@ -18,7 +18,7 @@ const UserHeader = () => {
   return (
     <header className="user-header">
       <div className="user-header-content">
-        <h1 className="app-title">The Anything Reader</h1>
+        <img src="/logo.png" alt="The Magical Everything Reader" className="app-logo" />
         <div className="user-info">
           <span className="welcome-text">Welcome, {displayName}</span>
           <Link
