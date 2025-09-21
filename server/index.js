@@ -18,12 +18,14 @@ import { eq } from 'drizzle-orm';
 import { ObjectStorageService } from './objectStorage.js';
 import ElevenLabsAgentSDKService from './elevenlabsAgentSDK.js';
 import cookieParser from 'cookie-parser';
+import bcrypt from 'bcryptjs';
 import {
   generateToken,
   hashPassword,
   comparePassword,
   authenticateToken,
-  optionalAuth
+  optionalAuth,
+  getUserWithPreferences
 } from './auth.js';
 import {
   isValidEmail,
@@ -161,35 +163,20 @@ app.get('/api/auth/me-debug', (req, res) => {
 });
 
 // Working auth endpoint that we know works
-app.get('/api/user-info', async (req, res) => {
-  console.log('User info route called');
-  
+app.get('/api/user-info', authenticateToken, async (req, res) => {
+  console.log('User info route called for user:', req.user.id);
+
   try {
-    // Manual auth check
-    const authHeader = req.headers['authorization'];
-    let token = authHeader && authHeader.split(' ')[1];
-
-    if (!token) {
-      const cookieToken = req.cookies?.token;
-      if (!cookieToken) {
-        console.log('No token found');
-        return res.status(401).json({ error: 'Access token required' });
-      }
-      token = cookieToken;
-    }
-
-    console.log('Token found, returning success');
-    
     res.json({
       success: true,
       user: {
-        id: 1,
-        email: 'test@example.com',
-        firstName: 'Test',
-        lastName: 'User'
+        id: req.user.id,
+        email: req.user.email,
+        firstName: req.user.firstName,
+        lastName: req.user.lastName
       }
     });
-    
+
   } catch (error) {
     console.error('Error in user-info:', error);
     res.status(500).json({ error: 'Internal server error' });
@@ -1812,6 +1799,40 @@ app.put('/api/user/password', authenticateToken, async (req, res) => {
   } catch (error) {
     console.error('Error changing password:', error);
     res.status(500).json({ error: 'Failed to change password' });
+  }
+});
+
+// Update user profile endpoint
+app.put('/api/user/profile', authenticateToken, async (req, res) => {
+  try {
+    const { firstName, lastName } = req.body;
+
+    if (!firstName && !lastName) {
+      return res.status(400).json({ error: 'At least one field (firstName or lastName) is required' });
+    }
+
+    // Update user profile
+    await dbHelpers.updateUserProfile(req.userId, { firstName, lastName });
+
+    // Get updated user data
+    const updatedUser = await dbHelpers.getUserById(req.userId);
+    if (!updatedUser) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    res.json({
+      success: true,
+      message: 'Profile updated successfully',
+      user: {
+        id: updatedUser.id,
+        email: updatedUser.email,
+        firstName: updatedUser.firstName,
+        lastName: updatedUser.lastName
+      }
+    });
+  } catch (error) {
+    console.error('Error updating user profile:', error);
+    res.status(500).json({ error: 'Failed to update profile' });
   }
 });
 

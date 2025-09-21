@@ -241,5 +241,16 @@ export const dbHelpers = {
       .where(eq(users.id, userId))
       .returning();
     return result[0];
+  },
+
+  async updateUserProfile(userId, updates) {
+    const result = await db.update(users)
+      .set({
+        ...updates,
+        updatedAt: new Date()
+      })
+      .where(eq(users.id, userId))
+      .returning();
+    return result[0];
   }
 };
