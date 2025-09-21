@@ -1,13 +1,14 @@
 /* User Header - Dyslexia-Friendly Styling */
 
 .user-header {
-  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
-  border-bottom: 3px solid #e1e8ed;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  padding: 1rem 2rem;
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+  border-bottom: 1px solid #e2e8f0;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  padding: 1.5rem 2rem;
   position: sticky;
   top: 0;
   z-index: 100;
+  backdrop-filter: blur(10px);
 }
 
 .user-header-content {
@@ -20,9 +21,14 @@
 }
 
 .app-logo {
-  height: 2.5rem;
+  height: 4rem;
   width: auto;
   object-fit: contain;
+  transition: transform 0.3s ease;
+}
+
+.app-logo:hover {
+  transform: scale(1.05);
 }
 
 .app-title {
