@@ -139,20 +139,7 @@ const BookViewer = () => {
     }
   }, [currentPage, pages]); // Remove textBlocksCache from deps to avoid infinite loops
 
-  // Show loading state while translations are being loaded
-  if (localizationLoading) {
-    return (
-      <div className="book-viewer">
-        <div className="loading-container">
-          <div className="loading-spinner">Loading...</div>
-          <p>Preparing your reading experience</p>
-        </div>
-      </div>
-    );
-  }
-
-
-  const processIncompleteBlocks = async (blocks, pageId) => {
+  const processIncompleteBlocks = useCallback(async (blocks, pageId) => {
     // Process any blocks that aren't completed, regardless of OCR text status
     const incompleteBlocks = blocks.filter(block => block.status !== 'completed');
     if (incompleteBlocks.length > 0) {

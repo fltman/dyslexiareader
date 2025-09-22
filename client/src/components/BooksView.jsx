@@ -63,25 +63,12 @@ const BooksView = () => {
     filterBooks();
   }, [filterBooks]);
 
-  // Show loading state while translations are being loaded
-  if (localizationLoading) {
-    return (
-      <div className="books-view">
-        <div className="books-header">
-          <h1>Loading...</h1>
-          <p>Preparing your reading experience</p>
-        </div>
-      </div>
-    );
-  }
-
-
-  const handleDeleteClick = (e, book) => {
+  const handleDeleteClick = useCallback((e, book) => {
     e.stopPropagation(); // Prevent navigation to book viewer
     setDeleteModal({ show: true, book });
-  };
+  }, []);
 
-  const handleDeleteConfirm = async () => {
+  const handleDeleteConfirm = useCallback(async () => {
     if (!deleteModal.book) return;
 
     setDeleting(true);
@@ -103,11 +90,23 @@ const BooksView = () => {
     } finally {
       setDeleting(false);
     }
-  };
+  }, [deleteModal.book, t]);
 
-  const handleDeleteCancel = () => {
+  const handleDeleteCancel = useCallback(() => {
     setDeleteModal({ show: false, book: null });
-  };
+  }, []);
+
+  // Show loading state while translations are being loaded - moved after all hooks
+  if (localizationLoading) {
+    return (
+      <div className="books-view">
+        <div className="books-header">
+          <h1>Loading...</h1>
+          <p>Preparing your reading experience</p>
+        </div>
+      </div>
+    );
+  }
 
   if (loading) {
     return <div className="loading">{t('books.loading')}</div>;
