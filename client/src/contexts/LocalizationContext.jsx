@@ -116,8 +116,11 @@ export const LocalizationProvider = ({ children }) => {
     const response = await fetch(`/api/localization/translations/${languageCode}`);
     if (response.ok) {
       const data = await response.json();
-      translations[languageName] = data.translations;
-      console.log(`✅ Loaded translations for ${languageName}`);
+      
+      // Always store translations under the correct language name, not the code
+      const actualLanguageName = availableLanguages.find(l => l.code === languageCode)?.name || languageName;
+      translations[actualLanguageName] = data.translations;
+      console.log(`✅ Loaded translations for ${actualLanguageName} (code: ${languageCode})`);
     } else {
       throw new Error(`Failed to load translations for ${languageName}`);
     }

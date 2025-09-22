@@ -1,0 +1,94 @@
+index-CzF6ZE7J.js:60 ✅ Loaded available languages: (2) ['Dansk', 'English']
+index-CzF6ZE7J.js:60 Translation key "bookViewer.loading" not found in English or English
+overrideMethod @ hook.js:608
+t @ index-CzF6ZE7J.js:60
+Ey @ index-CzF6ZE7J.js:60
+Nc @ index-CzF6ZE7J.js:48
+Xc @ index-CzF6ZE7J.js:48
+Tf @ index-CzF6ZE7J.js:48
+Wf @ index-CzF6ZE7J.js:48
+Qm @ index-CzF6ZE7J.js:48
+ds @ index-CzF6ZE7J.js:48
+Zf @ index-CzF6ZE7J.js:48
+rd @ index-CzF6ZE7J.js:48
+Ie @ index-CzF6ZE7J.js:17
+index-CzF6ZE7J.js:60 📚 Updating agent knowledge for book ID: 65
+index-CzF6ZE7J.js:60 🔄 Treating 'en' as language code, mapped to 'English'
+index-CzF6ZE7J.js:60 Translation key "bookViewer.scanTextBlocks" not found in English or English
+overrideMethod @ hook.js:608
+t @ index-CzF6ZE7J.js:60
+Ey @ index-CzF6ZE7J.js:60
+Nc @ index-CzF6ZE7J.js:48
+Xc @ index-CzF6ZE7J.js:48
+Tf @ index-CzF6ZE7J.js:48
+Wf @ index-CzF6ZE7J.js:48
+Qm @ index-CzF6ZE7J.js:48
+ds @ index-CzF6ZE7J.js:48
+Zf @ index-CzF6ZE7J.js:48
+rd @ index-CzF6ZE7J.js:48
+Ie @ index-CzF6ZE7J.js:17
+index-CzF6ZE7J.js:60 🟢 Rendering 0 text block overlays, imageRef: false
+index-CzF6ZE7J.js:60 📄 Loading text blocks for page: 0 pageId: 51
+index-CzF6ZE7J.js:60 🗺️ Current cache state: []
+index-CzF6ZE7J.js:60 🌍 No cache found, fetching from API...
+index-CzF6ZE7J.js:60 🔍 Fetching text blocks for pageId: 51
+index-CzF6ZE7J.js:60 Translation key "bookViewer.scanTextBlocks" not found in English or English
+overrideMethod @ hook.js:608
+t @ index-CzF6ZE7J.js:60
+Ey @ index-CzF6ZE7J.js:60
+Nc @ index-CzF6ZE7J.js:48
+Xc @ index-CzF6ZE7J.js:48
+Tf @ index-CzF6ZE7J.js:48
+Wf @ index-CzF6ZE7J.js:48
+Qm @ index-CzF6ZE7J.js:48
+ds @ index-CzF6ZE7J.js:48
+Zf @ index-CzF6ZE7J.js:48
+rd @ index-CzF6ZE7J.js:48
+Ie @ index-CzF6ZE7J.js:17
+index-CzF6ZE7J.js:60 🟢 Rendering 0 text block overlays, imageRef: true
+index-CzF6ZE7J.js:60 🎛️ Loaded playback speed from preferences: 1
+index-CzF6ZE7J.js:60 Translation key "bookViewer.scanTextBlocks" not found in English or English
+overrideMethod @ hook.js:608
+t @ index-CzF6ZE7J.js:60
+Ey @ index-CzF6ZE7J.js:60
+Nc @ index-CzF6ZE7J.js:48
+Xc @ index-CzF6ZE7J.js:48
+Tf @ index-CzF6ZE7J.js:48
+Wf @ index-CzF6ZE7J.js:48
+Qm @ index-CzF6ZE7J.js:48
+ds @ index-CzF6ZE7J.js:48
+Zf @ index-CzF6ZE7J.js:48
+rd @ index-CzF6ZE7J.js:48
+Ie @ index-CzF6ZE7J.js:17
+index-CzF6ZE7J.js:60 🟢 Rendering 0 text block overlays, imageRef: true
+index-CzF6ZE7J.js:60 ✅ Loaded translations for en
+index-CzF6ZE7J.js:48 Uncaught Error: Minified React error #310; visit https://react.dev/errors/310 for the full message or use the non-minified dev environment for full errors and additional helpful warnings.
+    at Ge (index-CzF6ZE7J.js:48:35419)
+    at jn (index-CzF6ZE7J.js:48:41881)
+    at Object.Uo [as useEffect] (index-CzF6ZE7J.js:48:42106)
+    at re.useEffect (index-CzF6ZE7J.js:25:7004)
+    at by (index-CzF6ZE7J.js:60:31178)
+    at Nc (index-CzF6ZE7J.js:48:34141)
+    at Xc (index-CzF6ZE7J.js:48:62151)
+    at Tf (index-CzF6ZE7J.js:48:72654)
+    at Wf (index-CzF6ZE7J.js:48:106685)
+    at Qm (index-CzF6ZE7J.js:48:105750)
+Ge @ index-CzF6ZE7J.js:48
+jn @ index-CzF6ZE7J.js:48
+Uo @ index-CzF6ZE7J.js:48
+re.useEffect @ index-CzF6ZE7J.js:25
+by @ index-CzF6ZE7J.js:60
+Nc @ index-CzF6ZE7J.js:48
+Xc @ index-CzF6ZE7J.js:48
+Tf @ index-CzF6ZE7J.js:48
+Wf @ index-CzF6ZE7J.js:48
+Qm @ index-CzF6ZE7J.js:48
+ds @ index-CzF6ZE7J.js:48
+Zf @ index-CzF6ZE7J.js:48
+rd @ index-CzF6ZE7J.js:48
+Ie @ index-CzF6ZE7J.js:17
+index-CzF6ZE7J.js:60 📦 Fetched text blocks: 19 blocks
+index-CzF6ZE7J.js:60 ✅ Fetched 19 text blocks from API for page 51
+index-CzF6ZE7J.js:60 🗺️ Updated cache, now contains: ['51']
+index-CzF6ZE7J.js:60 💻 Setting text blocks for current page: 19 blocks
+index-CzF6ZE7J.js:60 ✅ Agent knowledge updated successfully
