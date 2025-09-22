@@ -33,6 +33,26 @@ const BookViewer = () => {
   const [playbackSpeed, setPlaybackSpeed] = useState(1.0);
   const [userPreferences, setUserPreferences] = useState(null);
 
+  // Update agent's knowledge base for current book
+  const updateAgentKnowledge = async () => {
+    try {
+      console.log(`📚 Updating agent knowledge for book ID: ${bookId}`);
+
+      const response = await fetch(`/api/books/${bookId}/agent`, {
+        method: 'POST'
+      });
+
+      if (!response.ok) {
+        console.error('Failed to update agent knowledge');
+      } else {
+        const data = await response.json();
+        console.log('✅ Agent knowledge updated successfully');
+      }
+    } catch (err) {
+      console.error('Error updating agent knowledge:', err);
+    }
+  };
+
   useEffect(() => {
     if (bookId) {
       fetchBook();
@@ -79,27 +99,6 @@ const BookViewer = () => {
       console.error('Error loading user preferences:', error);
     }
   };
-
-  // Update agent's knowledge base for current book
-  const updateAgentKnowledge = async () => {
-    try {
-      console.log(`📚 Updating agent knowledge for book ID: ${bookId}`);
-
-      const response = await fetch(`/api/books/${bookId}/agent`, {
-        method: 'POST'
-      });
-
-      if (!response.ok) {
-        console.error('Failed to update agent knowledge');
-      } else {
-        const data = await response.json();
-        console.log('✅ Agent knowledge updated successfully');
-      }
-    } catch (err) {
-      console.error('Error updating agent knowledge:', err);
-    }
-  };
-
 
   useEffect(() => {
     if (pages.length > 0) {
