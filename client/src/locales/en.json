@@ -51,11 +51,15 @@
     "addNew": "Add New Book",
     "noBooks": "No books yet",
     "noBooksMessage": "Start your reading journey by adding your first book!",
+    "loading": "Loading books...",
     "processing": "Processing...",
     "error": "Error loading books",
     "deleteConfirm": "Are you sure you want to delete this book?",
     "delete": "Delete",
+    "deleteBook": "Delete Book",
     "cancel": "Cancel",
+    "searchPlaceholder": "Search books by title, author, or content...",
+    "unknownAuthor": "Unknown Author",
     "pages": "pages",
     "page": "page"
   },
@@ -153,7 +157,14 @@
     "submit": "Submit",
     "retry": "Retry",
     "yes": "Yes",
-    "no": "No"
+    "no": "No",
+    "home": "Home",
+    "settings": "Settings",
+    "user": "User"
+  },
+  "userHeader": {
+    "welcome": "Welcome, {{name}}!",
+    "signOut": "Sign Out"
   },
   "languages": {
     "en": "English",

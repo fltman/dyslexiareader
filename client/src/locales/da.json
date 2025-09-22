@@ -51,11 +51,15 @@
     "addNew": "Tilføj ny bog",
     "noBooks": "Ingen bøger endnu",
     "noBooksMessage": "Start din læserejse ved at tilføje din første bog!",
+    "loading": "Indlæser bøger...",
     "processing": "Behandler...",
     "error": "Fejl ved indlæsning af bøger",
     "deleteConfirm": "Er du sikker på, at du vil slette denne bog?",
     "delete": "Slet",
+    "deleteBook": "Slet bog",
     "cancel": "Annuller",
+    "searchPlaceholder": "Søg bøger efter titel, forfatter eller indhold...",
+    "unknownAuthor": "Ukendt forfatter",
     "pages": "sider",
     "page": "side"
   },
@@ -153,7 +157,14 @@
     "submit": "Indsend",
     "retry": "Prøv igen",
     "yes": "Ja",
-    "no": "Nej"
+    "no": "Nej",
+    "home": "Hjem",
+    "settings": "Indstillinger",
+    "user": "Bruger"
+  },
+  "userHeader": {
+    "welcome": "Velkommen, {{name}}!",
+    "signOut": "Log ud"
   },
   "languages": {
     "en": "English",
