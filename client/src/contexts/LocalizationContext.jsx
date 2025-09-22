@@ -173,12 +173,28 @@ export const LocalizationProvider = ({ children }) => {
     const keys = key.split('.');
     let value = translations[currentLanguage];
 
+    // Debug: Check if translations exist for current language
+    if (!translations[currentLanguage]) {
+      console.warn(`No translations loaded for ${currentLanguage}. Available languages:`, Object.keys(translations));
+      console.warn(`Attempting fallback to English...`);
+      value = translations['English'];
+      if (!value) {
+        console.warn(`No English translations available either. Using key as fallback.`);
+        return key;
+      }
+    }
+
     for (const k of keys) {
       if (value && typeof value === 'object') {
         value = value[k];
       } else {
         // Fallback to English if key not found
+        console.warn(`Key "${k}" not found in path "${key}" for ${currentLanguage}. Trying English fallback...`);
         value = translations['English'];
+        if (!value) {
+          console.warn(`Translation key "${key}" not found in ${currentLanguage} or English`);
+          return key;
+        }
         for (const fallbackKey of keys) {
           if (value && typeof value === 'object') {
             value = value[fallbackKey];
@@ -192,7 +208,7 @@ export const LocalizationProvider = ({ children }) => {
     }
 
     if (typeof value !== 'string') {
-      console.warn(`Translation key "${key}" is not a string`);
+      console.warn(`Translation key "${key}" is not a string. Value:`, value, `Type: ${typeof value}`);
       return key;
     }
 
