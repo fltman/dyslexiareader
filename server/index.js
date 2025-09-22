@@ -11,6 +11,7 @@ import OpenAI from 'openai';
 import { ElevenLabsClient } from '@elevenlabs/elevenlabs-js';
 import fs from 'fs';
 import crypto from 'crypto';
+import sharp from 'sharp';
 import { dbHelpers } from './database-replit.js';
 import { db } from './db.js';
 import { books } from '../shared/schema.js';
@@ -320,15 +321,43 @@ app.post('/api/sessions/:sessionId/pages', upload.single('image'), async (req, r
       return res.status(404).json({ error: 'Invalid or expired session' });
     }
 
-    // Generate unique filename
-    const fileExtension = path.extname(req.file.originalname);
-    const uniqueFilename = `${Date.now()}-${Math.round(Math.random() * 1E9)}${fileExtension}`;
+    // Generate unique filename with timestamp
+    const originalSize = req.file.buffer.length;
+    const timestamp = Date.now();
+    const randomId = Math.round(Math.random() * 1E9);
 
-    // Upload file using Replit Object Storage
-    console.log(`📁 Processing upload: ${uniqueFilename}, size: ${req.file.buffer.length} bytes, mimetype: ${req.file.mimetype}`);
-    console.log(`📄 Buffer info: isBuffer=${Buffer.isBuffer(req.file.buffer)}, constructor=${req.file.buffer.constructor.name}`);
-    
-    const imageUrl = await objectStorageService.uploadFile(req.file.buffer, uniqueFilename, req.file.mimetype);
+    console.log(`📁 Processing upload: ${req.file.originalname}, original size: ${originalSize} bytes, mimetype: ${req.file.mimetype}`);
+
+    // Compress image to AVIF format
+    let compressedBuffer;
+    let uniqueFilename;
+    let mimeType;
+
+    try {
+      compressedBuffer = await sharp(req.file.buffer)
+        .avif({ quality: 75, effort: 6 }) // Quality 75, max compression effort
+        .toBuffer();
+
+      uniqueFilename = `${timestamp}-${randomId}.avif`;
+      mimeType = 'image/avif';
+
+      const compressionRatio = ((originalSize - compressedBuffer.length) / originalSize * 100).toFixed(1);
+      console.log(`🗜️ Compressed to AVIF: ${compressedBuffer.length} bytes (${compressionRatio}% reduction)`);
+    } catch (compressionError) {
+      console.warn('⚠️ AVIF compression failed, falling back to JPEG:', compressionError.message);
+      // Fallback to JPEG if AVIF fails
+      compressedBuffer = await sharp(req.file.buffer)
+        .jpeg({ quality: 85 })
+        .toBuffer();
+
+      uniqueFilename = `${timestamp}-${randomId}.jpg`;
+      mimeType = 'image/jpeg';
+
+      const compressionRatio = ((originalSize - compressedBuffer.length) / originalSize * 100).toFixed(1);
+      console.log(`🗜️ Compressed to JPEG: ${compressedBuffer.length} bytes (${compressionRatio}% reduction)`);
+    }
+
+    const imageUrl = await objectStorageService.uploadFile(compressedBuffer, uniqueFilename, mimeType);
     console.log('✅ File uploaded to Replit Object Storage:', imageUrl);
 
     // Handle both field names (bookId from schema, book_id from database)
