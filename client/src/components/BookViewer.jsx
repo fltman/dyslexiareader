@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useLocalization } from '../contexts/LocalizationContext';
@@ -33,8 +33,61 @@ const BookViewer = () => {
   const [playbackSpeed, setPlaybackSpeed] = useState(1.0);
   const [userPreferences, setUserPreferences] = useState(null);
 
-  // Update agent's knowledge base for current book
-  const updateAgentKnowledge = async () => {
+  // Function to get user preferences for TTS - moved before useEffects
+  const loadUserPreferences = useCallback(async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const headers = {};
+
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+      }
+
+      const response = await fetch('/api/auth/preferences', {
+        headers,
+        credentials: 'include'
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setUserPreferences(data.preferences);
+
+        // Set playbook speed from preferences
+        if (data.preferences?.playbackSpeed) {
+          const speed = parseFloat(data.preferences.playbackSpeed);
+          setPlaybackSpeed(speed);
+          console.log('🎛️ Loaded playback speed from preferences:', speed);
+        }
+      } else if (response.status === 401 || response.status === 403) {
+        console.warn('Authentication failed in BookViewer, logging out');
+        logout();
+      }
+    } catch (error) {
+      console.error('Error loading user preferences:', error);
+    }
+  }, [logout]);
+
+  // Fetch book data - moved before useEffects
+  const fetchBook = useCallback(async () => {
+    try {
+      const response = await fetch(`/api/books/${bookId}`);
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      setBook(data);
+      setPages(data.pages || []);
+      setLoading(false);
+    } catch (error) {
+      console.error('Error fetching book:', error);
+      setLoading(false);
+    }
+  }, [bookId]);
+
+  // Update agent's knowledge base for current book - moved before useEffects
+  const updateAgentKnowledge = useCallback(async () => {
     try {
       console.log(`📚 Updating agent knowledge for book ID: ${bookId}`);
 
@@ -51,54 +104,20 @@ const BookViewer = () => {
     } catch (err) {
       console.error('Error updating agent knowledge:', err);
     }
-  };
+  }, [bookId]);
 
   useEffect(() => {
     if (bookId) {
       fetchBook();
       updateAgentKnowledge();
     }
-  }, [bookId]);
+  }, [bookId, fetchBook, updateAgentKnowledge]);
 
   useEffect(() => {
     if (user) {
       loadUserPreferences();
     }
-  }, [user]);
-
-
-  const loadUserPreferences = async () => {
-    try {
-      const token = localStorage.getItem('token');
-      const headers = {};
-      
-      if (token) {
-        headers['Authorization'] = `Bearer ${token}`;
-      }
-
-      const response = await fetch('/api/auth/preferences', {
-        headers,
-        credentials: 'include'
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setUserPreferences(data.preferences);
-
-        // Set playback speed from preferences
-        if (data.preferences?.playbackSpeed) {
-          const speed = parseFloat(data.preferences.playbackSpeed);
-          setPlaybackSpeed(speed);
-          console.log('🎛️ Loaded playback speed from preferences:', speed);
-        }
-      } else if (response.status === 401 || response.status === 403) {
-        console.warn('Authentication failed in BookViewer, logging out');
-        logout();
-      }
-    } catch (error) {
-      console.error('Error loading user preferences:', error);
-    }
-  };
+  }, [user, loadUserPreferences]);
 
   useEffect(() => {
     if (pages.length > 0) {
@@ -132,23 +151,6 @@ const BookViewer = () => {
     );
   }
 
-  const fetchBook = async () => {
-    try {
-      const response = await fetch(`/api/books/${bookId}`);
-      
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      
-      const data = await response.json();
-      setBook(data);
-      setPages(data.pages || []);
-      setLoading(false);
-    } catch (error) {
-      console.error('Error fetching book:', error);
-      setLoading(false);
-    }
-  };
 
   const processIncompleteBlocks = async (blocks, pageId) => {
     // Process any blocks that aren't completed, regardless of OCR text status

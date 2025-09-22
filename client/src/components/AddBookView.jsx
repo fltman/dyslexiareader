@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLocalization } from '../contexts/LocalizationContext';
 import './AddBookView.css';
@@ -22,21 +22,7 @@ const AddBookView = () => {
   const navigate = useNavigate();
   const { t } = useLocalization();
 
-  useEffect(() => {
-    if (!initializing) {
-      initializeBook();
-    }
-  }, []);
-
-  useEffect(() => {
-    if (sessionId) {
-      // Poll for page updates every 2 seconds
-      const pollInterval = setInterval(pollForUpdates, 2000);
-      return () => clearInterval(pollInterval);
-    }
-  }, [sessionId]);
-
-  const initializeBook = async () => {
+  const initializeBook = useCallback(async () => {
     if (initializing) return;
 
     try {
@@ -57,9 +43,9 @@ const AddBookView = () => {
     } finally {
       setInitializing(false);
     }
-  };
+  }, [initializing]);
 
-  const pollForUpdates = async () => {
+  const pollForUpdates = useCallback(async () => {
     if (!sessionId) return;
 
     try {
@@ -89,7 +75,22 @@ const AddBookView = () => {
     } catch (error) {
       console.error('Error polling updates:', error);
     }
-  };
+  }, [sessionId, pages.length, t, navigate]);
+
+  useEffect(() => {
+    if (!initializing) {
+      initializeBook();
+    }
+  }, [initializeBook, initializing]);
+
+  useEffect(() => {
+    if (sessionId) {
+      // Poll for page updates every 2 seconds
+      const pollInterval = setInterval(pollForUpdates, 2000);
+      return () => clearInterval(pollInterval);
+    }
+  }, [sessionId, pollForUpdates]);
+
 
   const handleDone = async () => {
     if (pages.length === 0) {

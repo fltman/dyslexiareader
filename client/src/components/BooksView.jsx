@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLocalization } from '../contexts/LocalizationContext';
 import './BooksView.css';
@@ -14,15 +14,7 @@ const BooksView = () => {
   const navigate = useNavigate();
   const { t, isLoading: localizationLoading } = useLocalization();
 
-  useEffect(() => {
-    fetchBooks();
-  }, []);
-
-  useEffect(() => {
-    filterBooks();
-  }, [books, searchTerm]);
-
-  const fetchBooks = async () => {
+  const fetchBooks = useCallback(async () => {
     try {
       const response = await fetch('/api/books', {
         credentials: 'include'
@@ -39,21 +31,9 @@ const BooksView = () => {
       console.error('Error fetching books:', error);
       setLoading(false);
     }
-  };
+  }, []);
 
-  // Show loading state while translations are being loaded
-  if (localizationLoading) {
-    return (
-      <div className="books-view">
-        <div className="books-header">
-          <h1>Loading...</h1>
-          <p>Preparing your reading experience</p>
-        </div>
-      </div>
-    );
-  }
-
-  const filterBooks = () => {
+  const filterBooks = useCallback(() => {
     if (!searchTerm.trim()) {
       setFilteredBooks(books);
       return;
@@ -73,7 +53,28 @@ const BooksView = () => {
       );
     });
     setFilteredBooks(filtered);
-  };
+  }, [books, searchTerm]);
+
+  useEffect(() => {
+    fetchBooks();
+  }, [fetchBooks]);
+
+  useEffect(() => {
+    filterBooks();
+  }, [filterBooks]);
+
+  // Show loading state while translations are being loaded
+  if (localizationLoading) {
+    return (
+      <div className="books-view">
+        <div className="books-header">
+          <h1>Loading...</h1>
+          <p>Preparing your reading experience</p>
+        </div>
+      </div>
+    );
+  }
+
 
   const handleDeleteClick = (e, book) => {
     e.stopPropagation(); // Prevent navigation to book viewer
