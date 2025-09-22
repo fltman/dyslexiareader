@@ -14,11 +14,7 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Check if user is authenticated on app load
-  useEffect(() => {
-    checkAuth();
-  }, []);
-
+  // Function declarations moved before useEffect to prevent temporal dead zone
   const checkAuth = async () => {
     try {
       const response = await fetch('/api/user-info', {
@@ -109,6 +105,11 @@ export const AuthProvider = ({ children }) => {
       setUser(null);
     }
   };
+
+  // Check if user is authenticated on app load - moved after function declarations
+  useEffect(() => {
+    checkAuth();
+  }, []);
 
   const value = {
     user,
