@@ -132,14 +132,13 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.6);
   display: flex;
-  align-items: center; /* Changed back to center for vertical centering */
+  align-items: center;
   justify-content: center;
-  z-index: 10000; /* Increased z-index to ensure it's above everything */
+  z-index: 10000;
   animation: fadeIn 0.2s ease-out;
-  overflow-y: auto;
-  padding: 2rem; /* Add padding for mobile */
+  padding: 2rem;
 }
 
 .settings-dialog {
@@ -147,13 +146,15 @@
   border-radius: 16px;
   max-width: 500px;
   width: 90%;
+  max-height: 80vh;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
   animation: slideIn 0.3s ease-out;
   font-family: 'OpenDyslexic', serif;
-  overflow: visible; /* Changed from hidden to visible */
-  position: relative; /* Ensure proper stacking */
-  z-index: 10001; /* Above overlay */
-  margin-top: 8rem; /* Add margin to push below header */
+  position: relative;
+  z-index: 10001;
+  display: flex;
+  flex-direction: column;
+  margin: auto; /* Center the dialog properly */
 }
 
 .settings-dialog-header {
@@ -195,6 +196,8 @@
 
 .settings-dialog-body {
   padding: 2rem;
+  overflow-y: auto;
+  flex: 1;
 }
 
 .settings-dialog-body p {
