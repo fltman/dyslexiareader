@@ -178,7 +178,7 @@ export const LocalizationProvider = ({ children }) => {
         value = value[k];
       } else {
         // Fallback to English if key not found
-        value = translations.en;
+        value = translations['English'];
         for (const fallbackKey of keys) {
           if (value && typeof value === 'object') {
             value = value[fallbackKey];
