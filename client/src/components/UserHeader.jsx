@@ -6,13 +6,29 @@ import './UserHeader.css';
 
 const UserHeader = () => {
   const { user, logout } = useAuth();
-  const { t } = useLocalization();
+  const { t, isLoading: localizationLoading } = useLocalization();
   const [showSettingsDialog, setShowSettingsDialog] = useState(false);
   const [hasElevenLabsSettings, setHasElevenLabsSettings] = useState(true);
 
   const handleLogout = async () => {
     await logout();
   };
+
+  // Show minimal header while translations are loading
+  if (localizationLoading) {
+    return (
+      <header className="user-header">
+        <div className="user-header-content">
+          <Link to="/" className="logo-link">
+            <img src="/logo.png" alt="The Magical Everything Reader" className="app-logo" />
+          </Link>
+          <div className="user-info">
+            <span className="welcome-text">Loading...</span>
+          </div>
+        </div>
+      </header>
+    );
+  }
 
   const displayName = user?.firstName && user?.lastName
     ? `${user.firstName} ${user.lastName}`

@@ -12,7 +12,7 @@ const BooksView = () => {
   const [deleteModal, setDeleteModal] = useState({ show: false, book: null });
   const [deleting, setDeleting] = useState(false);
   const navigate = useNavigate();
-  const { t } = useLocalization();
+  const { t, isLoading: localizationLoading } = useLocalization();
 
   useEffect(() => {
     fetchBooks();
@@ -40,6 +40,18 @@ const BooksView = () => {
       setLoading(false);
     }
   };
+
+  // Show loading state while translations are being loaded
+  if (localizationLoading) {
+    return (
+      <div className="books-view">
+        <div className="books-header">
+          <h1>Loading...</h1>
+          <p>Preparing your reading experience</p>
+        </div>
+      </div>
+    );
+  }
 
   const filterBooks = () => {
     if (!searchTerm.trim()) {
