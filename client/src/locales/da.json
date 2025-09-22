@@ -179,6 +179,14 @@
     "visitSettings": "Besøg din indstillingsside for at konfigurere disse muligheder og låse den fulde læseoplevelse op.",
     "goToSettings": "Gå til indstillinger"
   },
+  "bookViewer": {
+    "loading": "Indlæser bog...",
+    "scanTextBlocks": "Scan tekstblokke",
+    "processing": "Behandler...",
+    "detectingText": "Registrerer tekst...",
+    "bookNotFound": "Bog ikke fundet",
+    "backToBooks": "Tilbage til bøger"
+  },
   "languages": {
     "en": "English",
     "da": "Dansk (Danish)",

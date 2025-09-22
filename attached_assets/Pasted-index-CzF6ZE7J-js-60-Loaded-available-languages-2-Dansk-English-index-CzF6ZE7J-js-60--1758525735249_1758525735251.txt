@@ -1,0 +1,1011 @@
+index-CzF6ZE7J.js:60 ✅ Loaded available languages: (2) ['Dansk', 'English']
+index-CzF6ZE7J.js:60 🔄 Treating 'en' as language code, mapped to 'English'
+index-CzF6ZE7J.js:60 ✅ Loaded translations for en
+index-CzF6ZE7J.js:60 Translation key "bookViewer.loading" not found in en or English
+overrideMethod @ hook.js:608
+t @ index-CzF6ZE7J.js:60
+Ey @ index-CzF6ZE7J.js:60
+Nc @ index-CzF6ZE7J.js:48
+Xc @ index-CzF6ZE7J.js:48
+Tf @ index-CzF6ZE7J.js:48
+Wf @ index-CzF6ZE7J.js:48
+Zm @ index-CzF6ZE7J.js:48
+Vm @ index-CzF6ZE7J.js:48
+Zf @ index-CzF6ZE7J.js:48
+rd @ index-CzF6ZE7J.js:48
+Ie @ index-CzF6ZE7J.js:17
+index-CzF6ZE7J.js:60 📚 Updating agent knowledge for book ID: 65
+index-CzF6ZE7J.js:60 Translation key "bookViewer.scanTextBlocks" not found in en or English
+overrideMethod @ hook.js:608
+t @ index-CzF6ZE7J.js:60
+Ey @ index-CzF6ZE7J.js:60
+Nc @ index-CzF6ZE7J.js:48
+Xc @ index-CzF6ZE7J.js:48
+Tf @ index-CzF6ZE7J.js:48
+Wf @ index-CzF6ZE7J.js:48
+Qm @ index-CzF6ZE7J.js:48
+ds @ index-CzF6ZE7J.js:48
+Zf @ index-CzF6ZE7J.js:48
+rd @ index-CzF6ZE7J.js:48
+Ie @ index-CzF6ZE7J.js:17
+index-CzF6ZE7J.js:60 🟢 Rendering 0 text block overlays, imageRef: false
+index-CzF6ZE7J.js:60 📄 Loading text blocks for page: 0 pageId: 51
+index-CzF6ZE7J.js:60 🗺️ Current cache state: []
+index-CzF6ZE7J.js:60 🌍 No cache found, fetching from API...
+index-CzF6ZE7J.js:60 🔍 Fetching text blocks for pageId: 51
+index-CzF6ZE7J.js:60 Translation key "bookViewer.scanTextBlocks" not found in en or English
+overrideMethod @ hook.js:608
+t @ index-CzF6ZE7J.js:60
+Ey @ index-CzF6ZE7J.js:60
+Nc @ index-CzF6ZE7J.js:48
+Xc @ index-CzF6ZE7J.js:48
+Tf @ index-CzF6ZE7J.js:48
+Wf @ index-CzF6ZE7J.js:48
+Qm @ index-CzF6ZE7J.js:48
+ds @ index-CzF6ZE7J.js:48
+Zf @ index-CzF6ZE7J.js:48
+rd @ index-CzF6ZE7J.js:48
+Ie @ index-CzF6ZE7J.js:17
+index-CzF6ZE7J.js:60 🟢 Rendering 0 text block overlays, imageRef: true
+index-CzF6ZE7J.js:60 🎛️ Loaded playback speed from preferences: 1
+index-CzF6ZE7J.js:60 Translation key "bookViewer.scanTextBlocks" not found in en or English
+overrideMethod @ hook.js:608
+t @ index-CzF6ZE7J.js:60
+Ey @ index-CzF6ZE7J.js:60
+Nc @ index-CzF6ZE7J.js:48
+Xc @ index-CzF6ZE7J.js:48
+Tf @ index-CzF6ZE7J.js:48
+Wf @ index-CzF6ZE7J.js:48
+Qm @ index-CzF6ZE7J.js:48
+ds @ index-CzF6ZE7J.js:48
+Zf @ index-CzF6ZE7J.js:48
+rd @ index-CzF6ZE7J.js:48
+Ie @ index-CzF6ZE7J.js:17
+index-CzF6ZE7J.js:60 🟢 Rendering 0 text block overlays, imageRef: true
+index-CzF6ZE7J.js:60 📦 Fetched text blocks: 0 blocks
+index-CzF6ZE7J.js:60 ✅ Fetched 0 text blocks from API for page 51
+index-CzF6ZE7J.js:60 🗺️ Updated cache, now contains: ['51']
+index-CzF6ZE7J.js:60 💻 Setting text blocks for current page: 0 blocks
+index-CzF6ZE7J.js:60 🔍 No text blocks found for page, auto-detecting...
+index-CzF6ZE7J.js:60 🔍 Auto-detecting text blocks for page: 51
+index-CzF6ZE7J.js:60 Translation key "bookViewer.processing" not found in en or English
+overrideMethod @ hook.js:608
+t @ index-CzF6ZE7J.js:60
+Ey @ index-CzF6ZE7J.js:60
+Nc @ index-CzF6ZE7J.js:48
+Xc @ index-CzF6ZE7J.js:48
+Tf @ index-CzF6ZE7J.js:48
+Wf @ index-CzF6ZE7J.js:48
+Qm @ index-CzF6ZE7J.js:48
+ds @ index-CzF6ZE7J.js:48
+Zf @ index-CzF6ZE7J.js:48
+rd @ index-CzF6ZE7J.js:48
+Ie @ index-CzF6ZE7J.js:17
+index-CzF6ZE7J.js:60 🟢 Rendering 0 text block overlays, imageRef: true
+index-CzF6ZE7J.js:60 Translation key "bookViewer.detectingText" not found in en or English
+overrideMethod @ hook.js:608
+t @ index-CzF6ZE7J.js:60
+Ey @ index-CzF6ZE7J.js:60
+Nc @ index-CzF6ZE7J.js:48
+Xc @ index-CzF6ZE7J.js:48
+Tf @ index-CzF6ZE7J.js:48
+Wf @ index-CzF6ZE7J.js:48
+Qm @ index-CzF6ZE7J.js:48
+ds @ index-CzF6ZE7J.js:48
+Zf @ index-CzF6ZE7J.js:48
+rd @ index-CzF6ZE7J.js:48
+Ie @ index-CzF6ZE7J.js:17
+index-CzF6ZE7J.js:60 Image loaded, ready for detection
+index-CzF6ZE7J.js:60 ✅ Agent knowledge updated successfully
+index-CzF6ZE7J.js:60 ✅ Auto-detection completed: {success: true, blocks: Array(19), totalBlocks: 19, usedGoogleVision: true}
+index-CzF6ZE7J.js:60 🔄 Auto-processing 19 incomplete text blocks...
+index-CzF6ZE7J.js:60 Translation key "bookViewer.scanTextBlocks" not found in en or English
+overrideMethod @ hook.js:608
+t @ index-CzF6ZE7J.js:60
+Ey @ index-CzF6ZE7J.js:60
+Nc @ index-CzF6ZE7J.js:48
+Xc @ index-CzF6ZE7J.js:48
+Tf @ index-CzF6ZE7J.js:48
+Wf @ index-CzF6ZE7J.js:48
+Qm @ index-CzF6ZE7J.js:48
+ds @ index-CzF6ZE7J.js:48
+Zf @ index-CzF6ZE7J.js:48
+rd @ index-CzF6ZE7J.js:48
+Ie @ index-CzF6ZE7J.js:17
+index-CzF6ZE7J.js:60 🟢 Rendering 19 text block overlays, imageRef: true
+index-CzF6ZE7J.js:60 🟢 Rendering block: 769 status: undefined position: {x: 1, y: 44, width: 135, height: 30}
+index-CzF6ZE7J.js:60 Translation key "bookViewer.processing" not found in en or English
+overrideMethod @ hook.js:608
+t @ index-CzF6ZE7J.js:60
+(anonymous) @ index-CzF6ZE7J.js:60
+Ey @ index-CzF6ZE7J.js:60
+Nc @ index-CzF6ZE7J.js:48
+Xc @ index-CzF6ZE7J.js:48
+Tf @ index-CzF6ZE7J.js:48
+Wf @ index-CzF6ZE7J.js:48
+Qm @ index-CzF6ZE7J.js:48
+ds @ index-CzF6ZE7J.js:48
+Zf @ index-CzF6ZE7J.js:48
+rd @ index-CzF6ZE7J.js:48
+Ie @ index-CzF6ZE7J.js:17
+index-CzF6ZE7J.js:60 🟢 Rendering block: 770 status: undefined position: {x: 1, y: 206, width: 102, height: 47}
+index-CzF6ZE7J.js:60 Translation key "bookViewer.processing" not found in en or English
+overrideMethod @ hook.js:608
+t @ index-CzF6ZE7J.js:60
+(anonymous) @ index-CzF6ZE7J.js:60
+Ey @ index-CzF6ZE7J.js:60
+Nc @ index-CzF6ZE7J.js:48
+Xc @ index-CzF6ZE7J.js:48
+Tf @ index-CzF6ZE7J.js:48
+Wf @ index-CzF6ZE7J.js:48
+Qm @ index-CzF6ZE7J.js:48
+ds @ index-CzF6ZE7J.js:48
+Zf @ index-CzF6ZE7J.js:48
+rd @ index-CzF6ZE7J.js:48
+Ie @ index-CzF6ZE7J.js:17
+index-CzF6ZE7J.js:60 🟢 Rendering block: 771 status: undefined position: {x: 1, y: 2198, width: 104, height: 27}
+index-CzF6ZE7J.js:60 Translation key "bookViewer.processing" not found in en or English
+overrideMethod @ hook.js:608
+t @ index-CzF6ZE7J.js:60
+(anonymous) @ index-CzF6ZE7J.js:60
+Ey @ index-CzF6ZE7J.js:60
+Nc @ index-CzF6ZE7J.js:48
+Xc @ index-CzF6ZE7J.js:48
+Tf @ index-CzF6ZE7J.js:48
+Wf @ index-CzF6ZE7J.js:48
+Qm @ index-CzF6ZE7J.js:48
+ds @ index-CzF6ZE7J.js:48
+Zf @ index-CzF6ZE7J.js:48
+rd @ index-CzF6ZE7J.js:48
+Ie @ index-CzF6ZE7J.js:17
+index-CzF6ZE7J.js:60 🟢 Rendering block: 772 status: undefined position: {x: 1, y: 2253, width: 84, height: 24}
+index-CzF6ZE7J.js:60 Translation key "bookViewer.processing" not found in en or English
+overrideMethod @ hook.js:608
+t @ index-CzF6ZE7J.js:60
+(anonymous) @ index-CzF6ZE7J.js:60
+Ey @ index-CzF6ZE7J.js:60
+Nc @ index-CzF6ZE7J.js:48
+Xc @ index-CzF6ZE7J.js:48
+Tf @ index-CzF6ZE7J.js:48
+Wf @ index-CzF6ZE7J.js:48
+Qm @ index-CzF6ZE7J.js:48
+ds @ index-CzF6ZE7J.js:48
+Zf @ index-CzF6ZE7J.js:48
+rd @ index-CzF6ZE7J.js:48
+Ie @ index-CzF6ZE7J.js:17
+index-CzF6ZE7J.js:60 🟢 Rendering block: 773 status: undefined position: {x: 555, y: 0, width: 627, height: 234}
+index-CzF6ZE7J.js:60 Translation key "bookViewer.processing" not found in en or English
+overrideMethod @ hook.js:608
+t @ index-CzF6ZE7J.js:60
+(anonymous) @ index-CzF6ZE7J.js:60
+Ey @ index-CzF6ZE7J.js:60
+Nc @ index-CzF6ZE7J.js:48
+Xc @ index-CzF6ZE7J.js:48
+Tf @ index-CzF6ZE7J.js:48
+Wf @ index-CzF6ZE7J.js:48
+Qm @ index-CzF6ZE7J.js:48
+ds @ index-CzF6ZE7J.js:48
+Zf @ index-CzF6ZE7J.js:48
+rd @ index-CzF6ZE7J.js:48
+Ie @ index-CzF6ZE7J.js:17
+index-CzF6ZE7J.js:60 🟢 Rendering block: 774 status: undefined position: {x: 824, y: 809, width: 886, height: 105}
+index-CzF6ZE7J.js:60 Translation key "bookViewer.processing" not found in en or English
+overrideMethod @ hook.js:608
+t @ index-CzF6ZE7J.js:60
+(anonymous) @ index-CzF6ZE7J.js:60
+Ey @ index-CzF6ZE7J.js:60
+Nc @ index-CzF6ZE7J.js:48
+Xc @ index-CzF6ZE7J.js:48
+Tf @ index-CzF6ZE7J.js:48
+Wf @ index-CzF6ZE7J.js:48
+Qm @ index-CzF6ZE7J.js:48
+ds @ index-CzF6ZE7J.js:48
+Zf @ index-CzF6ZE7J.js:48
+rd @ index-CzF6ZE7J.js:48
+Ie @ index-CzF6ZE7J.js:17
+index-CzF6ZE7J.js:60 🟢 Rendering block: 775 status: undefined position: {x: 448, y: 2009, width: 1621, height: 151}
+index-CzF6ZE7J.js:60 Translation key "bookViewer.processing" not found in en or English
+overrideMethod @ hook.js:608
+t @ index-CzF6ZE7J.js:60
+(anonymous) @ index-CzF6ZE7J.js:60
+Ey @ index-CzF6ZE7J.js:60
+Nc @ index-CzF6ZE7J.js:48
+Xc @ index-CzF6ZE7J.js:48
+Tf @ index-CzF6ZE7J.js:48
+Wf @ index-CzF6ZE7J.js:48
+Qm @ index-CzF6ZE7J.js:48
+ds @ index-CzF6ZE7J.js:48
+Zf @ index-CzF6ZE7J.js:48
+rd @ index-CzF6ZE7J.js:48
+Ie @ index-CzF6ZE7J.js:17
+index-CzF6ZE7J.js:60 🟢 Rendering block: 776 status: undefined position: {x: 914, y: 2316, width: 691, height: 53}
+index-CzF6ZE7J.js:60 Translation key "bookViewer.processing" not found in en or English
+overrideMethod @ hook.js:608
+t @ index-CzF6ZE7J.js:60
+(anonymous) @ index-CzF6ZE7J.js:60
+Ey @ index-CzF6ZE7J.js:60
+Nc @ index-CzF6ZE7J.js:48
+Xc @ index-CzF6ZE7J.js:48
+Tf @ index-CzF6ZE7J.js:48
+Wf @ index-CzF6ZE7J.js:48
+Qm @ index-CzF6ZE7J.js:48
+ds @ index-CzF6ZE7J.js:48
+Zf @ index-CzF6ZE7J.js:48
+rd @ index-CzF6ZE7J.js:48
+Ie @ index-CzF6ZE7J.js:17
+index-CzF6ZE7J.js:60 🟢 Rendering block: 777 status: undefined position: {x: 540, y: 2435, width: 1431, height: 49}
+index-CzF6ZE7J.js:60 Translation key "bookViewer.processing" not found in en or English
+overrideMethod @ hook.js:608
+t @ index-CzF6ZE7J.js:60
+(anonymous) @ index-CzF6ZE7J.js:60
+Ey @ index-CzF6ZE7J.js:60
+Nc @ index-CzF6ZE7J.js:48
+Xc @ index-CzF6ZE7J.js:48
+Tf @ index-CzF6ZE7J.js:48
+Wf @ index-CzF6ZE7J.js:48
+Qm @ index-CzF6ZE7J.js:48
+ds @ index-CzF6ZE7J.js:48
+Zf @ index-CzF6ZE7J.js:48
+rd @ index-CzF6ZE7J.js:48
+Ie @ index-CzF6ZE7J.js:17
+index-CzF6ZE7J.js:60 🟢 Rendering block: 778 status: undefined position: {x: 160, y: 2528, width: 81, height: 19}
+index-CzF6ZE7J.js:60 Translation key "bookViewer.processing" not found in en or English
+overrideMethod @ hook.js:608
+t @ index-CzF6ZE7J.js:60
+(anonymous) @ index-CzF6ZE7J.js:60
+Ey @ index-CzF6ZE7J.js:60
+Nc @ index-CzF6ZE7J.js:48
+Xc @ index-CzF6ZE7J.js:48
+Tf @ index-CzF6ZE7J.js:48
+Wf @ index-CzF6ZE7J.js:48
+Qm @ index-CzF6ZE7J.js:48
+ds @ index-CzF6ZE7J.js:48
+Zf @ index-CzF6ZE7J.js:48
+rd @ index-CzF6ZE7J.js:48
+Ie @ index-CzF6ZE7J.js:17
+index-CzF6ZE7J.js:60 🟢 Rendering block: 779 status: undefined position: {x: 699, y: 2573, width: 72, height: 20}
+index-CzF6ZE7J.js:60 Translation key "bookViewer.processing" not found in en or English
+overrideMethod @ hook.js:608
+t @ index-CzF6ZE7J.js:60
+(anonymous) @ index-CzF6ZE7J.js:60
+Ey @ index-CzF6ZE7J.js:60
+Nc @ index-CzF6ZE7J.js:48
+Xc @ index-CzF6ZE7J.js:48
+Tf @ index-CzF6ZE7J.js:48
+Wf @ index-CzF6ZE7J.js:48
+Qm @ index-CzF6ZE7J.js:48
+ds @ index-CzF6ZE7J.js:48
+Zf @ index-CzF6ZE7J.js:48
+rd @ index-CzF6ZE7J.js:48
+Ie @ index-CzF6ZE7J.js:17
+index-CzF6ZE7J.js:60 🟢 Rendering block: 780 status: undefined position: {x: 468, y: 3646, width: 146, height: 74}
+index-CzF6ZE7J.js:60 Translation key "bookViewer.processing" not found in en or English
+overrideMethod @ hook.js:608
+t @ index-CzF6ZE7J.js:60
+(anonymous) @ index-CzF6ZE7J.js:60
+Ey @ index-CzF6ZE7J.js:60
+Nc @ index-CzF6ZE7J.js:48
+Xc @ index-CzF6ZE7J.js:48
+Tf @ index-CzF6ZE7J.js:48
+Wf @ index-CzF6ZE7J.js:48
+Qm @ index-CzF6ZE7J.js:48
+ds @ index-CzF6ZE7J.js:48
+Zf @ index-CzF6ZE7J.js:48
+rd @ index-CzF6ZE7J.js:48
+Ie @ index-CzF6ZE7J.js:17
+index-CzF6ZE7J.js:60 🟢 Rendering block: 781 status: undefined position: {x: 1649, y: 2548, width: 41, height: 37}
+index-CzF6ZE7J.js:60 Translation key "bookViewer.processing" not found in en or English
+overrideMethod @ hook.js:608
+t @ index-CzF6ZE7J.js:60
+(anonymous) @ index-CzF6ZE7J.js:60
+Ey @ index-CzF6ZE7J.js:60
+Nc @ index-CzF6ZE7J.js:48
+Xc @ index-CzF6ZE7J.js:48
+Tf @ index-CzF6ZE7J.js:48
+Wf @ index-CzF6ZE7J.js:48
+Qm @ index-CzF6ZE7J.js:48
+ds @ index-CzF6ZE7J.js:48
+Zf @ index-CzF6ZE7J.js:48
+rd @ index-CzF6ZE7J.js:48
+Ie @ index-CzF6ZE7J.js:17
+index-CzF6ZE7J.js:60 🟢 Rendering block: 782 status: undefined position: {x: 1642, y: 2544, width: 88, height: 73}
+index-CzF6ZE7J.js:60 Translation key "bookViewer.processing" not found in en or English
+overrideMethod @ hook.js:608
+t @ index-CzF6ZE7J.js:60
+(anonymous) @ index-CzF6ZE7J.js:60
+Ey @ index-CzF6ZE7J.js:60
+Nc @ index-CzF6ZE7J.js:48
+Xc @ index-CzF6ZE7J.js:48
+Tf @ index-CzF6ZE7J.js:48
+Wf @ index-CzF6ZE7J.js:48
+Qm @ index-CzF6ZE7J.js:48
+ds @ index-CzF6ZE7J.js:48
+Zf @ index-CzF6ZE7J.js:48
+rd @ index-CzF6ZE7J.js:48
+Ie @ index-CzF6ZE7J.js:17
+index-CzF6ZE7J.js:60 🟢 Rendering block: 783 status: undefined position: {x: 2202, y: 2552, width: 92, height: 80}
+index-CzF6ZE7J.js:60 Translation key "bookViewer.processing" not found in en or English
+overrideMethod @ hook.js:608
+t @ index-CzF6ZE7J.js:60
+(anonymous) @ index-CzF6ZE7J.js:60
+Ey @ index-CzF6ZE7J.js:60
+Nc @ index-CzF6ZE7J.js:48
+Xc @ index-CzF6ZE7J.js:48
+Tf @ index-CzF6ZE7J.js:48
+Wf @ index-CzF6ZE7J.js:48
+Qm @ index-CzF6ZE7J.js:48
+ds @ index-CzF6ZE7J.js:48
+Zf @ index-CzF6ZE7J.js:48
+rd @ index-CzF6ZE7J.js:48
+Ie @ index-CzF6ZE7J.js:17
+index-CzF6ZE7J.js:60 🟢 Rendering block: 784 status: undefined position: {x: 2636, y: 1556, width: 388, height: 79}
+index-CzF6ZE7J.js:60 Translation key "bookViewer.processing" not found in en or English
+overrideMethod @ hook.js:608
+t @ index-CzF6ZE7J.js:60
+(anonymous) @ index-CzF6ZE7J.js:60
+Ey @ index-CzF6ZE7J.js:60
+Nc @ index-CzF6ZE7J.js:48
+Xc @ index-CzF6ZE7J.js:48
+Tf @ index-CzF6ZE7J.js:48
+Wf @ index-CzF6ZE7J.js:48
+Qm @ index-CzF6ZE7J.js:48
+ds @ index-CzF6ZE7J.js:48
+Zf @ index-CzF6ZE7J.js:48
+rd @ index-CzF6ZE7J.js:48
+Ie @ index-CzF6ZE7J.js:17
+index-CzF6ZE7J.js:60 🟢 Rendering block: 785 status: undefined position: {x: 2535, y: 1678, width: 489, height: 123}
+index-CzF6ZE7J.js:60 Translation key "bookViewer.processing" not found in en or English
+overrideMethod @ hook.js:608
+t @ index-CzF6ZE7J.js:60
+(anonymous) @ index-CzF6ZE7J.js:60
+Ey @ index-CzF6ZE7J.js:60
+Nc @ index-CzF6ZE7J.js:48
+Xc @ index-CzF6ZE7J.js:48
+Tf @ index-CzF6ZE7J.js:48
+Wf @ index-CzF6ZE7J.js:48
+Qm @ index-CzF6ZE7J.js:48
+ds @ index-CzF6ZE7J.js:48
+Zf @ index-CzF6ZE7J.js:48
+rd @ index-CzF6ZE7J.js:48
+Ie @ index-CzF6ZE7J.js:17
+index-CzF6ZE7J.js:60 🟢 Rendering block: 786 status: undefined position: {x: 2757, y: 1835, width: 148, height: 42}
+index-CzF6ZE7J.js:60 Translation key "bookViewer.processing" not found in en or English
+overrideMethod @ hook.js:608
+t @ index-CzF6ZE7J.js:60
+(anonymous) @ index-CzF6ZE7J.js:60
+Ey @ index-CzF6ZE7J.js:60
+Nc @ index-CzF6ZE7J.js:48
+Xc @ index-CzF6ZE7J.js:48
+Tf @ index-CzF6ZE7J.js:48
+Wf @ index-CzF6ZE7J.js:48
+Qm @ index-CzF6ZE7J.js:48
+ds @ index-CzF6ZE7J.js:48
+Zf @ index-CzF6ZE7J.js:48
+rd @ index-CzF6ZE7J.js:48
+Ie @ index-CzF6ZE7J.js:17
+index-CzF6ZE7J.js:60 🟢 Rendering block: 787 status: undefined position: {x: 2611, y: 3280, width: 77, height: 38}
+index-CzF6ZE7J.js:60 Translation key "bookViewer.processing" not found in en or English
+overrideMethod @ hook.js:608
+t @ index-CzF6ZE7J.js:60
+(anonymous) @ index-CzF6ZE7J.js:60
+Ey @ index-CzF6ZE7J.js:60
+Nc @ index-CzF6ZE7J.js:48
+Xc @ index-CzF6ZE7J.js:48
+Tf @ index-CzF6ZE7J.js:48
+Wf @ index-CzF6ZE7J.js:48
+Qm @ index-CzF6ZE7J.js:48
+ds @ index-CzF6ZE7J.js:48
+Zf @ index-CzF6ZE7J.js:48
+rd @ index-CzF6ZE7J.js:48
+Ie @ index-CzF6ZE7J.js:17
+index-CzF6ZE7J.js:60 Translation key "bookViewer.processingBlocks" not found in en or English
+overrideMethod @ hook.js:608
+t @ index-CzF6ZE7J.js:60
+Ey @ index-CzF6ZE7J.js:60
+Nc @ index-CzF6ZE7J.js:48
+Xc @ index-CzF6ZE7J.js:48
+Tf @ index-CzF6ZE7J.js:48
+Wf @ index-CzF6ZE7J.js:48
+Qm @ index-CzF6ZE7J.js:48
+ds @ index-CzF6ZE7J.js:48
+Zf @ index-CzF6ZE7J.js:48
+rd @ index-CzF6ZE7J.js:48
+Ie @ index-CzF6ZE7J.js:17
+index-CzF6ZE7J.js:60 Translation key "bookViewer.scanTextBlocks" not found in en or English
+overrideMethod @ hook.js:608
+t @ index-CzF6ZE7J.js:60
+Ey @ index-CzF6ZE7J.js:60
+Nc @ index-CzF6ZE7J.js:48
+Xc @ index-CzF6ZE7J.js:48
+Tf @ index-CzF6ZE7J.js:48
+Wf @ index-CzF6ZE7J.js:48
+Qm @ index-CzF6ZE7J.js:48
+ds @ index-CzF6ZE7J.js:48
+Zf @ index-CzF6ZE7J.js:48
+rd @ index-CzF6ZE7J.js:48
+Ie @ index-CzF6ZE7J.js:17
+index-CzF6ZE7J.js:60 🟢 Rendering 19 text block overlays, imageRef: true
+index-CzF6ZE7J.js:60 🟢 Rendering block: 769 status: undefined position: {x: 1, y: 44, width: 135, height: 30}
+index-CzF6ZE7J.js:60 Translation key "bookViewer.processing" not found in en or English
+overrideMethod @ hook.js:608
+t @ index-CzF6ZE7J.js:60
+(anonymous) @ index-CzF6ZE7J.js:60
+Ey @ index-CzF6ZE7J.js:60
+Nc @ index-CzF6ZE7J.js:48
+Xc @ index-CzF6ZE7J.js:48
+Tf @ index-CzF6ZE7J.js:48
+Wf @ index-CzF6ZE7J.js:48
+Qm @ index-CzF6ZE7J.js:48
+ds @ index-CzF6ZE7J.js:48
+Zf @ index-CzF6ZE7J.js:48
+rd @ index-CzF6ZE7J.js:48
+Ie @ index-CzF6ZE7J.js:17
+index-CzF6ZE7J.js:60 🟢 Rendering block: 770 status: undefined position: {x: 1, y: 206, width: 102, height: 47}
+index-CzF6ZE7J.js:60 Translation key "bookViewer.processing" not found in en or English
+overrideMethod @ hook.js:608
+t @ index-CzF6ZE7J.js:60
+(anonymous) @ index-CzF6ZE7J.js:60
+Ey @ index-CzF6ZE7J.js:60
+Nc @ index-CzF6ZE7J.js:48
+Xc @ index-CzF6ZE7J.js:48
+Tf @ index-CzF6ZE7J.js:48
+Wf @ index-CzF6ZE7J.js:48
+Qm @ index-CzF6ZE7J.js:48
+ds @ index-CzF6ZE7J.js:48
+Zf @ index-CzF6ZE7J.js:48
+rd @ index-CzF6ZE7J.js:48
+Ie @ index-CzF6ZE7J.js:17
+index-CzF6ZE7J.js:60 🟢 Rendering block: 771 status: undefined position: {x: 1, y: 2198, width: 104, height: 27}
+index-CzF6ZE7J.js:60 Translation key "bookViewer.processing" not found in en or English
+overrideMethod @ hook.js:608
+t @ index-CzF6ZE7J.js:60
+(anonymous) @ index-CzF6ZE7J.js:60
+Ey @ index-CzF6ZE7J.js:60
+Nc @ index-CzF6ZE7J.js:48
+Xc @ index-CzF6ZE7J.js:48
+Tf @ index-CzF6ZE7J.js:48
+Wf @ index-CzF6ZE7J.js:48
+Qm @ index-CzF6ZE7J.js:48
+ds @ index-CzF6ZE7J.js:48
+Zf @ index-CzF6ZE7J.js:48
+rd @ index-CzF6ZE7J.js:48
+Ie @ index-CzF6ZE7J.js:17
+index-CzF6ZE7J.js:60 🟢 Rendering block: 772 status: undefined position: {x: 1, y: 2253, width: 84, height: 24}
+index-CzF6ZE7J.js:60 Translation key "bookViewer.processing" not found in en or English
+overrideMethod @ hook.js:608
+t @ index-CzF6ZE7J.js:60
+(anonymous) @ index-CzF6ZE7J.js:60
+Ey @ index-CzF6ZE7J.js:60
+Nc @ index-CzF6ZE7J.js:48
+Xc @ index-CzF6ZE7J.js:48
+Tf @ index-CzF6ZE7J.js:48
+Wf @ index-CzF6ZE7J.js:48
+Qm @ index-CzF6ZE7J.js:48
+ds @ index-CzF6ZE7J.js:48
+Zf @ index-CzF6ZE7J.js:48
+rd @ index-CzF6ZE7J.js:48
+Ie @ index-CzF6ZE7J.js:17
+index-CzF6ZE7J.js:60 🟢 Rendering block: 773 status: undefined position: {x: 555, y: 0, width: 627, height: 234}
+index-CzF6ZE7J.js:60 Translation key "bookViewer.processing" not found in en or English
+overrideMethod @ hook.js:608
+t @ index-CzF6ZE7J.js:60
+(anonymous) @ index-CzF6ZE7J.js:60
+Ey @ index-CzF6ZE7J.js:60
+Nc @ index-CzF6ZE7J.js:48
+Xc @ index-CzF6ZE7J.js:48
+Tf @ index-CzF6ZE7J.js:48
+Wf @ index-CzF6ZE7J.js:48
+Qm @ index-CzF6ZE7J.js:48
+ds @ index-CzF6ZE7J.js:48
+Zf @ index-CzF6ZE7J.js:48
+rd @ index-CzF6ZE7J.js:48
+Ie @ index-CzF6ZE7J.js:17
+index-CzF6ZE7J.js:60 🟢 Rendering block: 774 status: undefined position: {x: 824, y: 809, width: 886, height: 105}
+index-CzF6ZE7J.js:60 Translation key "bookViewer.processing" not found in en or English
+overrideMethod @ hook.js:608
+t @ index-CzF6ZE7J.js:60
+(anonymous) @ index-CzF6ZE7J.js:60
+Ey @ index-CzF6ZE7J.js:60
+Nc @ index-CzF6ZE7J.js:48
+Xc @ index-CzF6ZE7J.js:48
+Tf @ index-CzF6ZE7J.js:48
+Wf @ index-CzF6ZE7J.js:48
+Qm @ index-CzF6ZE7J.js:48
+ds @ index-CzF6ZE7J.js:48
+Zf @ index-CzF6ZE7J.js:48
+rd @ index-CzF6ZE7J.js:48
+Ie @ index-CzF6ZE7J.js:17
+index-CzF6ZE7J.js:60 🟢 Rendering block: 775 status: undefined position: {x: 448, y: 2009, width: 1621, height: 151}
+index-CzF6ZE7J.js:60 Translation key "bookViewer.processing" not found in en or English
+overrideMethod @ hook.js:608
+t @ index-CzF6ZE7J.js:60
+(anonymous) @ index-CzF6ZE7J.js:60
+Ey @ index-CzF6ZE7J.js:60
+Nc @ index-CzF6ZE7J.js:48
+Xc @ index-CzF6ZE7J.js:48
+Tf @ index-CzF6ZE7J.js:48
+Wf @ index-CzF6ZE7J.js:48
+Qm @ index-CzF6ZE7J.js:48
+ds @ index-CzF6ZE7J.js:48
+Zf @ index-CzF6ZE7J.js:48
+rd @ index-CzF6ZE7J.js:48
+Ie @ index-CzF6ZE7J.js:17
+index-CzF6ZE7J.js:60 🟢 Rendering block: 776 status: undefined position: {x: 914, y: 2316, width: 691, height: 53}
+index-CzF6ZE7J.js:60 Translation key "bookViewer.processing" not found in en or English
+overrideMethod @ hook.js:608
+t @ index-CzF6ZE7J.js:60
+(anonymous) @ index-CzF6ZE7J.js:60
+Ey @ index-CzF6ZE7J.js:60
+Nc @ index-CzF6ZE7J.js:48
+Xc @ index-CzF6ZE7J.js:48
+Tf @ index-CzF6ZE7J.js:48
+Wf @ index-CzF6ZE7J.js:48
+Qm @ index-CzF6ZE7J.js:48
+ds @ index-CzF6ZE7J.js:48
+Zf @ index-CzF6ZE7J.js:48
+rd @ index-CzF6ZE7J.js:48
+Ie @ index-CzF6ZE7J.js:17
+index-CzF6ZE7J.js:60 🟢 Rendering block: 777 status: undefined position: {x: 540, y: 2435, width: 1431, height: 49}
+index-CzF6ZE7J.js:60 Translation key "bookViewer.processing" not found in en or English
+overrideMethod @ hook.js:608
+t @ index-CzF6ZE7J.js:60
+(anonymous) @ index-CzF6ZE7J.js:60
+Ey @ index-CzF6ZE7J.js:60
+Nc @ index-CzF6ZE7J.js:48
+Xc @ index-CzF6ZE7J.js:48
+Tf @ index-CzF6ZE7J.js:48
+Wf @ index-CzF6ZE7J.js:48
+Qm @ index-CzF6ZE7J.js:48
+ds @ index-CzF6ZE7J.js:48
+Zf @ index-CzF6ZE7J.js:48
+rd @ index-CzF6ZE7J.js:48
+Ie @ index-CzF6ZE7J.js:17
+index-CzF6ZE7J.js:60 🟢 Rendering block: 778 status: undefined position: {x: 160, y: 2528, width: 81, height: 19}
+index-CzF6ZE7J.js:60 Translation key "bookViewer.processing" not found in en or English
+overrideMethod @ hook.js:608
+t @ index-CzF6ZE7J.js:60
+(anonymous) @ index-CzF6ZE7J.js:60
+Ey @ index-CzF6ZE7J.js:60
+Nc @ index-CzF6ZE7J.js:48
+Xc @ index-CzF6ZE7J.js:48
+Tf @ index-CzF6ZE7J.js:48
+Wf @ index-CzF6ZE7J.js:48
+Qm @ index-CzF6ZE7J.js:48
+ds @ index-CzF6ZE7J.js:48
+Zf @ index-CzF6ZE7J.js:48
+rd @ index-CzF6ZE7J.js:48
+Ie @ index-CzF6ZE7J.js:17
+index-CzF6ZE7J.js:60 🟢 Rendering block: 779 status: undefined position: {x: 699, y: 2573, width: 72, height: 20}
+index-CzF6ZE7J.js:60 Translation key "bookViewer.processing" not found in en or English
+overrideMethod @ hook.js:608
+t @ index-CzF6ZE7J.js:60
+(anonymous) @ index-CzF6ZE7J.js:60
+Ey @ index-CzF6ZE7J.js:60
+Nc @ index-CzF6ZE7J.js:48
+Xc @ index-CzF6ZE7J.js:48
+Tf @ index-CzF6ZE7J.js:48
+Wf @ index-CzF6ZE7J.js:48
+Qm @ index-CzF6ZE7J.js:48
+ds @ index-CzF6ZE7J.js:48
+Zf @ index-CzF6ZE7J.js:48
+rd @ index-CzF6ZE7J.js:48
+Ie @ index-CzF6ZE7J.js:17
+index-CzF6ZE7J.js:60 🟢 Rendering block: 780 status: undefined position: {x: 468, y: 3646, width: 146, height: 74}
+index-CzF6ZE7J.js:60 Translation key "bookViewer.processing" not found in en or English
+overrideMethod @ hook.js:608
+t @ index-CzF6ZE7J.js:60
+(anonymous) @ index-CzF6ZE7J.js:60
+Ey @ index-CzF6ZE7J.js:60
+Nc @ index-CzF6ZE7J.js:48
+Xc @ index-CzF6ZE7J.js:48
+Tf @ index-CzF6ZE7J.js:48
+Wf @ index-CzF6ZE7J.js:48
+Qm @ index-CzF6ZE7J.js:48
+ds @ index-CzF6ZE7J.js:48
+Zf @ index-CzF6ZE7J.js:48
+rd @ index-CzF6ZE7J.js:48
+Ie @ index-CzF6ZE7J.js:17
+index-CzF6ZE7J.js:60 🟢 Rendering block: 781 status: undefined position: {x: 1649, y: 2548, width: 41, height: 37}
+index-CzF6ZE7J.js:60 Translation key "bookViewer.processing" not found in en or English
+overrideMethod @ hook.js:608
+t @ index-CzF6ZE7J.js:60
+(anonymous) @ index-CzF6ZE7J.js:60
+Ey @ index-CzF6ZE7J.js:60
+Nc @ index-CzF6ZE7J.js:48
+Xc @ index-CzF6ZE7J.js:48
+Tf @ index-CzF6ZE7J.js:48
+Wf @ index-CzF6ZE7J.js:48
+Qm @ index-CzF6ZE7J.js:48
+ds @ index-CzF6ZE7J.js:48
+Zf @ index-CzF6ZE7J.js:48
+rd @ index-CzF6ZE7J.js:48
+Ie @ index-CzF6ZE7J.js:17
+index-CzF6ZE7J.js:60 🟢 Rendering block: 782 status: undefined position: {x: 1642, y: 2544, width: 88, height: 73}
+index-CzF6ZE7J.js:60 Translation key "bookViewer.processing" not found in en or English
+overrideMethod @ hook.js:608
+t @ index-CzF6ZE7J.js:60
+(anonymous) @ index-CzF6ZE7J.js:60
+Ey @ index-CzF6ZE7J.js:60
+Nc @ index-CzF6ZE7J.js:48
+Xc @ index-CzF6ZE7J.js:48
+Tf @ index-CzF6ZE7J.js:48
+Wf @ index-CzF6ZE7J.js:48
+Qm @ index-CzF6ZE7J.js:48
+ds @ index-CzF6ZE7J.js:48
+Zf @ index-CzF6ZE7J.js:48
+rd @ index-CzF6ZE7J.js:48
+Ie @ index-CzF6ZE7J.js:17
+index-CzF6ZE7J.js:60 🟢 Rendering block: 783 status: undefined position: {x: 2202, y: 2552, width: 92, height: 80}
+index-CzF6ZE7J.js:60 Translation key "bookViewer.processing" not found in en or English
+overrideMethod @ hook.js:608
+t @ index-CzF6ZE7J.js:60
+(anonymous) @ index-CzF6ZE7J.js:60
+Ey @ index-CzF6ZE7J.js:60
+Nc @ index-CzF6ZE7J.js:48
+Xc @ index-CzF6ZE7J.js:48
+Tf @ index-CzF6ZE7J.js:48
+Wf @ index-CzF6ZE7J.js:48
+Qm @ index-CzF6ZE7J.js:48
+ds @ index-CzF6ZE7J.js:48
+Zf @ index-CzF6ZE7J.js:48
+rd @ index-CzF6ZE7J.js:48
+Ie @ index-CzF6ZE7J.js:17
+index-CzF6ZE7J.js:60 🟢 Rendering block: 784 status: undefined position: {x: 2636, y: 1556, width: 388, height: 79}
+index-CzF6ZE7J.js:60 Translation key "bookViewer.processing" not found in en or English
+overrideMethod @ hook.js:608
+t @ index-CzF6ZE7J.js:60
+(anonymous) @ index-CzF6ZE7J.js:60
+Ey @ index-CzF6ZE7J.js:60
+Nc @ index-CzF6ZE7J.js:48
+Xc @ index-CzF6ZE7J.js:48
+Tf @ index-CzF6ZE7J.js:48
+Wf @ index-CzF6ZE7J.js:48
+Qm @ index-CzF6ZE7J.js:48
+ds @ index-CzF6ZE7J.js:48
+Zf @ index-CzF6ZE7J.js:48
+rd @ index-CzF6ZE7J.js:48
+Ie @ index-CzF6ZE7J.js:17
+index-CzF6ZE7J.js:60 🟢 Rendering block: 785 status: undefined position: {x: 2535, y: 1678, width: 489, height: 123}
+index-CzF6ZE7J.js:60 Translation key "bookViewer.processing" not found in en or English
+overrideMethod @ hook.js:608
+t @ index-CzF6ZE7J.js:60
+(anonymous) @ index-CzF6ZE7J.js:60
+Ey @ index-CzF6ZE7J.js:60
+Nc @ index-CzF6ZE7J.js:48
+Xc @ index-CzF6ZE7J.js:48
+Tf @ index-CzF6ZE7J.js:48
+Wf @ index-CzF6ZE7J.js:48
+Qm @ index-CzF6ZE7J.js:48
+ds @ index-CzF6ZE7J.js:48
+Zf @ index-CzF6ZE7J.js:48
+rd @ index-CzF6ZE7J.js:48
+Ie @ index-CzF6ZE7J.js:17
+index-CzF6ZE7J.js:60 🟢 Rendering block: 786 status: undefined position: {x: 2757, y: 1835, width: 148, height: 42}
+index-CzF6ZE7J.js:60 Translation key "bookViewer.processing" not found in en or English
+overrideMethod @ hook.js:608
+t @ index-CzF6ZE7J.js:60
+(anonymous) @ index-CzF6ZE7J.js:60
+Ey @ index-CzF6ZE7J.js:60
+Nc @ index-CzF6ZE7J.js:48
+Xc @ index-CzF6ZE7J.js:48
+Tf @ index-CzF6ZE7J.js:48
+Wf @ index-CzF6ZE7J.js:48
+Qm @ index-CzF6ZE7J.js:48
+ds @ index-CzF6ZE7J.js:48
+Zf @ index-CzF6ZE7J.js:48
+rd @ index-CzF6ZE7J.js:48
+Ie @ index-CzF6ZE7J.js:17
+index-CzF6ZE7J.js:60 🟢 Rendering block: 787 status: undefined position: {x: 2611, y: 3280, width: 77, height: 38}
+index-CzF6ZE7J.js:60 Translation key "bookViewer.processing" not found in en or English
+overrideMethod @ hook.js:608
+t @ index-CzF6ZE7J.js:60
+(anonymous) @ index-CzF6ZE7J.js:60
+Ey @ index-CzF6ZE7J.js:60
+Nc @ index-CzF6ZE7J.js:48
+Xc @ index-CzF6ZE7J.js:48
+Tf @ index-CzF6ZE7J.js:48
+Wf @ index-CzF6ZE7J.js:48
+Qm @ index-CzF6ZE7J.js:48
+ds @ index-CzF6ZE7J.js:48
+Zf @ index-CzF6ZE7J.js:48
+rd @ index-CzF6ZE7J.js:48
+Ie @ index-CzF6ZE7J.js:17
+index-CzF6ZE7J.js:60 Translation key "bookViewer.scanTextBlocks" not found in en or English
+overrideMethod @ hook.js:608
+t @ index-CzF6ZE7J.js:60
+Ey @ index-CzF6ZE7J.js:60
+Nc @ index-CzF6ZE7J.js:48
+Xc @ index-CzF6ZE7J.js:48
+Tf @ index-CzF6ZE7J.js:48
+Wf @ index-CzF6ZE7J.js:48
+Qm @ index-CzF6ZE7J.js:48
+ds @ index-CzF6ZE7J.js:48
+Zf @ index-CzF6ZE7J.js:48
+rd @ index-CzF6ZE7J.js:48
+Ie @ index-CzF6ZE7J.js:17
+index-CzF6ZE7J.js:60 🟢 Rendering 19 text block overlays, imageRef: true
+index-CzF6ZE7J.js:60 🟢 Rendering block: 769 status: completed position: {x: 1, y: 44, width: 135, height: 30}
+index-CzF6ZE7J.js:60 Translation key "bookViewer.clickToPlay" not found in en or English
+overrideMethod @ hook.js:608
+t @ index-CzF6ZE7J.js:60
+(anonymous) @ index-CzF6ZE7J.js:60
+Ey @ index-CzF6ZE7J.js:60
+Nc @ index-CzF6ZE7J.js:48
+Xc @ index-CzF6ZE7J.js:48
+Tf @ index-CzF6ZE7J.js:48
+Wf @ index-CzF6ZE7J.js:48
+Qm @ index-CzF6ZE7J.js:48
+ds @ index-CzF6ZE7J.js:48
+Zf @ index-CzF6ZE7J.js:48
+rd @ index-CzF6ZE7J.js:48
+Ie @ index-CzF6ZE7J.js:17
+index-CzF6ZE7J.js:60 🟢 Rendering block: 770 status: completed position: {x: 1, y: 206, width: 102, height: 47}
+index-CzF6ZE7J.js:60 Translation key "bookViewer.clickToPlay" not found in en or English
+overrideMethod @ hook.js:608
+t @ index-CzF6ZE7J.js:60
+(anonymous) @ index-CzF6ZE7J.js:60
+Ey @ index-CzF6ZE7J.js:60
+Nc @ index-CzF6ZE7J.js:48
+Xc @ index-CzF6ZE7J.js:48
+Tf @ index-CzF6ZE7J.js:48
+Wf @ index-CzF6ZE7J.js:48
+Qm @ index-CzF6ZE7J.js:48
+ds @ index-CzF6ZE7J.js:48
+Zf @ index-CzF6ZE7J.js:48
+rd @ index-CzF6ZE7J.js:48
+Ie @ index-CzF6ZE7J.js:17
+index-CzF6ZE7J.js:60 🟢 Rendering block: 771 status: completed position: {x: 1, y: 2198, width: 104, height: 27}
+index-CzF6ZE7J.js:60 Translation key "bookViewer.clickToPlay" not found in en or English
+overrideMethod @ hook.js:608
+t @ index-CzF6ZE7J.js:60
+(anonymous) @ index-CzF6ZE7J.js:60
+Ey @ index-CzF6ZE7J.js:60
+Nc @ index-CzF6ZE7J.js:48
+Xc @ index-CzF6ZE7J.js:48
+Tf @ index-CzF6ZE7J.js:48
+Wf @ index-CzF6ZE7J.js:48
+Qm @ index-CzF6ZE7J.js:48
+ds @ index-CzF6ZE7J.js:48
+Zf @ index-CzF6ZE7J.js:48
+rd @ index-CzF6ZE7J.js:48
+Ie @ index-CzF6ZE7J.js:17
+index-CzF6ZE7J.js:60 🟢 Rendering block: 772 status: completed position: {x: 1, y: 2253, width: 84, height: 24}
+index-CzF6ZE7J.js:60 Translation key "bookViewer.clickToPlay" not found in en or English
+overrideMethod @ hook.js:608
+t @ index-CzF6ZE7J.js:60
+(anonymous) @ index-CzF6ZE7J.js:60
+Ey @ index-CzF6ZE7J.js:60
+Nc @ index-CzF6ZE7J.js:48
+Xc @ index-CzF6ZE7J.js:48
+Tf @ index-CzF6ZE7J.js:48
+Wf @ index-CzF6ZE7J.js:48
+Qm @ index-CzF6ZE7J.js:48
+ds @ index-CzF6ZE7J.js:48
+Zf @ index-CzF6ZE7J.js:48
+rd @ index-CzF6ZE7J.js:48
+Ie @ index-CzF6ZE7J.js:17
+index-CzF6ZE7J.js:60 🟢 Rendering block: 773 status: completed position: {x: 555, y: 0, width: 627, height: 234}
+index-CzF6ZE7J.js:60 Translation key "bookViewer.clickToPlay" not found in en or English
+overrideMethod @ hook.js:608
+t @ index-CzF6ZE7J.js:60
+(anonymous) @ index-CzF6ZE7J.js:60
+Ey @ index-CzF6ZE7J.js:60
+Nc @ index-CzF6ZE7J.js:48
+Xc @ index-CzF6ZE7J.js:48
+Tf @ index-CzF6ZE7J.js:48
+Wf @ index-CzF6ZE7J.js:48
+Qm @ index-CzF6ZE7J.js:48
+ds @ index-CzF6ZE7J.js:48
+Zf @ index-CzF6ZE7J.js:48
+rd @ index-CzF6ZE7J.js:48
+Ie @ index-CzF6ZE7J.js:17
+index-CzF6ZE7J.js:60 🟢 Rendering block: 774 status: completed position: {x: 824, y: 809, width: 886, height: 105}
+index-CzF6ZE7J.js:60 Translation key "bookViewer.clickToPlay" not found in en or English
+overrideMethod @ hook.js:608
+t @ index-CzF6ZE7J.js:60
+(anonymous) @ index-CzF6ZE7J.js:60
+Ey @ index-CzF6ZE7J.js:60
+Nc @ index-CzF6ZE7J.js:48
+Xc @ index-CzF6ZE7J.js:48
+Tf @ index-CzF6ZE7J.js:48
+Wf @ index-CzF6ZE7J.js:48
+Qm @ index-CzF6ZE7J.js:48
+ds @ index-CzF6ZE7J.js:48
+Zf @ index-CzF6ZE7J.js:48
+rd @ index-CzF6ZE7J.js:48
+Ie @ index-CzF6ZE7J.js:17
+index-CzF6ZE7J.js:60 🟢 Rendering block: 775 status: completed position: {x: 448, y: 2009, width: 1621, height: 151}
+index-CzF6ZE7J.js:60 Translation key "bookViewer.clickToPlay" not found in en or English
+overrideMethod @ hook.js:608
+t @ index-CzF6ZE7J.js:60
+(anonymous) @ index-CzF6ZE7J.js:60
+Ey @ index-CzF6ZE7J.js:60
+Nc @ index-CzF6ZE7J.js:48
+Xc @ index-CzF6ZE7J.js:48
+Tf @ index-CzF6ZE7J.js:48
+Wf @ index-CzF6ZE7J.js:48
+Qm @ index-CzF6ZE7J.js:48
+ds @ index-CzF6ZE7J.js:48
+Zf @ index-CzF6ZE7J.js:48
+rd @ index-CzF6ZE7J.js:48
+Ie @ index-CzF6ZE7J.js:17
+index-CzF6ZE7J.js:60 🟢 Rendering block: 776 status: completed position: {x: 914, y: 2316, width: 691, height: 53}
+index-CzF6ZE7J.js:60 Translation key "bookViewer.clickToPlay" not found in en or English
+overrideMethod @ hook.js:608
+t @ index-CzF6ZE7J.js:60
+(anonymous) @ index-CzF6ZE7J.js:60
+Ey @ index-CzF6ZE7J.js:60
+Nc @ index-CzF6ZE7J.js:48
+Xc @ index-CzF6ZE7J.js:48
+Tf @ index-CzF6ZE7J.js:48
+Wf @ index-CzF6ZE7J.js:48
+Qm @ index-CzF6ZE7J.js:48
+ds @ index-CzF6ZE7J.js:48
+Zf @ index-CzF6ZE7J.js:48
+rd @ index-CzF6ZE7J.js:48
+Ie @ index-CzF6ZE7J.js:17
+index-CzF6ZE7J.js:60 🟢 Rendering block: 777 status: completed position: {x: 540, y: 2435, width: 1431, height: 49}
+index-CzF6ZE7J.js:60 Translation key "bookViewer.clickToPlay" not found in en or English
+overrideMethod @ hook.js:608
+t @ index-CzF6ZE7J.js:60
+(anonymous) @ index-CzF6ZE7J.js:60
+Ey @ index-CzF6ZE7J.js:60
+Nc @ index-CzF6ZE7J.js:48
+Xc @ index-CzF6ZE7J.js:48
+Tf @ index-CzF6ZE7J.js:48
+Wf @ index-CzF6ZE7J.js:48
+Qm @ index-CzF6ZE7J.js:48
+ds @ index-CzF6ZE7J.js:48
+Zf @ index-CzF6ZE7J.js:48
+rd @ index-CzF6ZE7J.js:48
+Ie @ index-CzF6ZE7J.js:17
+index-CzF6ZE7J.js:60 🟢 Rendering block: 778 status: completed position: {x: 160, y: 2528, width: 81, height: 19}
+index-CzF6ZE7J.js:60 Translation key "bookViewer.clickToPlay" not found in en or English
+overrideMethod @ hook.js:608
+t @ index-CzF6ZE7J.js:60
+(anonymous) @ index-CzF6ZE7J.js:60
+Ey @ index-CzF6ZE7J.js:60
+Nc @ index-CzF6ZE7J.js:48
+Xc @ index-CzF6ZE7J.js:48
+Tf @ index-CzF6ZE7J.js:48
+Wf @ index-CzF6ZE7J.js:48
+Qm @ index-CzF6ZE7J.js:48
+ds @ index-CzF6ZE7J.js:48
+Zf @ index-CzF6ZE7J.js:48
+rd @ index-CzF6ZE7J.js:48
+Ie @ index-CzF6ZE7J.js:17
+index-CzF6ZE7J.js:60 🟢 Rendering block: 779 status: completed position: {x: 699, y: 2573, width: 72, height: 20}
+index-CzF6ZE7J.js:60 Translation key "bookViewer.clickToPlay" not found in en or English
+overrideMethod @ hook.js:608
+t @ index-CzF6ZE7J.js:60
+(anonymous) @ index-CzF6ZE7J.js:60
+Ey @ index-CzF6ZE7J.js:60
+Nc @ index-CzF6ZE7J.js:48
+Xc @ index-CzF6ZE7J.js:48
+Tf @ index-CzF6ZE7J.js:48
+Wf @ index-CzF6ZE7J.js:48
+Qm @ index-CzF6ZE7J.js:48
+ds @ index-CzF6ZE7J.js:48
+Zf @ index-CzF6ZE7J.js:48
+rd @ index-CzF6ZE7J.js:48
+Ie @ index-CzF6ZE7J.js:17
+index-CzF6ZE7J.js:60 🟢 Rendering block: 780 status: completed position: {x: 468, y: 3646, width: 146, height: 74}
+index-CzF6ZE7J.js:60 Translation key "bookViewer.clickToPlay" not found in en or English
+overrideMethod @ hook.js:608
+t @ index-CzF6ZE7J.js:60
+(anonymous) @ index-CzF6ZE7J.js:60
+Ey @ index-CzF6ZE7J.js:60
+Nc @ index-CzF6ZE7J.js:48
+Xc @ index-CzF6ZE7J.js:48
+Tf @ index-CzF6ZE7J.js:48
+Wf @ index-CzF6ZE7J.js:48
+Qm @ index-CzF6ZE7J.js:48
+ds @ index-CzF6ZE7J.js:48
+Zf @ index-CzF6ZE7J.js:48
+rd @ index-CzF6ZE7J.js:48
+Ie @ index-CzF6ZE7J.js:17
+index-CzF6ZE7J.js:60 🟢 Rendering block: 781 status: completed position: {x: 1649, y: 2548, width: 41, height: 37}
+index-CzF6ZE7J.js:60 Translation key "bookViewer.clickToPlay" not found in en or English
+overrideMethod @ hook.js:608
+t @ index-CzF6ZE7J.js:60
+(anonymous) @ index-CzF6ZE7J.js:60
+Ey @ index-CzF6ZE7J.js:60
+Nc @ index-CzF6ZE7J.js:48
+Xc @ index-CzF6ZE7J.js:48
+Tf @ index-CzF6ZE7J.js:48
+Wf @ index-CzF6ZE7J.js:48
+Qm @ index-CzF6ZE7J.js:48
+ds @ index-CzF6ZE7J.js:48
+Zf @ index-CzF6ZE7J.js:48
+rd @ index-CzF6ZE7J.js:48
+Ie @ index-CzF6ZE7J.js:17
+index-CzF6ZE7J.js:60 🟢 Rendering block: 782 status: completed position: {x: 1642, y: 2544, width: 88, height: 73}
+index-CzF6ZE7J.js:60 Translation key "bookViewer.clickToPlay" not found in en or English
+overrideMethod @ hook.js:608
+t @ index-CzF6ZE7J.js:60
+(anonymous) @ index-CzF6ZE7J.js:60
+Ey @ index-CzF6ZE7J.js:60
+Nc @ index-CzF6ZE7J.js:48
+Xc @ index-CzF6ZE7J.js:48
+Tf @ index-CzF6ZE7J.js:48
+Wf @ index-CzF6ZE7J.js:48
+Qm @ index-CzF6ZE7J.js:48
+ds @ index-CzF6ZE7J.js:48
+Zf @ index-CzF6ZE7J.js:48
+rd @ index-CzF6ZE7J.js:48
+Ie @ index-CzF6ZE7J.js:17
+index-CzF6ZE7J.js:60 🟢 Rendering block: 783 status: completed position: {x: 2202, y: 2552, width: 92, height: 80}
+index-CzF6ZE7J.js:60 Translation key "bookViewer.clickToPlay" not found in en or English
+overrideMethod @ hook.js:608
+t @ index-CzF6ZE7J.js:60
+(anonymous) @ index-CzF6ZE7J.js:60
+Ey @ index-CzF6ZE7J.js:60
+Nc @ index-CzF6ZE7J.js:48
+Xc @ index-CzF6ZE7J.js:48
+Tf @ index-CzF6ZE7J.js:48
+Wf @ index-CzF6ZE7J.js:48
+Qm @ index-CzF6ZE7J.js:48
+ds @ index-CzF6ZE7J.js:48
+Zf @ index-CzF6ZE7J.js:48
+rd @ index-CzF6ZE7J.js:48
+Ie @ index-CzF6ZE7J.js:17
+index-CzF6ZE7J.js:60 🟢 Rendering block: 784 status: completed position: {x: 2636, y: 1556, width: 388, height: 79}
+index-CzF6ZE7J.js:60 Translation key "bookViewer.clickToPlay" not found in en or English
+overrideMethod @ hook.js:608
+t @ index-CzF6ZE7J.js:60
+(anonymous) @ index-CzF6ZE7J.js:60
+Ey @ index-CzF6ZE7J.js:60
+Nc @ index-CzF6ZE7J.js:48
+Xc @ index-CzF6ZE7J.js:48
+Tf @ index-CzF6ZE7J.js:48
+Wf @ index-CzF6ZE7J.js:48
+Qm @ index-CzF6ZE7J.js:48
+ds @ index-CzF6ZE7J.js:48
+Zf @ index-CzF6ZE7J.js:48
+rd @ index-CzF6ZE7J.js:48
+Ie @ index-CzF6ZE7J.js:17
+index-CzF6ZE7J.js:60 🟢 Rendering block: 785 status: completed position: {x: 2535, y: 1678, width: 489, height: 123}
+index-CzF6ZE7J.js:60 Translation key "bookViewer.clickToPlay" not found in en or English
+overrideMethod @ hook.js:608
+t @ index-CzF6ZE7J.js:60
+(anonymous) @ index-CzF6ZE7J.js:60
+Ey @ index-CzF6ZE7J.js:60
+Nc @ index-CzF6ZE7J.js:48
+Xc @ index-CzF6ZE7J.js:48
+Tf @ index-CzF6ZE7J.js:48
+Wf @ index-CzF6ZE7J.js:48
+Qm @ index-CzF6ZE7J.js:48
+ds @ index-CzF6ZE7J.js:48
+Zf @ index-CzF6ZE7J.js:48
+rd @ index-CzF6ZE7J.js:48
+Ie @ index-CzF6ZE7J.js:17
+index-CzF6ZE7J.js:60 🟢 Rendering block: 786 status: completed position: {x: 2757, y: 1835, width: 148, height: 42}
+index-CzF6ZE7J.js:60 Translation key "bookViewer.clickToPlay" not found in en or English
+overrideMethod @ hook.js:608
+t @ index-CzF6ZE7J.js:60
+(anonymous) @ index-CzF6ZE7J.js:60
+Ey @ index-CzF6ZE7J.js:60
+Nc @ index-CzF6ZE7J.js:48
+Xc @ index-CzF6ZE7J.js:48
+Tf @ index-CzF6ZE7J.js:48
+Wf @ index-CzF6ZE7J.js:48
+Qm @ index-CzF6ZE7J.js:48
+ds @ index-CzF6ZE7J.js:48
+Zf @ index-CzF6ZE7J.js:48
+rd @ index-CzF6ZE7J.js:48
+Ie @ index-CzF6ZE7J.js:17
+index-CzF6ZE7J.js:60 🟢 Rendering block: 787 status: completed position: {x: 2611, y: 3280, width: 77, height: 38}
+index-CzF6ZE7J.js:60 Translation key "bookViewer.clickToPlay" not found in en or English
+overrideMethod @ hook.js:608
+t @ index-CzF6ZE7J.js:60
+(anonymous) @ index-CzF6ZE7J.js:60
+Ey @ index-CzF6ZE7J.js:60
+Nc @ index-CzF6ZE7J.js:48
+Xc @ index-CzF6ZE7J.js:48
+Tf @ index-CzF6ZE7J.js:48
+Wf @ index-CzF6ZE7J.js:48
+Qm @ index-CzF6ZE7J.js:48
+ds @ index-CzF6ZE7J.js:48
+Zf @ index-CzF6ZE7J.js:48
+rd @ index-CzF6ZE7J.js:48
+Ie @ index-CzF6ZE7J.js:17

@@ -179,6 +179,14 @@
     "visitSettings": "Visit your settings page to configure these options and unlock the full reading experience.",
     "goToSettings": "Go to Settings"
   },
+  "bookViewer": {
+    "loading": "Loading book...",
+    "scanTextBlocks": "Scan Text Blocks",
+    "processing": "Processing...",
+    "detectingText": "Detecting text...",
+    "bookNotFound": "Book not found",
+    "backToBooks": "Back to Books"
+  },
   "languages": {
     "en": "English",
     "da": "Dansk (Danish)",
