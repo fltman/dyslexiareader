@@ -98,11 +98,14 @@ export const LocalizationProvider = ({ children }) => {
 
   // Function to load translations for a specific language
   const loadTranslationsForLanguage = async (languageName) => {
-    let languageCode = languageCodeMap[languageName];
+    // Initialize languageCode as null to avoid temporal dead zone issues
+    let languageCode = null;
     
-    // If not found, check if languageName is actually a language code
-    if (!languageCode) {
-      // Check if it's a language code like 'en' or 'da'
+    // Try to get language code from the map first
+    if (languageCodeMap[languageName]) {
+      languageCode = languageCodeMap[languageName];
+    } else {
+      // Check if languageName is actually a language code like 'en' or 'da'
       const languageByCode = availableLanguages.find(l => l.code === languageName);
       if (languageByCode) {
         languageCode = languageName;
