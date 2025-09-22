@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect, useRef } from 'react';
+import { createContext, useContext, useState, useEffect, useRef, useCallback } from 'react';
 
 const LocalizationContext = createContext();
 
@@ -13,47 +13,14 @@ export const useLocalization = () => {
 export const LocalizationProvider = ({ children }) => {
   const [currentLanguage, setCurrentLanguage] = useState('English');
   const [isLoading, setIsLoading] = useState(true);
-  
+
   // Move module-level variables to component state to prevent temporal dead zone issues
   const translations = useRef({});
   const availableLanguages = useRef([]);
   const languageCodeMap = useRef({});
 
-  // Function to load translations for a specific language
-  const loadTranslationsForLanguage = async (languageName) => {
-    // Initialize languageCode as null to avoid temporal dead zone issues
-    let languageCode = null;
-    
-    // Try to get language code from the map first
-    if (languageCodeMap.current[languageName]) {
-      languageCode = languageCodeMap.current[languageName];
-    } else {
-      // Check if languageName is actually a language code like 'en' or 'da'
-      const languageByCode = availableLanguages.current.find(l => l.code === languageName);
-      if (languageByCode) {
-        languageCode = languageName;
-        console.log(`🔄 Treating '${languageName}' as language code, mapped to '${languageByCode.name}'`);
-      } else {
-        console.warn(`No code found for language: ${languageName}`);
-        return;
-      }
-    }
-
-    const response = await fetch(`/api/localization/translations/${languageCode}`);
-    if (response.ok) {
-      const data = await response.json();
-      
-      // Always store translations under the correct language name, not the code
-      const actualLanguageName = availableLanguages.current.find(l => l.code === languageCode)?.name || languageName;
-      translations.current[actualLanguageName] = data.translations;
-      console.log(`✅ Loaded translations for ${actualLanguageName} (code: ${languageCode})`);
-    } else {
-      throw new Error(`Failed to load translations for ${languageName}`);
-    }
-  };
-
-  // Fallback translations if API fails
-  const loadFallbackTranslations = async () => {
+  // Fallback translations if API fails - moved before other functions to prevent temporal dead zone
+  const loadFallbackTranslations = useCallback(async () => {
     translations.current['English'] = {
       app: {
         name: "The Magical Everything Reader",
@@ -74,7 +41,40 @@ export const LocalizationProvider = ({ children }) => {
       availableLanguages.current.push({ code: 'en', name: 'English', is_active: true });
       languageCodeMap.current['English'] = 'en';
     }
-  };
+  }, []);
+
+  // Function to load translations for a specific language
+  const loadTranslationsForLanguage = useCallback(async (languageName) => {
+    // Initialize languageCode as null to avoid temporal dead zone issues
+    let languageCode = null;
+
+    // Try to get language code from the map first
+    if (languageCodeMap.current[languageName]) {
+      languageCode = languageCodeMap.current[languageName];
+    } else {
+      // Check if languageName is actually a language code like 'en' or 'da'
+      const languageByCode = availableLanguages.current.find(l => l.code === languageName);
+      if (languageByCode) {
+        languageCode = languageName;
+        console.log(`🔄 Treating '${languageName}' as language code, mapped to '${languageByCode.name}'`);
+      } else {
+        console.warn(`No code found for language: ${languageName}`);
+        return;
+      }
+    }
+
+    const response = await fetch(`/api/localization/translations/${languageCode}`);
+    if (response.ok) {
+      const data = await response.json();
+
+      // Always store translations under the correct language name, not the code
+      const actualLanguageName = availableLanguages.current.find(l => l.code === languageCode)?.name || languageName;
+      translations.current[actualLanguageName] = data.translations;
+      console.log(`✅ Loaded translations for ${actualLanguageName} (code: ${languageCode})`);
+    } else {
+      throw new Error(`Failed to load translations for ${languageName}`);
+    }
+  }, []);
 
   // Load available languages and translations on mount
   useEffect(() => {
@@ -149,10 +149,10 @@ export const LocalizationProvider = ({ children }) => {
     };
 
     initializeLocalization();
-  }, []);
+  }, [loadTranslationsForLanguage, loadFallbackTranslations]);
 
   // Save language preference
-  const changeLanguage = async (newLanguage) => {
+  const changeLanguage = useCallback(async (newLanguage) => {
     try {
       // Load translations if not already cached
       if (!translations.current[newLanguage]) {
@@ -179,10 +179,10 @@ export const LocalizationProvider = ({ children }) => {
     } catch (error) {
       console.error('Error changing language:', error);
     }
-  };
+  }, [loadTranslationsForLanguage]);
 
   // Translation function with interpolation support
-  const t = (key, params = {}) => {
+  const t = useCallback((key, params = {}) => {
     const keys = key.split('.');
     let value = translations.current[currentLanguage];
 
@@ -213,18 +213,18 @@ export const LocalizationProvider = ({ children }) => {
     return value.replace(/\{\{(\w+)\}\}/g, (match, paramKey) => {
       return params[paramKey] !== undefined ? params[paramKey] : match;
     });
-  };
+  }, [currentLanguage]);
 
   // Get available languages
-  const getAvailableLanguages = () => {
+  const getAvailableLanguages = useCallback(() => {
     return availableLanguages.current.map(lang => ({
       code: lang.code,
       name: lang.name
     }));
-  };
+  }, []);
 
   // Add new language dynamically
-  const addLanguage = (languageName, translationData) => {
+  const addLanguage = useCallback((languageName, translationData) => {
     translations.current[languageName] = translationData;
 
     // Add to available languages if not already present
@@ -237,7 +237,7 @@ export const LocalizationProvider = ({ children }) => {
         is_active: true
       });
     }
-  };
+  }, []);
 
   const value = {
     currentLanguage,
