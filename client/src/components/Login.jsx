@@ -29,7 +29,7 @@ const Login = ({ onSwitchToRegister }) => {
     <div className="login-container">
       <div className="login-card">
         <div className="login-logo-container">
-          <img src="/logo.png" alt="The Magical Everything Reader" className="login-logo" />
+          <img src="/logo_500px.png" alt="The Magical Everything Reader" className="login-logo" />
           <div className="pulsating-orb"></div>
         </div>
         <h1>Sign In</h1>

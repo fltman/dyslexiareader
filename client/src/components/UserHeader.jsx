@@ -64,7 +64,7 @@ const UserHeader = () => {
     <header className="user-header">
       <div className="user-header-content">
         <Link to="/" className="logo-link" title="Home">
-          <img src="/logo.png" alt="The Magical Everything Reader" className="app-logo" />
+          <img src="/logo_300px.png" alt="The Magical Everything Reader" className="app-logo" />
         </Link>
         <div className="user-info">
           <span className="welcome-text">Welcome, {displayName}</span>
