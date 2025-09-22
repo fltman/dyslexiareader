@@ -10,7 +10,7 @@ const Login = ({ onSwitchToRegister }) => {
   const [error, setError] = useState('');
 
   const { login } = useAuth();
-  const { t } = useLocalization();
+  const { t, isLoading: localizationLoading } = useLocalization();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -26,6 +26,22 @@ const Login = ({ onSwitchToRegister }) => {
     setIsLoading(false);
   };
 
+
+  // Show loading state while translations are being loaded
+  if (localizationLoading) {
+    return (
+      <div className="login-container">
+        <div className="login-card">
+          <div className="login-logo-container">
+            <img src="/logo.png" alt="The Magical Everything Reader" className="login-logo" />
+            <div className="pulsating-orb"></div>
+          </div>
+          <h1>Loading...</h1>
+          <p className="login-subtitle">Preparing your reading experience</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="login-container">
