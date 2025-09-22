@@ -1,0 +1,107 @@
+index-DoZbO8OV.js:60 ✅ Loaded available languages: (2) ['Dansk', 'English']
+index-DoZbO8OV.js:60 ✅ Loaded translations for English
+index-DoZbO8OV.js:60 Translation key "auth.createAccountSubtitle" is not a string
+overrideMethod @ hook.js:608
+t @ index-DoZbO8OV.js:60
+yy @ index-DoZbO8OV.js:60
+Nc @ index-DoZbO8OV.js:48
+Xc @ index-DoZbO8OV.js:48
+Tf @ index-DoZbO8OV.js:48
+Wf @ index-DoZbO8OV.js:48
+Qm @ index-DoZbO8OV.js:48
+ds @ index-DoZbO8OV.js:48
+Zf @ index-DoZbO8OV.js:48
+od @ index-DoZbO8OV.js:48
+Bn @ index-DoZbO8OV.js:48
+cd @ index-DoZbO8OV.js:48
+(anonymous) @ index-DoZbO8OV.js:48
+index-DoZbO8OV.js:60 Translation key "auth.emailRequired" is not a string
+overrideMethod @ hook.js:608
+t @ index-DoZbO8OV.js:60
+yy @ index-DoZbO8OV.js:60
+Nc @ index-DoZbO8OV.js:48
+Xc @ index-DoZbO8OV.js:48
+Tf @ index-DoZbO8OV.js:48
+Wf @ index-DoZbO8OV.js:48
+Qm @ index-DoZbO8OV.js:48
+ds @ index-DoZbO8OV.js:48
+Zf @ index-DoZbO8OV.js:48
+od @ index-DoZbO8OV.js:48
+Bn @ index-DoZbO8OV.js:48
+cd @ index-DoZbO8OV.js:48
+(anonymous) @ index-DoZbO8OV.js:48
+index-DoZbO8OV.js:60 Translation key "auth.passwordRequired" is not a string
+overrideMethod @ hook.js:608
+t @ index-DoZbO8OV.js:60
+yy @ index-DoZbO8OV.js:60
+Nc @ index-DoZbO8OV.js:48
+Xc @ index-DoZbO8OV.js:48
+Tf @ index-DoZbO8OV.js:48
+Wf @ index-DoZbO8OV.js:48
+Qm @ index-DoZbO8OV.js:48
+ds @ index-DoZbO8OV.js:48
+Zf @ index-DoZbO8OV.js:48
+od @ index-DoZbO8OV.js:48
+Bn @ index-DoZbO8OV.js:48
+cd @ index-DoZbO8OV.js:48
+(anonymous) @ index-DoZbO8OV.js:48
+index-DoZbO8OV.js:60 Translation key "auth.passwordHint" is not a string
+overrideMethod @ hook.js:608
+t @ index-DoZbO8OV.js:60
+yy @ index-DoZbO8OV.js:60
+Nc @ index-DoZbO8OV.js:48
+Xc @ index-DoZbO8OV.js:48
+Tf @ index-DoZbO8OV.js:48
+Wf @ index-DoZbO8OV.js:48
+Qm @ index-DoZbO8OV.js:48
+ds @ index-DoZbO8OV.js:48
+Zf @ index-DoZbO8OV.js:48
+od @ index-DoZbO8OV.js:48
+Bn @ index-DoZbO8OV.js:48
+cd @ index-DoZbO8OV.js:48
+(anonymous) @ index-DoZbO8OV.js:48
+index-DoZbO8OV.js:60 Translation key "auth.confirmPasswordRequired" is not a string
+overrideMethod @ hook.js:608
+t @ index-DoZbO8OV.js:60
+yy @ index-DoZbO8OV.js:60
+Nc @ index-DoZbO8OV.js:48
+Xc @ index-DoZbO8OV.js:48
+Tf @ index-DoZbO8OV.js:48
+Wf @ index-DoZbO8OV.js:48
+Qm @ index-DoZbO8OV.js:48
+ds @ index-DoZbO8OV.js:48
+Zf @ index-DoZbO8OV.js:48
+od @ index-DoZbO8OV.js:48
+Bn @ index-DoZbO8OV.js:48
+cd @ index-DoZbO8OV.js:48
+(anonymous) @ index-DoZbO8OV.js:48
+index-DoZbO8OV.js:60 Translation key "auth.alreadyHaveAccount" is not a string
+overrideMethod @ hook.js:608
+t @ index-DoZbO8OV.js:60
+yy @ index-DoZbO8OV.js:60
+Nc @ index-DoZbO8OV.js:48
+Xc @ index-DoZbO8OV.js:48
+Tf @ index-DoZbO8OV.js:48
+Wf @ index-DoZbO8OV.js:48
+Qm @ index-DoZbO8OV.js:48
+ds @ index-DoZbO8OV.js:48
+Zf @ index-DoZbO8OV.js:48
+od @ index-DoZbO8OV.js:48
+Bn @ index-DoZbO8OV.js:48
+cd @ index-DoZbO8OV.js:48
+(anonymous) @ index-DoZbO8OV.js:48
+index-DoZbO8OV.js:60 Translation key "auth.signInHere" is not a string
+overrideMethod @ hook.js:608
+t @ index-DoZbO8OV.js:60
+yy @ index-DoZbO8OV.js:60
+Nc @ index-DoZbO8OV.js:48
+Xc @ index-DoZbO8OV.js:48
+Tf @ index-DoZbO8OV.js:48
+Wf @ index-DoZbO8OV.js:48
+Qm @ index-DoZbO8OV.js:48
+ds @ index-DoZbO8OV.js:48
+Zf @ index-DoZbO8OV.js:48
+od @ index-DoZbO8OV.js:48
+Bn @ index-DoZbO8OV.js:48
+cd @ index-DoZbO8OV.js:48
+(anonymous) @ index-DoZbO8OV.js:48
