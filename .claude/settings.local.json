@@ -41,7 +41,8 @@
       "Bash(git fetch:*)",
       "Bash(git merge:*)",
       "Read(//Users/andersbj/Desktop/**)",
-      "Bash(git restore:*)"
+      "Bash(git restore:*)",
+      "Bash(npm uninstall:*)"
     ],
     "deny": [],
     "ask": []
