@@ -178,7 +178,7 @@ const BookViewer = () => {
         });
       }
     }
-  };
+  }, []);
 
   const fetchTextBlocksOnly = async (pageId) => {
     try {
