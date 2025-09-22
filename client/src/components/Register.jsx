@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import PasswordRequirements from './PasswordRequirements';
 import './Login.css';
@@ -34,7 +34,8 @@ const Register = ({ onSwitchToLogin }) => {
 
   const isPasswordValid = (password) => {
     const validation = validatePassword(password);
-    return Object.values(validation).every(Boolean);
+    // Only check the requirements shown in the checklist
+    return validation.length && validation.lowercase && validation.uppercase && validation.number && validation.special;
   };
 
   const handleInputChange = (e) => {
@@ -82,8 +83,10 @@ const Register = ({ onSwitchToLogin }) => {
       case 'confirmPassword':
         return passwordsMatch ? 'valid' : 'neutral';
       case 'firstName':
+        if (formData.firstName && formData.firstName.trim().length > 0 && formData.firstName.trim().length < 2) return 'invalid';
         return !formData.firstName || formData.firstName.trim().length >= 2 ? 'valid' : 'neutral';
       case 'lastName':
+        if (formData.lastName && formData.lastName.trim().length > 0 && formData.lastName.trim().length < 2) return 'invalid';
         return !formData.lastName || formData.lastName.trim().length >= 2 ? 'valid' : 'neutral';
       default:
         return 'neutral';
@@ -152,7 +155,7 @@ const Register = ({ onSwitchToLogin }) => {
         <p className="login-subtitle">Join for a personalized dyslexia-friendly reading experience</p>
 
         {error && (
-          <div className="error-banner" role="alert">
+          <div className={`error-banner ${error.includes('Too many') ? 'rate-limit' : ''}`} role="alert">
             {error}
           </div>
         )}
@@ -169,12 +172,17 @@ const Register = ({ onSwitchToLogin }) => {
                 onChange={handleInputChange}
                 disabled={isLoading}
                 autoComplete="given-name"
-                aria-invalid={getFieldValidationState('firstName') === 'invalid'}
+                aria-invalid={getFieldValidationState('firstName') === 'invalid' || undefined}
                 aria-describedby={fieldErrors.firstName ? 'firstName-error' : undefined}
               />
               {fieldErrors.firstName && (
                 <span id="firstName-error" className="field-error" role="alert">
                   {fieldErrors.firstName}
+                </span>
+              )}
+              {!fieldErrors.firstName && getFieldValidationState('firstName') === 'invalid' && (
+                <span className="field-error" role="alert">
+                  First name must be at least 2 characters
                 </span>
               )}
             </div>
@@ -189,12 +197,17 @@ const Register = ({ onSwitchToLogin }) => {
                 onChange={handleInputChange}
                 disabled={isLoading}
                 autoComplete="family-name"
-                aria-invalid={getFieldValidationState('lastName') === 'invalid'}
+                aria-invalid={getFieldValidationState('lastName') === 'invalid' || undefined}
                 aria-describedby={fieldErrors.lastName ? 'lastName-error' : undefined}
               />
               {fieldErrors.lastName && (
                 <span id="lastName-error" className="field-error" role="alert">
                   {fieldErrors.lastName}
+                </span>
+              )}
+              {!fieldErrors.lastName && getFieldValidationState('lastName') === 'invalid' && (
+                <span className="field-error" role="alert">
+                  Last name must be at least 2 characters
                 </span>
               )}
             </div>
@@ -211,7 +224,7 @@ const Register = ({ onSwitchToLogin }) => {
               required
               disabled={isLoading}
               autoComplete="email"
-              aria-invalid={getFieldValidationState('email') === 'invalid'}
+              aria-invalid={getFieldValidationState('email') === 'invalid' || undefined}
               aria-describedby={fieldErrors.email ? 'email-error' : undefined}
             />
             {fieldErrors.email && (
@@ -235,7 +248,7 @@ const Register = ({ onSwitchToLogin }) => {
               disabled={isLoading}
               autoComplete="new-password"
               minLength="8"
-              aria-invalid={getFieldValidationState('password') === 'invalid'}
+              aria-invalid={getFieldValidationState('password') === 'invalid' || undefined}
               aria-describedby={fieldErrors.password ? 'password-error' : 'password-requirements'}
             />
             {fieldErrors.password && (
@@ -260,7 +273,7 @@ const Register = ({ onSwitchToLogin }) => {
               required
               disabled={isLoading}
               autoComplete="new-password"
-              aria-invalid={getFieldValidationState('confirmPassword') === 'invalid' || showPasswordMismatch}
+              aria-invalid={getFieldValidationState('confirmPassword') === 'invalid' || showPasswordMismatch || undefined}
               aria-describedby={fieldErrors.confirmPassword ? 'confirmPassword-error' : showPasswordMismatch ? 'password-mismatch' : undefined}
             />
             {fieldErrors.confirmPassword && (

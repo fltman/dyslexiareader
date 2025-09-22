@@ -1,7 +1,7 @@
 import React from 'react';
 import './PasswordRequirements.css';
 
-const PasswordRequirements = ({ password, showRequirements = true }) => {
+const PasswordRequirements = ({ password, showRequirements = true, id = 'password-requirements' }) => {
   const requirements = [
     {
       id: 'length',
@@ -41,7 +41,7 @@ const PasswordRequirements = ({ password, showRequirements = true }) => {
   }
 
   return (
-    <div className="password-requirements" role="status" aria-live="polite">
+    <div id={id} className="password-requirements" role="status" aria-live="polite">
       <div className="requirements-header">
         <span className="requirements-title">Password Requirements:</span>
         {allRequirementsMet && (
