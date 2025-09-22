@@ -21,6 +21,63 @@ export const LocalizationProvider = ({ children }) => {
   const [currentLanguage, setCurrentLanguage] = useState('English');
   const [isLoading, setIsLoading] = useState(true);
 
+  // Function to load translations for a specific language
+  const loadTranslationsForLanguage = async (languageName) => {
+    // Initialize languageCode as null to avoid temporal dead zone issues
+    let languageCode = null;
+    
+    // Try to get language code from the map first
+    if (languageCodeMap[languageName]) {
+      languageCode = languageCodeMap[languageName];
+    } else {
+      // Check if languageName is actually a language code like 'en' or 'da'
+      const languageByCode = availableLanguages.find(l => l.code === languageName);
+      if (languageByCode) {
+        languageCode = languageName;
+        console.log(`🔄 Treating '${languageName}' as language code, mapped to '${languageByCode.name}'`);
+      } else {
+        console.warn(`No code found for language: ${languageName}`);
+        return;
+      }
+    }
+
+    const response = await fetch(`/api/localization/translations/${languageCode}`);
+    if (response.ok) {
+      const data = await response.json();
+      
+      // Always store translations under the correct language name, not the code
+      const actualLanguageName = availableLanguages.find(l => l.code === languageCode)?.name || languageName;
+      translations[actualLanguageName] = data.translations;
+      console.log(`✅ Loaded translations for ${actualLanguageName} (code: ${languageCode})`);
+    } else {
+      throw new Error(`Failed to load translations for ${languageName}`);
+    }
+  };
+
+  // Fallback translations if API fails
+  const loadFallbackTranslations = async () => {
+    translations['English'] = {
+      app: {
+        name: "The Magical Everything Reader",
+        tagline: "The ultimate reader for people with dyslexia"
+      },
+      auth: {
+        signIn: "Sign In",
+        email: "Email",
+        password: "Password"
+      },
+      common: {
+        loading: "Loading...",
+        error: "An error occurred"
+      }
+    };
+
+    if (!availableLanguages.some(l => l.name === 'English')) {
+      availableLanguages.push({ code: 'en', name: 'English', is_active: true });
+      languageCodeMap['English'] = 'en';
+    }
+  };
+
   // Load available languages and translations on mount
   useEffect(() => {
     const initializeLocalization = async () => {
@@ -95,63 +152,6 @@ export const LocalizationProvider = ({ children }) => {
 
     initializeLocalization();
   }, []);
-
-  // Function to load translations for a specific language
-  const loadTranslationsForLanguage = async (languageName) => {
-    // Initialize languageCode as null to avoid temporal dead zone issues
-    let languageCode = null;
-    
-    // Try to get language code from the map first
-    if (languageCodeMap[languageName]) {
-      languageCode = languageCodeMap[languageName];
-    } else {
-      // Check if languageName is actually a language code like 'en' or 'da'
-      const languageByCode = availableLanguages.find(l => l.code === languageName);
-      if (languageByCode) {
-        languageCode = languageName;
-        console.log(`🔄 Treating '${languageName}' as language code, mapped to '${languageByCode.name}'`);
-      } else {
-        console.warn(`No code found for language: ${languageName}`);
-        return;
-      }
-    }
-
-    const response = await fetch(`/api/localization/translations/${languageCode}`);
-    if (response.ok) {
-      const data = await response.json();
-      
-      // Always store translations under the correct language name, not the code
-      const actualLanguageName = availableLanguages.find(l => l.code === languageCode)?.name || languageName;
-      translations[actualLanguageName] = data.translations;
-      console.log(`✅ Loaded translations for ${actualLanguageName} (code: ${languageCode})`);
-    } else {
-      throw new Error(`Failed to load translations for ${languageName}`);
-    }
-  };
-
-  // Fallback translations if API fails
-  const loadFallbackTranslations = async () => {
-    translations['English'] = {
-      app: {
-        name: "The Magical Everything Reader",
-        tagline: "The ultimate reader for people with dyslexia"
-      },
-      auth: {
-        signIn: "Sign In",
-        email: "Email",
-        password: "Password"
-      },
-      common: {
-        loading: "Loading...",
-        error: "An error occurred"
-      }
-    };
-
-    if (!availableLanguages.some(l => l.name === 'English')) {
-      availableLanguages.push({ code: 'en', name: 'English', is_active: true });
-      languageCodeMap['English'] = 'en';
-    }
-  };
 
   // Save language preference
   const changeLanguage = async (newLanguage) => {
