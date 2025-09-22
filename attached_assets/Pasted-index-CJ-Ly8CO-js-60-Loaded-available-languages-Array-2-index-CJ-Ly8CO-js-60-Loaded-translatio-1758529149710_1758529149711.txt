@@ -1,0 +1,110 @@
+index-CJ-Ly8CO.js:60 ✅ Loaded available languages: Array(2)
+index-CJ-Ly8CO.js:60 ✅ Loaded translations for English (code: en)
+index-CJ-Ly8CO.js:60 Translation key "addBook.settingUp" not found in English or English
+t @ index-CJ-Ly8CO.js:60
+xy @ index-CJ-Ly8CO.js:60
+Nc @ index-CJ-Ly8CO.js:48
+Xc @ index-CJ-Ly8CO.js:48
+Tf @ index-CJ-Ly8CO.js:48
+Wf @ index-CJ-Ly8CO.js:48
+Zm @ index-CJ-Ly8CO.js:48
+Vm @ index-CJ-Ly8CO.js:48
+Zf @ index-CJ-Ly8CO.js:48
+rd @ index-CJ-Ly8CO.js:48
+at @ index-CJ-Ly8CO.js:17
+index-CJ-Ly8CO.js:60 Translation key "addBook.settingUp" not found in English or English
+t @ index-CJ-Ly8CO.js:60
+xy @ index-CJ-Ly8CO.js:60
+Nc @ index-CJ-Ly8CO.js:48
+Xc @ index-CJ-Ly8CO.js:48
+Tf @ index-CJ-Ly8CO.js:48
+Wf @ index-CJ-Ly8CO.js:48
+Qm @ index-CJ-Ly8CO.js:48
+ds @ index-CJ-Ly8CO.js:48
+Zf @ index-CJ-Ly8CO.js:48
+rd @ index-CJ-Ly8CO.js:48
+at @ index-CJ-Ly8CO.js:17
+index-CJ-Ly8CO.js:60 Translation key "addBook.scanWithPhone" not found in English or English
+t @ index-CJ-Ly8CO.js:60
+xy @ index-CJ-Ly8CO.js:60
+Nc @ index-CJ-Ly8CO.js:48
+Xc @ index-CJ-Ly8CO.js:48
+Tf @ index-CJ-Ly8CO.js:48
+Wf @ index-CJ-Ly8CO.js:48
+Qm @ index-CJ-Ly8CO.js:48
+ds @ index-CJ-Ly8CO.js:48
+Zf @ index-CJ-Ly8CO.js:48
+rd @ index-CJ-Ly8CO.js:48
+at @ index-CJ-Ly8CO.js:17
+index-CJ-Ly8CO.js:60 Translation key "addBook.qrCodeAlt" not found in English or English
+t @ index-CJ-Ly8CO.js:60
+xy @ index-CJ-Ly8CO.js:60
+Nc @ index-CJ-Ly8CO.js:48
+Xc @ index-CJ-Ly8CO.js:48
+Tf @ index-CJ-Ly8CO.js:48
+Wf @ index-CJ-Ly8CO.js:48
+Qm @ index-CJ-Ly8CO.js:48
+ds @ index-CJ-Ly8CO.js:48
+Zf @ index-CJ-Ly8CO.js:48
+rd @ index-CJ-Ly8CO.js:48
+at @ index-CJ-Ly8CO.js:17
+index-CJ-Ly8CO.js:60 Translation key "addBook.qrInstructions" not found in English or English
+t @ index-CJ-Ly8CO.js:60
+xy @ index-CJ-Ly8CO.js:60
+Nc @ index-CJ-Ly8CO.js:48
+Xc @ index-CJ-Ly8CO.js:48
+Tf @ index-CJ-Ly8CO.js:48
+Wf @ index-CJ-Ly8CO.js:48
+Qm @ index-CJ-Ly8CO.js:48
+ds @ index-CJ-Ly8CO.js:48
+Zf @ index-CJ-Ly8CO.js:48
+rd @ index-CJ-Ly8CO.js:48
+at @ index-CJ-Ly8CO.js:17
+index-CJ-Ly8CO.js:60 Translation key "addBook.orVisitUrl" not found in English or English
+t @ index-CJ-Ly8CO.js:60
+xy @ index-CJ-Ly8CO.js:60
+Nc @ index-CJ-Ly8CO.js:48
+Xc @ index-CJ-Ly8CO.js:48
+Tf @ index-CJ-Ly8CO.js:48
+Wf @ index-CJ-Ly8CO.js:48
+Qm @ index-CJ-Ly8CO.js:48
+ds @ index-CJ-Ly8CO.js:48
+Zf @ index-CJ-Ly8CO.js:48
+rd @ index-CJ-Ly8CO.js:48
+at @ index-CJ-Ly8CO.js:17
+index-CJ-Ly8CO.js:60 Translation key "addBook.pages" not found in English or English
+t @ index-CJ-Ly8CO.js:60
+xy @ index-CJ-Ly8CO.js:60
+Nc @ index-CJ-Ly8CO.js:48
+Xc @ index-CJ-Ly8CO.js:48
+Tf @ index-CJ-Ly8CO.js:48
+Wf @ index-CJ-Ly8CO.js:48
+Qm @ index-CJ-Ly8CO.js:48
+ds @ index-CJ-Ly8CO.js:48
+Zf @ index-CJ-Ly8CO.js:48
+rd @ index-CJ-Ly8CO.js:48
+at @ index-CJ-Ly8CO.js:17
+index-CJ-Ly8CO.js:60 Translation key "addBook.noPagesYet" not found in English or English
+t @ index-CJ-Ly8CO.js:60
+xy @ index-CJ-Ly8CO.js:60
+Nc @ index-CJ-Ly8CO.js:48
+Xc @ index-CJ-Ly8CO.js:48
+Tf @ index-CJ-Ly8CO.js:48
+Wf @ index-CJ-Ly8CO.js:48
+Qm @ index-CJ-Ly8CO.js:48
+ds @ index-CJ-Ly8CO.js:48
+Zf @ index-CJ-Ly8CO.js:48
+rd @ index-CJ-Ly8CO.js:48
+at @ index-CJ-Ly8CO.js:17
+index-CJ-Ly8CO.js:60 Translation key "addBook.scanQRStart" not found in English or English
+t @ index-CJ-Ly8CO.js:60
+xy @ index-CJ-Ly8CO.js:60
+Nc @ index-CJ-Ly8CO.js:48
+Xc @ index-CJ-Ly8CO.js:48
+Tf @ index-CJ-Ly8CO.js:48
+Wf @ index-CJ-Ly8CO.js:48
+Qm @ index-CJ-Ly8CO.js:48
+ds @ index-CJ-Ly8CO.js:48
+Zf @ index-CJ-Ly8CO.js:48
+rd @ index-CJ-Ly8CO.js:48
+at @ index-CJ-Ly8CO.js:17

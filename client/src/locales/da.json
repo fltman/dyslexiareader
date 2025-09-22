@@ -140,6 +140,25 @@
       "passwordTooShort": "Ny adgangskode skal være mindst 6 tegn lang"
     }
   },
+  "addBook": {
+    "settingUp": "Sætter din bog op...",
+    "scanWithPhone": "Scan med din telefon",
+    "qrCodeAlt": "QR-kode til mobilscanning",
+    "qrInstructions": "Scan denne QR-kode med dit telefons kamera for at begynde at tilføje sider",
+    "orVisitUrl": "Eller besøg denne URL direkte på din telefon:",
+    "pages": "Sider",
+    "noPagesYet": "Ingen sider endnu. Brug din telefon til at scanne QR-koden og begynd at tage billeder.",
+    "scanQRStart": "Scan QR-kode for at komme i gang",
+    "loadingQR": "Indlæser QR-kode...",
+    "processing": "Behandler bog...",
+    "scanAtLeastOnePage": "Scan venligst mindst én side før du afslutter.",
+    "processError": "Fejl ved behandling af bog. Prøv igen.",
+    "processingWithAI": "Behandler med AI...",
+    "pageNumber": "Side {{number}}",
+    "scanningActive": "Scanningssession er aktiv",
+    "processingBook": "Behandler din bog",
+    "progressSteps": "Trin {{current}} af {{total}}"
+  },
   "qr": {
     "title": "Scan for at tilføje sider",
     "subtitle": "Åbn kamera på din telefon for at scanne denne QR-kode",
@@ -167,7 +186,8 @@
     "home": "Hjem",
     "settings": "Indstillinger",
     "user": "Bruger",
-    "later": "Måske senere"
+    "later": "Måske senere",
+    "done": "Færdig"
   },
   "userHeader": {
     "welcome": "Velkommen, {{name}}!",

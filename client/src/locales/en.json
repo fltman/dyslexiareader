@@ -140,6 +140,25 @@
       "passwordTooShort": "New password must be at least 6 characters long"
     }
   },
+  "addBook": {
+    "settingUp": "Setting up your book...",
+    "scanWithPhone": "Scan with your phone",
+    "qrCodeAlt": "QR code for mobile scanning",
+    "qrInstructions": "Scan this QR code with your phone's camera to start adding pages",
+    "orVisitUrl": "Or visit this URL directly on your phone:",
+    "pages": "Pages",
+    "noPagesYet": "No pages yet. Use your phone to scan the QR code and start taking photos.",
+    "scanQRStart": "Scan QR code to get started",
+    "loadingQR": "Loading QR code...",
+    "processing": "Processing book...",
+    "scanAtLeastOnePage": "Please scan at least one page before completing.",
+    "processError": "Error processing book. Please try again.",
+    "processingWithAI": "Processing with AI...",
+    "pageNumber": "Page {{number}}",
+    "scanningActive": "Scanning session is active",
+    "processingBook": "Processing your book",
+    "progressSteps": "Step {{current}} of {{total}}"
+  },
   "qr": {
     "title": "Scan to Add Pages",
     "subtitle": "Open camera on your phone to scan this QR code",
@@ -167,7 +186,8 @@
     "home": "Home",
     "settings": "Settings",
     "user": "User",
-    "later": "Maybe Later"
+    "later": "Maybe Later",
+    "done": "Done"
   },
   "userHeader": {
     "welcome": "Welcome, {{name}}!",
