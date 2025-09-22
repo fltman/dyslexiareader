@@ -8,7 +8,7 @@ const BookViewer = () => {
   const { bookId } = useParams();
   const navigate = useNavigate();
   const { user, logout } = useAuth();
-  const { t } = useLocalization();
+  const { t, isLoading: localizationLoading } = useLocalization();
   const imageRef = useRef(null);
 
   const [book, setBook] = useState(null);
@@ -45,6 +45,7 @@ const BookViewer = () => {
       loadUserPreferences();
     }
   }, [user]);
+
 
   const loadUserPreferences = async () => {
     try {
@@ -119,6 +120,18 @@ const BookViewer = () => {
       }
     }
   }, [currentPage, pages]); // Remove textBlocksCache from deps to avoid infinite loops
+
+  // Show loading state while translations are being loaded
+  if (localizationLoading) {
+    return (
+      <div className="book-viewer">
+        <div className="loading-container">
+          <div className="loading-spinner">Loading...</div>
+          <p>Preparing your reading experience</p>
+        </div>
+      </div>
+    );
+  }
 
   const fetchBook = async () => {
     try {

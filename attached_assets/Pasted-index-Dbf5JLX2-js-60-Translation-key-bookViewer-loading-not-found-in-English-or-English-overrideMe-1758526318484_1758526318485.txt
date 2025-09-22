@@ -1,0 +1,133 @@
+index-Dbf5JLX2.js:60 Translation key "bookViewer.loading" not found in English or English
+overrideMethod @ hook.js:608
+t @ index-Dbf5JLX2.js:60
+Ey @ index-Dbf5JLX2.js:60
+Nc @ index-Dbf5JLX2.js:48
+Xc @ index-Dbf5JLX2.js:48
+Tf @ index-Dbf5JLX2.js:48
+Wf @ index-Dbf5JLX2.js:48
+Qm @ index-Dbf5JLX2.js:48
+ds @ index-Dbf5JLX2.js:48
+Zf @ index-Dbf5JLX2.js:48
+rd @ index-Dbf5JLX2.js:48
+Ie @ index-Dbf5JLX2.js:17
+index-Dbf5JLX2.js:60 ✅ Loaded available languages: (2) ['Dansk', 'English']
+index-Dbf5JLX2.js:60 📚 Updating agent knowledge for book ID: 65
+index-Dbf5JLX2.js:60 🔄 Treating 'en' as language code, mapped to 'English'
+index-Dbf5JLX2.js:60 Translation key "bookViewer.scanTextBlocks" not found in English or English
+overrideMethod @ hook.js:608
+t @ index-Dbf5JLX2.js:60
+Ey @ index-Dbf5JLX2.js:60
+Nc @ index-Dbf5JLX2.js:48
+Xc @ index-Dbf5JLX2.js:48
+Tf @ index-Dbf5JLX2.js:48
+Wf @ index-Dbf5JLX2.js:48
+Qm @ index-Dbf5JLX2.js:48
+ds @ index-Dbf5JLX2.js:48
+Zf @ index-Dbf5JLX2.js:48
+rd @ index-Dbf5JLX2.js:48
+Ie @ index-Dbf5JLX2.js:17
+index-Dbf5JLX2.js:60 🟢 Rendering 0 text block overlays, imageRef: false
+index-Dbf5JLX2.js:60 📄 Loading text blocks for page: 0 pageId: 51
+index-Dbf5JLX2.js:60 🗺️ Current cache state: []
+index-Dbf5JLX2.js:60 🌍 No cache found, fetching from API...
+index-Dbf5JLX2.js:60 🔍 Fetching text blocks for pageId: 51
+index-Dbf5JLX2.js:60 Translation key "bookViewer.scanTextBlocks" not found in English or English
+overrideMethod @ hook.js:608
+t @ index-Dbf5JLX2.js:60
+Ey @ index-Dbf5JLX2.js:60
+Nc @ index-Dbf5JLX2.js:48
+Xc @ index-Dbf5JLX2.js:48
+Tf @ index-Dbf5JLX2.js:48
+Wf @ index-Dbf5JLX2.js:48
+Qm @ index-Dbf5JLX2.js:48
+ds @ index-Dbf5JLX2.js:48
+Zf @ index-Dbf5JLX2.js:48
+rd @ index-Dbf5JLX2.js:48
+Ie @ index-Dbf5JLX2.js:17
+index-Dbf5JLX2.js:60 🟢 Rendering 0 text block overlays, imageRef: true
+index-Dbf5JLX2.js:60 🎛️ Loaded playback speed from preferences: 1
+index-Dbf5JLX2.js:60 Translation key "bookViewer.scanTextBlocks" not found in English or English
+overrideMethod @ hook.js:608
+t @ index-Dbf5JLX2.js:60
+Ey @ index-Dbf5JLX2.js:60
+Nc @ index-Dbf5JLX2.js:48
+Xc @ index-Dbf5JLX2.js:48
+Tf @ index-Dbf5JLX2.js:48
+Wf @ index-Dbf5JLX2.js:48
+Qm @ index-Dbf5JLX2.js:48
+ds @ index-Dbf5JLX2.js:48
+Zf @ index-Dbf5JLX2.js:48
+rd @ index-Dbf5JLX2.js:48
+Ie @ index-Dbf5JLX2.js:17
+index-Dbf5JLX2.js:60 🟢 Rendering 0 text block overlays, imageRef: true
+index-Dbf5JLX2.js:60 ✅ Loaded translations for English (code: en)
+index-Dbf5JLX2.js:48 Uncaught Error: Minified React error #310; visit https://react.dev/errors/310 for the full message or use the non-minified dev environment for full errors and additional helpful warnings.
+    at Ge (index-Dbf5JLX2.js:48:35419)
+    at jn (index-Dbf5JLX2.js:48:41881)
+    at Object.Uo [as useEffect] (index-Dbf5JLX2.js:48:42106)
+    at re.useEffect (index-Dbf5JLX2.js:25:7004)
+    at by (index-Dbf5JLX2.js:60:31225)
+    at Nc (index-Dbf5JLX2.js:48:34141)
+    at Xc (index-Dbf5JLX2.js:48:62151)
+    at Tf (index-Dbf5JLX2.js:48:72654)
+    at Wf (index-Dbf5JLX2.js:48:106685)
+    at Qm (index-Dbf5JLX2.js:48:105750)
+Ge @ index-Dbf5JLX2.js:48
+jn @ index-Dbf5JLX2.js:48
+Uo @ index-Dbf5JLX2.js:48
+re.useEffect @ index-Dbf5JLX2.js:25
+by @ index-Dbf5JLX2.js:60
+Nc @ index-Dbf5JLX2.js:48
+Xc @ index-Dbf5JLX2.js:48
+Tf @ index-Dbf5JLX2.js:48
+Wf @ index-Dbf5JLX2.js:48
+Qm @ index-Dbf5JLX2.js:48
+ds @ index-Dbf5JLX2.js:48
+Zf @ index-Dbf5JLX2.js:48
+rd @ index-Dbf5JLX2.js:48
+Ie @ index-Dbf5JLX2.js:17
+convai-widget-embed:244 [ConversationalAI] Cannot fetch config for agent agent_2701k5hmygdyegps36rmfm75xts3: signal is aborted without reason
+overrideMethod @ hook.js:608
+(anonymous) @ convai-widget-embed:244
+Promise.catch
+(anonymous) @ convai-widget-embed:244
+(anonymous) @ convai-widget-embed:1
+(anonymous) @ convai-widget-embed:1
+Un @ convai-widget-embed:1
+(anonymous) @ convai-widget-embed:1
+Cs @ convai-widget-embed:1
+Dp @ convai-widget-embed:1
+setTimeout
+n @ convai-widget-embed:1
+requestAnimationFrame
+Mp @ convai-widget-embed:1
+(anonymous) @ convai-widget-embed:1
+(anonymous) @ convai-widget-embed:1
+(anonymous) @ convai-widget-embed:1
+hs @ convai-widget-embed:1
+rc @ convai-widget-embed:1
+hs @ convai-widget-embed:1
+rc @ convai-widget-embed:1
+hs @ convai-widget-embed:1
+rc @ convai-widget-embed:1
+hs @ convai-widget-embed:1
+rc @ convai-widget-embed:1
+hs @ convai-widget-embed:1
+rc @ convai-widget-embed:1
+hs @ convai-widget-embed:1
+rc @ convai-widget-embed:1
+hs @ convai-widget-embed:1
+rc @ convai-widget-embed:1
+hs @ convai-widget-embed:1
+Kt @ convai-widget-embed:1
+xp @ convai-widget-embed:1
+Rp @ convai-widget-embed:1
+F_ @ convai-widget-embed:462
+(anonymous) @ convai-widget-embed:462
+(anonymous) @ convai-widget-embed:462
+index-Dbf5JLX2.js:60 📦 Fetched text blocks: 19 blocks
+index-Dbf5JLX2.js:60 ✅ Fetched 19 text blocks from API for page 51
+index-Dbf5JLX2.js:60 🗺️ Updated cache, now contains: ['51']
+index-Dbf5JLX2.js:60 💻 Setting text blocks for current page: 19 blocks
+index-Dbf5JLX2.js:60 ✅ Agent knowledge updated successfully
