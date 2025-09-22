@@ -285,7 +285,7 @@ export const createDefaultPreferences = async (userId) => {
     await db.insert(userPreferences).values({
       userId,
       playbackSpeed: '1.0',
-      preferredLanguage: 'en',
+      preferredLanguage: 'English',
       dyslexiaMode: true,
       highContrast: false,
       reducedMotion: false,

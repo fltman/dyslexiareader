@@ -114,10 +114,10 @@ export const preferencesSchema = Joi.object({
     }),
 
   preferredLanguage: Joi.string()
-    .valid('en', 'es', 'fr', 'de', 'it', 'pt', 'sv', 'no', 'da', 'fi')
+    .valid('English', 'Dansk', 'Español', 'Français', 'Deutsch', 'Italiano', 'Português', 'Svenska', 'Norsk', 'Suomi')
     .optional()
     .messages({
-      'any.only': 'Invalid language code'
+      'any.only': 'Invalid language name'
     }),
 
   dyslexiaMode: Joi.boolean()

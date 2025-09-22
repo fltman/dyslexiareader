@@ -98,10 +98,19 @@ export const LocalizationProvider = ({ children }) => {
 
   // Function to load translations for a specific language
   const loadTranslationsForLanguage = async (languageName) => {
-    const languageCode = languageCodeMap[languageName];
+    let languageCode = languageCodeMap[languageName];
+    
+    // If not found, check if languageName is actually a language code
     if (!languageCode) {
-      console.warn(`No code found for language: ${languageName}`);
-      return;
+      // Check if it's a language code like 'en' or 'da'
+      const languageByCode = availableLanguages.find(l => l.code === languageName);
+      if (languageByCode) {
+        languageCode = languageName;
+        console.log(`🔄 Treating '${languageName}' as language code, mapped to '${languageByCode.name}'`);
+      } else {
+        console.warn(`No code found for language: ${languageName}`);
+        return;
+      }
     }
 
     const response = await fetch(`/api/localization/translations/${languageCode}`);
