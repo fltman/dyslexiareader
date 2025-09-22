@@ -78,7 +78,16 @@ export const AuthProvider = ({ children }) => {
         body: JSON.stringify({ email, password, firstName, lastName }),
       });
 
-      const data = await response.json();
+      let data;
+      try {
+        data = await response.json();
+      } catch (parseError) {
+        return { 
+          success: false, 
+          error: 'Server response error. Please try again.',
+          code: 'PARSE_ERROR'
+        };
+      }
 
       if (response.ok) {
         setUser(data.user);
@@ -88,10 +97,19 @@ export const AuthProvider = ({ children }) => {
         }
         return { success: true };
       } else {
-        return { success: false, error: data.error };
+        return { 
+          success: false, 
+          error: data.error || 'Registration failed',
+          code: data.code || 'UNKNOWN_ERROR',
+          details: data.details || []
+        };
       }
     } catch (error) {
-      return { success: false, error: 'Registration failed. Please try again.' };
+      return { 
+        success: false, 
+        error: 'Registration failed. Please try again.',
+        code: 'NETWORK_ERROR'
+      };
     }
   };
 
