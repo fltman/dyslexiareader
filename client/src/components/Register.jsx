@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
+import { useLocalization } from '../contexts/LocalizationContext';
 import './Login.css';
 
 const Register = ({ onSwitchToLogin }) => {
@@ -14,6 +15,7 @@ const Register = ({ onSwitchToLogin }) => {
   const [error, setError] = useState('');
 
   const { register } = useAuth();
+  const { t } = useLocalization();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -29,19 +31,19 @@ const Register = ({ onSwitchToLogin }) => {
 
     // Validation
     if (formData.password !== formData.confirmPassword) {
-      setError('Passwords do not match');
+      setError(t('auth.passwordsDoNotMatch'));
       return;
     }
 
     // Password validation to match backend requirements
     if (formData.password.length < 8) {
-      setError('Password must be at least 8 characters long');
+      setError(t('auth.passwordTooShort'));
       return;
     }
 
     const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/;
     if (!passwordPattern.test(formData.password)) {
-      setError('Password must contain at least one lowercase letter, one uppercase letter, one number, and one special character');
+      setError(t('auth.passwordRequirements'));
       return;
     }
 
@@ -65,18 +67,18 @@ const Register = ({ onSwitchToLogin }) => {
     <div className="login-container">
       <div className="login-card">
         <div className="login-logo-container">
-          <img src="/logo.png" alt="The Magical Everything Reader" className="login-logo" />
+          <img src="/logo.png" alt={t('app.name')} className="login-logo" />
           <div className="pulsating-orb"></div>
         </div>
-        <h1>Create Account</h1>
-        <p className="login-subtitle">Join for a personalized dyslexia-friendly reading experience</p>
+        <h1>{t('auth.createAccount')}</h1>
+        <p className="login-subtitle">{t('auth.createAccountSubtitle')}</p>
 
         {error && <div className="error-message">{error}</div>}
 
         <form onSubmit={handleSubmit} className="login-form">
           <div className="form-row">
             <div className="form-group">
-              <label htmlFor="firstName">First Name</label>
+              <label htmlFor="firstName">{t('auth.firstName')}</label>
               <input
                 type="text"
                 id="firstName"
@@ -89,7 +91,7 @@ const Register = ({ onSwitchToLogin }) => {
             </div>
 
             <div className="form-group">
-              <label htmlFor="lastName">Last Name</label>
+              <label htmlFor="lastName">{t('auth.lastName')}</label>
               <input
                 type="text"
                 id="lastName"
@@ -103,7 +105,7 @@ const Register = ({ onSwitchToLogin }) => {
           </div>
 
           <div className="form-group">
-            <label htmlFor="email">Email *</label>
+            <label htmlFor="email">{t('auth.emailRequired')}</label>
             <input
               type="email"
               id="email"
@@ -117,7 +119,7 @@ const Register = ({ onSwitchToLogin }) => {
           </div>
 
           <div className="form-group">
-            <label htmlFor="password">Password *</label>
+            <label htmlFor="password">{t('auth.passwordRequired')}</label>
             <input
               type="password"
               id="password"
@@ -129,11 +131,11 @@ const Register = ({ onSwitchToLogin }) => {
               autoComplete="new-password"
               minLength="8"
             />
-            <small className="form-hint">At least 8 characters with one lowercase, one uppercase, one number, and one special character (@$!%*?&)</small>
+            <small className="form-hint">{t('auth.passwordHint')}</small>
           </div>
 
           <div className="form-group">
-            <label htmlFor="confirmPassword">Confirm Password *</label>
+            <label htmlFor="confirmPassword">{t('auth.confirmPasswordRequired')}</label>
             <input
               type="password"
               id="confirmPassword"
@@ -151,18 +153,18 @@ const Register = ({ onSwitchToLogin }) => {
             className="login-button primary"
             disabled={isLoading}
           >
-            {isLoading ? 'Creating Account...' : 'Create Account'}
+            {isLoading ? t('auth.creatingAccount') : t('auth.createAccount')}
           </button>
         </form>
 
         <p className="login-switch">
-          Already have an account?{' '}
+          {t('auth.alreadyHaveAccount')}{' '}
           <button
             onClick={onSwitchToLogin}
             className="switch-button"
             disabled={isLoading}
           >
-            Sign in here
+            {t('auth.signInHere')}
           </button>
         </p>
       </div>

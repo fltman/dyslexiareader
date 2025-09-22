@@ -1,12 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { useLocalization } from '../contexts/LocalizationContext';
 import './BookViewer.css';
 
 const BookViewer = () => {
   const { bookId } = useParams();
   const navigate = useNavigate();
   const { user, logout } = useAuth();
+  const { t } = useLocalization();
   const imageRef = useRef(null);
 
   const [book, setBook] = useState(null);
@@ -682,14 +684,14 @@ const BookViewer = () => {
   };
 
   if (loading) {
-    return <div className="book-viewer-loading">Loading book...</div>;
+    return <div className="book-viewer-loading">{t('bookViewer.loading')}</div>;
   }
 
   if (!book || pages.length === 0) {
     return (
       <div className="book-viewer-error">
-        <h2>Book not found or no pages available</h2>
-        <button onClick={() => navigate('/')} className="back-button" title="Back to Books">
+        <h2>{t('bookViewer.bookNotFound')}</h2>
+        <button onClick={() => navigate('/')} className="back-button" title={t('bookViewer.backToBooks')}>
           ←
         </button>
       </div>
@@ -710,7 +712,7 @@ const BookViewer = () => {
               onClick={detectTextBlocks}
               disabled={isDetecting}
               className="process-button-overlay"
-              title={isDetecting ? 'Processing...' : 'Scan Text Blocks'}
+              title={isDetecting ? t('bookViewer.processing') : t('bookViewer.scanTextBlocks')}
             >
               {isDetecting ? '⏳' : '⟲'}
             </button>
@@ -785,7 +787,7 @@ const BookViewer = () => {
                   height: `${((block.height * scaleY) / imageRef.current?.naturalHeight * 100) || 0}%`,
                   cursor: block.status === 'completed' ? 'pointer' : 'default'
                 }}
-                title={block.status === 'completed' ? (block.ocr_text || 'Click to play audio') : 'Processing...'}
+                title={block.status === 'completed' ? (block.ocr_text || t('bookViewer.clickToPlay')) : t('bookViewer.processing')}
                 onClick={() => {
                   if (block.status === 'completed') {
                     playTextBlock(block);
@@ -819,7 +821,7 @@ const BookViewer = () => {
                   <div className="player-text">
                     {currentPlayingText && currentPlayingText.length > 40 
                       ? currentPlayingText.substring(0, 40) + '...' 
-                      : currentPlayingText || 'Loading...'}
+                      : currentPlayingText || t('bookViewer.loadingAudio')}
                   </div>
                   <div className="player-controls">
                     <button
@@ -867,7 +869,7 @@ const BookViewer = () => {
               <div className="detection-progress">
                 <div className="detection-spinner"></div>
                 <span className="detection-text">
-                  {isDetecting ? 'Detecting text...' : `Processing ${processingBlocks.size} blocks...`}
+                  {isDetecting ? t('bookViewer.detectingText') : t('bookViewer.processingBlocks', { count: processingBlocks.size })}
                 </span>
               </div>
             )}

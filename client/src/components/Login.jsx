@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
+import { useLocalization } from '../contexts/LocalizationContext';
 import './Login.css';
 
 const Login = ({ onSwitchToRegister }) => {
@@ -9,6 +10,7 @@ const Login = ({ onSwitchToRegister }) => {
   const [error, setError] = useState('');
 
   const { login } = useAuth();
+  const { t } = useLocalization();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -29,17 +31,17 @@ const Login = ({ onSwitchToRegister }) => {
     <div className="login-container">
       <div className="login-card">
         <div className="login-logo-container">
-          <img src="/logo.png" alt="The Magical Everything Reader" className="login-logo" />
+          <img src="/logo.png" alt={t('app.name')} className="login-logo" />
           <div className="pulsating-orb"></div>
         </div>
-        <h1>Sign In</h1>
-        <p className="login-subtitle">Access your dyslexia-friendly reading experience</p>
+        <h1>{t('auth.signIn')}</h1>
+        <p className="login-subtitle">{t('auth.signInSubtitle')}</p>
 
         {error && <div className="error-message">{error}</div>}
 
         <form onSubmit={handleSubmit} className="login-form">
           <div className="form-group">
-            <label htmlFor="email">Email</label>
+            <label htmlFor="email">{t('auth.email')}</label>
             <input
               type="email"
               id="email"
@@ -52,7 +54,7 @@ const Login = ({ onSwitchToRegister }) => {
           </div>
 
           <div className="form-group">
-            <label htmlFor="password">Password</label>
+            <label htmlFor="password">{t('auth.password')}</label>
             <input
               type="password"
               id="password"
@@ -69,18 +71,18 @@ const Login = ({ onSwitchToRegister }) => {
             className="login-button primary"
             disabled={isLoading}
           >
-            {isLoading ? 'Signing in...' : 'Sign In'}
+            {isLoading ? t('auth.signingIn') : t('auth.signIn')}
           </button>
         </form>
 
         <p className="login-switch">
-          Don't have an account?{' '}
+          {t('auth.noAccount')}{' '}
           <button
             onClick={onSwitchToRegister}
             className="switch-button"
             disabled={isLoading}
           >
-            Create one here
+            {t('auth.createAccount')}
           </button>
         </p>
       </div>

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useLocalization } from '../contexts/LocalizationContext';
 import './BooksView.css';
 
 const BooksView = () => {
@@ -11,6 +12,7 @@ const BooksView = () => {
   const [deleteModal, setDeleteModal] = useState({ show: false, book: null });
   const [deleting, setDeleting] = useState(false);
   const navigate = useNavigate();
+  const { t } = useLocalization();
 
   useEffect(() => {
     fetchBooks();
@@ -80,11 +82,11 @@ const BooksView = () => {
         setBooks(prev => prev.filter(b => b.id !== deleteModal.book.id));
         setDeleteModal({ show: false, book: null });
       } else {
-        alert('Failed to delete book. Please try again.');
+        alert(t('books.deleteError'));
       }
     } catch (error) {
       console.error('Error deleting book:', error);
-      alert('Error deleting book. Please try again.');
+      alert(t('books.deleteError'));
     } finally {
       setDeleting(false);
     }
@@ -95,7 +97,7 @@ const BooksView = () => {
   };
 
   if (loading) {
-    return <div className="loading">Loading books...</div>;
+    return <div className="loading">{t('books.loading')}</div>;
   }
 
   return (
@@ -103,7 +105,7 @@ const BooksView = () => {
       <div className="search-container">
         <input
           type="text"
-          placeholder="Search books by title, author, keywords, or content..."
+          placeholder={t('books.searchPlaceholder')}
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           className="search-input"
@@ -122,7 +124,7 @@ const BooksView = () => {
               {book.cover ? (
                 <img
                   src={book.cover}
-                  alt={book.title || 'Book'}
+                  alt={book.title || t('books.book')}
                   onError={(e) => {
                     e.target.style.display = 'none';
                     e.target.nextElementSibling.style.display = 'flex';
@@ -134,8 +136,8 @@ const BooksView = () => {
               </div>
             </div>
             <div className="book-info">
-              <h3>{book.title || 'Processing...'}</h3>
-              <p>{book.author || 'Unknown Author'}</p>
+              <h3>{book.title || t('books.processing')}</h3>
+              <p>{book.author || t('books.unknownAuthor')}</p>
               {book.keywords && book.keywords.length > 0 && (
                 <div className="book-keywords">
                   {book.keywords.slice(0, 4).map((keyword, index) => (
@@ -149,7 +151,7 @@ const BooksView = () => {
             <button
               className="delete-button"
               onClick={(e) => handleDeleteClick(e, book)}
-              title="Delete book"
+              title={t('books.deleteBook')}
             >
               ×
             </button>
@@ -173,11 +175,11 @@ const BooksView = () => {
         <div className="modal-overlay">
           <div className="modal">
             <div className="modal-header">
-              <h2>Delete Book</h2>
+              <h2>{t('books.deleteBook')}</h2>
             </div>
             <div className="modal-body">
-              <p>Are you sure you want to delete "{deleteModal.book?.title || 'this book'}"?</p>
-              <p>This action cannot be undone.</p>
+              <p>{t('books.deleteConfirmation', { title: deleteModal.book?.title || t('books.thisBook') })}</p>
+              <p>{t('books.deleteWarning')}</p>
             </div>
             <div className="modal-footer">
               <button
@@ -185,14 +187,14 @@ const BooksView = () => {
                 onClick={handleDeleteCancel}
                 disabled={deleting}
               >
-                Cancel
+                {t('common.cancel')}
               </button>
               <button
                 className="confirm-delete-button"
                 onClick={handleDeleteConfirm}
                 disabled={deleting}
               >
-                {deleting ? 'Deleting...' : 'Delete'}
+                {deleting ? t('books.deleting') : t('common.delete')}
               </button>
             </div>
           </div>

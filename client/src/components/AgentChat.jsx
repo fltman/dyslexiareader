@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { useLocalization } from '../contexts/LocalizationContext';
 import './AgentChat.css';
 
 const AgentChat = ({ bookId, bookTitle }) => {
+  const { t } = useLocalization();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const agentId = 'agent_2701k5hmygdyegps36rmfm75xts3'; // Hardcoded agent ID
@@ -42,13 +44,13 @@ const AgentChat = ({ bookId, bookTitle }) => {
   return (
     <div className="agent-chat">
       <div className="agent-header">
-        <h3>AI Assistant</h3>
+        <h3>{t('agentChat.aiAssistant')}</h3>
         <button 
           onClick={updateAgentKnowledge}
           disabled={isLoading}
           className="update-btn"
         >
-          {isLoading ? 'Updating...' : 'Update Knowledge'}
+          {isLoading ? t('agentChat.updating') : t('agentChat.updateKnowledge')}
         </button>
       </div>
       

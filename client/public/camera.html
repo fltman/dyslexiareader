@@ -224,11 +224,11 @@
 <body>
     <div class="header">
         <img src="/logo.png" alt="The Magical Everything Reader" class="app-logo" />
-        <div class="status">Take photos of book pages</div>
+        <div class="status" data-i18n="camera.takePhotos">Take photos of book pages</div>
     </div>
 
     <div class="controls">
-        <div class="page-count" id="pageCount">📚 0 pages captured</div>
+        <div class="page-count" id="pageCount" data-i18n="camera.initialCount">📚 0 pages captured</div>
 
         <!-- Hidden file input that triggers native camera -->
         <input
@@ -244,33 +244,121 @@
         </label>
 
         <div class="info-text">
-            Tap the camera button to take a photo<br>
-            Return to the main app when done
+            <span data-i18n="camera.tapToTakePhoto">Tap the camera button to take a photo</span><br>
+            <span data-i18n="camera.returnToApp">Return to the main app when done</span>
         </div>
     </div>
 
     <div class="instructions">
-        <h3>📸 Tips for best results:</h3>
+        <h3 data-i18n="camera.tipsTitle">📸 Tips for best results:</h3>
         <p>
-            • Hold your phone steady<br>
-            • Ensure good lighting<br>
-            • Capture the entire page<br>
-            • Take one page at a time
+            <span data-i18n="camera.tip1">• Hold your phone steady</span><br>
+            <span data-i18n="camera.tip2">• Ensure good lighting</span><br>
+            <span data-i18n="camera.tip3">• Capture the entire page</span><br>
+            <span data-i18n="camera.tip4">• Take one page at a time</span>
         </p>
     </div>
 
-    <div class="success-message" id="successMessage">
+    <div class="success-message" id="successMessage" data-i18n="camera.uploadSuccess">
         ✅ Page uploaded successfully!
     </div>
 
     <div class="error" id="error" style="display: none;"></div>
-    <div class="loading" id="loading">Uploading page...</div>
+    <div class="loading" id="loading" data-i18n="camera.uploading">Uploading page...</div>
 
     <div class="recent-photos" id="recentPhotos" style="display: none;">
         <!-- Recent photos will be added here -->
     </div>
 
     <script>
+        // Simple localization system for camera page
+        const translations = {
+            'English': {
+                'camera.takePhotos': 'Take photos of book pages',
+                'camera.tapToTakePhoto': 'Tap the camera button to take a photo',
+                'camera.returnToApp': 'Return to the main app when done',
+                'camera.tipsTitle': '📸 Tips for best results:',
+                'camera.tip1': '• Hold your phone steady',
+                'camera.tip2': '• Ensure good lighting',
+                'camera.tip3': '• Capture the entire page',
+                'camera.tip4': '• Take one page at a time',
+                'camera.uploadSuccess': '✅ Page uploaded successfully!',
+                'camera.uploading': 'Uploading page...',
+                'camera.invalidSession': 'Invalid session. Please scan the QR code again.',
+                'camera.uploadFailed': 'Failed to upload page. Please try again.',
+                'camera.networkError': 'Network error. Check your connection.',
+                'camera.pagesSingular': 'page',
+                'camera.pagesPlural': 'pages',
+                'camera.captured': 'captured',
+                'camera.initialCount': '📚 0 pages captured'
+            },
+            'Dansk': {
+                'camera.takePhotos': 'Tag billeder af bogsider',
+                'camera.tapToTakePhoto': 'Tryk på kameraknappen for at tage et billede',
+                'camera.returnToApp': 'Vend tilbage til hovedappen når du er færdig',
+                'camera.tipsTitle': '📸 Tips til bedste resultater:',
+                'camera.tip1': '• Hold din telefon stille',
+                'camera.tip2': '• Sørg for god belysning',
+                'camera.tip3': '• Tag hele siden med',
+                'camera.tip4': '• Tag én side ad gangen',
+                'camera.uploadSuccess': '✅ Side uploadet med succes!',
+                'camera.uploading': 'Uploader side...',
+                'camera.invalidSession': 'Ugyldig session. Scan venligst QR-koden igen.',
+                'camera.uploadFailed': 'Kunne ikke uploade side. Prøv venligst igen.',
+                'camera.networkError': 'Netværksfejl. Tjek din forbindelse.',
+                'camera.pagesSingular': 'side',
+                'camera.pagesPlural': 'sider',
+                'camera.captured': 'taget',
+                'camera.initialCount': '📚 0 sider taget'
+            }
+        };
+
+        // Get user's language preference from localStorage or browser
+        function getUserLanguage() {
+            // Try localStorage first
+            const saved = localStorage.getItem('language');
+            if (saved && translations[saved]) {
+                return saved;
+            }
+
+            // Fallback to browser language
+            const browserLang = navigator.language.split('-')[0];
+            const languageName = Object.keys(translations).find(
+                name => name.toLowerCase().startsWith(browserLang)
+            );
+
+            return languageName || 'English';
+        }
+
+        // Apply translations to the page
+        function applyTranslations() {
+            const language = getUserLanguage();
+            const langData = translations[language];
+
+            if (!langData) return;
+
+            // Update all elements with data-i18n attributes
+            document.querySelectorAll('[data-i18n]').forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                if (langData[key]) {
+                    element.textContent = langData[key];
+                }
+            });
+
+            // Update document title and language
+            document.documentElement.lang = language === 'Dansk' ? 'da' : 'en';
+        }
+
+        // Translation function for dynamic content
+        function t(key) {
+            const language = getUserLanguage();
+            const langData = translations[language];
+            return langData && langData[key] ? langData[key] : key;
+        }
+
+        // Apply translations when page loads
+        document.addEventListener('DOMContentLoaded', applyTranslations);
+
         const cameraInput = document.getElementById('cameraInput');
         const pageCount = document.getElementById('pageCount');
         const errorDiv = document.getElementById('error');
@@ -287,7 +375,7 @@
         sessionId = urlParams.get('session');
 
         if (!sessionId) {
-            showError('Invalid session. Please scan the QR code again.');
+            showError(t('camera.invalidSession'));
             document.getElementById('cameraBtn').style.display = 'none';
         }
 
@@ -328,11 +416,11 @@
                     // Clear the input so the same file can be selected again
                     cameraInput.value = '';
                 } else {
-                    showError('Failed to upload page. Please try again.');
+                    showError(t('camera.uploadFailed'));
                 }
             } catch (error) {
                 console.error('Upload error:', error);
-                showError('Network error. Check your connection.');
+                showError(t('camera.networkError'));
             } finally {
                 loadingDiv.style.display = 'none';
             }
@@ -340,8 +428,8 @@
 
         function updatePageCount() {
             const emoji = pageNum === 0 ? '📚' : pageNum === 1 ? '📖' : '📚';
-            const pageText = pageNum === 1 ? 'page' : 'pages';
-            pageCount.textContent = `${emoji} ${pageNum} ${pageText} captured`;
+            const pageText = pageNum === 1 ? t('camera.pagesSingular') : t('camera.pagesPlural');
+            pageCount.textContent = `${emoji} ${pageNum} ${pageText} ${t('camera.captured')}`;
             pageCount.style.animation = 'pulse 0.5s ease';
             setTimeout(() => {
                 pageCount.style.animation = '';

@@ -14,7 +14,7 @@ import crypto from 'crypto';
 import { dbHelpers } from './database-replit.js';
 import { db } from './db.js';
 import { books } from '../shared/schema.js';
-import { eq } from 'drizzle-orm';
+import { eq, sql } from 'drizzle-orm';
 import { ObjectStorageService } from './objectStorage.js';
 import ElevenLabsAgentSDKService from './elevenlabsAgentSDK.js';
 import cookieParser from 'cookie-parser';
@@ -145,6 +145,208 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Mount auth routes
 app.use('/api/auth', authRoutes);
+
+// Language translation endpoint
+app.post('/api/localization/translate', authenticateToken, async (req, res) => {
+  try {
+    const { targetLanguage } = req.body;
+
+    if (!targetLanguage) {
+      return res.status(400).json({ error: 'Target language is required' });
+    }
+
+    if (!openai) {
+      return res.status(500).json({ error: 'OpenAI is not configured' });
+    }
+
+    // Read the English translation file
+    const fs = await import('fs');
+    const path = await import('path');
+    const __dirname = new URL('.', import.meta.url).pathname;
+
+    const englishTranslations = JSON.parse(
+      fs.readFileSync(path.join(__dirname, '../client/src/locales/en.json'), 'utf8')
+    );
+
+    console.log(`🌍 Translating interface to ${targetLanguage}...`);
+
+    const response = await openai.chat.completions.create({
+      model: "gpt-4o",
+      messages: [
+        {
+          role: "user",
+          content: `Translate this JSON file of UI translations from English to ${targetLanguage}.
+
+IMPORTANT INSTRUCTIONS:
+1. Maintain the exact same JSON structure and key names
+2. Only translate the VALUES, never the keys
+3. Keep interpolation variables like {{count}}, {{current}}, {{total}} exactly as they are
+4. Keep HTML tags if any exist
+5. Maintain the same tone and style appropriate for each context
+6. For language names, keep them in their native form (e.g., "Deutsch" for German)
+7. Ensure all translations are natural and culturally appropriate for ${targetLanguage}
+
+Here is the JSON to translate:
+
+${JSON.stringify(englishTranslations, null, 2)}
+
+Return only the translated JSON, no explanations.`
+        }
+      ],
+      max_tokens: 4000,
+      temperature: 0.3
+    });
+
+    const translatedContent = response.choices[0].message.content;
+
+    // Parse the translated JSON
+    let translations;
+    try {
+      // Extract JSON from response (in case there's extra text)
+      const jsonMatch = translatedContent.match(/\{[\s\S]*\}/);
+      if (jsonMatch) {
+        translations = JSON.parse(jsonMatch[0]);
+      } else {
+        translations = JSON.parse(translatedContent);
+      }
+    } catch (parseError) {
+      console.error('Error parsing translated JSON:', parseError);
+      return res.status(500).json({ error: 'Failed to parse translation response' });
+    }
+
+    console.log(`✅ Successfully translated interface to ${targetLanguage}`);
+
+    // Store the new language and translations in the database
+    try {
+      // Insert the new language
+      const languageResult = await db.execute(sql`
+        INSERT INTO languages (code, name)
+        VALUES (${targetLanguage.toLowerCase().replace(/\s+/g, '_')}, ${targetLanguage})
+        ON CONFLICT (code) DO UPDATE SET name = ${targetLanguage}
+        RETURNING id
+      `);
+
+      const languageId = languageResult.rows[0].id;
+
+      // Function to flatten nested objects into dot notation keys
+      function flattenObject(obj, prefix = '') {
+        const flattened = {};
+        for (const key in obj) {
+          if (obj.hasOwnProperty(key)) {
+            const newKey = prefix ? `${prefix}.${key}` : key;
+            if (typeof obj[key] === 'object' && obj[key] !== null && !Array.isArray(obj[key])) {
+              Object.assign(flattened, flattenObject(obj[key], newKey));
+            } else {
+              flattened[newKey] = obj[key];
+            }
+          }
+        }
+        return flattened;
+      }
+
+      const flatTranslations = flattenObject(translations);
+
+      // Delete existing translations for this language
+      await db.execute(sql`
+        DELETE FROM translations WHERE language_id = ${languageId}
+      `);
+
+      // Insert new translations
+      for (const [key, value] of Object.entries(flatTranslations)) {
+        await db.execute(sql`
+          INSERT INTO translations (language_id, key, value)
+          VALUES (${languageId}, ${key}, ${value})
+        `);
+      }
+
+      console.log(`✅ Stored ${Object.keys(flatTranslations).length} translations for ${targetLanguage} in database`);
+    } catch (dbError) {
+      console.error('Error storing translations in database:', dbError);
+      // Continue anyway - we still return the translations even if storage fails
+    }
+
+    res.json({
+      success: true,
+      targetLanguage,
+      translations
+    });
+
+  } catch (error) {
+    console.error('Translation error:', error);
+    res.status(500).json({ error: 'Failed to translate language' });
+  }
+});
+
+// Get available languages
+app.get('/api/localization/languages', async (req, res) => {
+  try {
+    const languages = await db.execute(sql`
+      SELECT code, name, is_active
+      FROM languages
+      WHERE is_active = true
+      ORDER BY name
+    `);
+
+    res.json({
+      success: true,
+      languages: languages.rows
+    });
+  } catch (error) {
+    console.error('Error fetching languages:', error);
+    res.status(500).json({ error: 'Failed to fetch languages' });
+  }
+});
+
+// Get translations for a specific language
+app.get('/api/localization/translations/:languageCode', async (req, res) => {
+  try {
+    const { languageCode } = req.params;
+
+    // Get language ID
+    const language = await db.execute(sql`
+      SELECT id FROM languages WHERE code = ${languageCode} AND is_active = true
+    `);
+
+    if (!language.rows || language.rows.length === 0) {
+      return res.status(404).json({ error: 'Language not found' });
+    }
+
+    const languageId = language.rows[0].id;
+
+    // Get all translations for this language
+    const translations = await db.execute(sql`
+      SELECT key, value
+      FROM translations
+      WHERE language_id = ${languageId}
+      ORDER BY key
+    `);
+
+    // Convert flat key-value pairs back to nested object
+    const translationObject = {};
+    translations.rows.forEach(({ key, value }) => {
+      const keyParts = key.split('.');
+      let current = translationObject;
+
+      for (let i = 0; i < keyParts.length - 1; i++) {
+        if (!current[keyParts[i]]) {
+          current[keyParts[i]] = {};
+        }
+        current = current[keyParts[i]];
+      }
+
+      current[keyParts[keyParts.length - 1]] = value;
+    });
+
+    res.json({
+      success: true,
+      languageCode,
+      translations: translationObject
+    });
+  } catch (error) {
+    console.error('Error fetching translations:', error);
+    res.status(500).json({ error: 'Failed to fetch translations' });
+  }
+});
 
 // Basic favicon route to prevent 404 errors
 app.get('/favicon.ico', (req, res) => {
@@ -364,21 +566,21 @@ app.post('/api/sessions/:sessionId/complete', async (req, res) => {
     // Get user's language preference for localized processing
     const book = await dbHelpers.getBook(bookId);
     const userPreferences = await dbHelpers.getUserPreferences(book.userId || book.user_id);
-    const userLanguage = userPreferences?.preferredLanguage || 'en';
+    const userLanguage = userPreferences?.preferredLanguage || 'English';
 
     // Language-specific prompts for book analysis
     const languagePrompts = {
-      en: {
+      'English': {
         prompt: "Look at this book page image carefully and extract comprehensive information. Extract the book title, determine up to 3 relevant categories, and generate 8-12 descriptive keywords with emojis. If you can see a clear title, use it. If unclear, suggest a descriptive title based on content. \n\nCategories to choose from: Fiction, Non-Fiction, Education, Science, History, Biography, Children, General\n\nFor keywords, include:\n- Language (🇬🇧 English, 🇸🇪 Swedish, etc.)\n- Topic/Subject (📚 Literature, 🔬 Science, etc.)\n- Level/Audience (👶 Children, 🎓 Academic, etc.)\n- Content type (📖 Book, 📋 Certificate, etc.)\n\nRespond in English only in strict JSON format:",
         categories: ["Fiction", "Non-Fiction", "Education", "Science", "History", "Biography", "Children", "General"]
       },
-      da: {
+      'Dansk': {
         prompt: "Se nøje på dette bogsidebillede og udtræk omfattende information. Udtræk bogtitlen, bestem op til 3 relevante kategorier, og generer 8-12 beskrivende nøgleord med emojis. Hvis du kan se en klar titel, brug den. Hvis uklart, foreslå en beskrivende titel baseret på indhold. \n\nKategorier at vælge fra: Fiktion, Faglitteratur, Uddannelse, Videnskab, Historie, Biografi, Børn, Generelt\n\nFor nøgleord, inkluder:\n- Sprog (🇩🇰 Dansk, 🇬🇧 Engelsk, etc.)\n- Emne/Område (📚 Litteratur, 🔬 Videnskab, etc.)\n- Niveau/Målgruppe (👶 Børn, 🎓 Akademisk, etc.)\n- Indholdstype (📖 Bog, 📋 Certifikat, etc.)\n\nSvar på dansk i strikt JSON-format:",
         categories: ["Fiktion", "Faglitteratur", "Uddannelse", "Videnskab", "Historie", "Biografi", "Børn", "Generelt"]
       }
     };
 
-    const currentLanguageConfig = languagePrompts[userLanguage] || languagePrompts.en;
+    const currentLanguageConfig = languagePrompts[userLanguage] || languagePrompts['English'];
     if (pages.length === 0) {
       return res.status(400).json({ error: 'No pages uploaded' });
     }

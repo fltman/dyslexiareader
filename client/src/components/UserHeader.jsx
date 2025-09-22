@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
+import { useLocalization } from '../contexts/LocalizationContext';
 import { Link } from 'react-router-dom';
 import './UserHeader.css';
 
 const UserHeader = () => {
   const { user, logout } = useAuth();
+  const { t } = useLocalization();
   const [showSettingsDialog, setShowSettingsDialog] = useState(false);
   const [hasElevenLabsSettings, setHasElevenLabsSettings] = useState(true);
 
@@ -16,7 +18,7 @@ const UserHeader = () => {
     ? `${user.firstName} ${user.lastName}`
     : user?.firstName
     ? user.firstName
-    : user?.email || 'User';
+    : user?.email || t('common.user');
 
   useEffect(() => {
     const checkElevenLabsSettings = async () => {
@@ -63,15 +65,15 @@ const UserHeader = () => {
   return (
     <header className="user-header">
       <div className="user-header-content">
-        <Link to="/" className="logo-link" title="Home">
-          <img src="/logo.png" alt="The Magical Everything Reader" className="app-logo" />
+        <Link to="/" className="logo-link" title={t('common.home')}>
+          <img src="/logo.png" alt={t('app.name')} className="app-logo" />
         </Link>
         <div className="user-info">
-          <span className="welcome-text">Welcome, {displayName}</span>
+          <span className="welcome-text">{t('userHeader.welcome', { name: displayName })}</span>
           <Link
             to="/settings"
             className={`settings-link ${!hasElevenLabsSettings ? 'settings-warning' : ''}`}
-            title="Settings"
+            title={t('common.settings')}
           >
             ⚙
             {!hasElevenLabsSettings && <span className="settings-indicator"></span>}
@@ -79,7 +81,7 @@ const UserHeader = () => {
           <button
             onClick={handleLogout}
             className="logout-button"
-            title="Sign out"
+            title={t('userHeader.signOut')}
           >
             ⇥
           </button>
@@ -90,7 +92,7 @@ const UserHeader = () => {
         <div className="settings-dialog-overlay" onClick={() => setShowSettingsDialog(false)}>
           <div className="settings-dialog" onClick={(e) => e.stopPropagation()}>
             <div className="settings-dialog-header">
-              <h3>ElevenLabs Settings Required</h3>
+              <h3>{t('userHeader.elevenLabsRequired')}</h3>
               <button
                 className="dialog-close"
                 onClick={() => setShowSettingsDialog(false)}
@@ -99,26 +101,26 @@ const UserHeader = () => {
               </button>
             </div>
             <div className="settings-dialog-body">
-              <p>To use the text-to-speech features, you need to configure your ElevenLabs settings:</p>
+              <p>{t('userHeader.ttsSetupRequired')}</p>
               <ul>
-                <li>ElevenLabs API Key</li>
-                <li>Voice ID</li>
+                <li>{t('userHeader.elevenLabsApiKey')}</li>
+                <li>{t('userHeader.voiceId')}</li>
               </ul>
-              <p>Please visit the Settings page to configure these options.</p>
+              <p>{t('userHeader.visitSettings')}</p>
             </div>
             <div className="settings-dialog-footer">
               <button
                 className="dialog-button secondary"
                 onClick={() => setShowSettingsDialog(false)}
               >
-                Later
+                {t('common.later')}
               </button>
               <Link
                 to="/settings"
                 className="dialog-button primary"
                 onClick={() => setShowSettingsDialog(false)}
               >
-                Go to Settings
+                {t('userHeader.goToSettings')}
               </Link>
             </div>
           </div>

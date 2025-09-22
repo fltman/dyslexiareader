@@ -47,6 +47,33 @@ async function migrate() {
     `);
     console.log('✅ User preferences table created/verified');
 
+    // Create languages table for storing available languages
+    await db.execute(sql`
+      CREATE TABLE IF NOT EXISTS languages (
+        id SERIAL PRIMARY KEY,
+        code TEXT UNIQUE NOT NULL,
+        name TEXT UNIQUE NOT NULL,
+        is_active BOOLEAN DEFAULT true,
+        created_at TIMESTAMP DEFAULT NOW(),
+        updated_at TIMESTAMP DEFAULT NOW()
+      )
+    `);
+    console.log('✅ Languages table created/verified');
+
+    // Create translations table for storing localization strings
+    await db.execute(sql`
+      CREATE TABLE IF NOT EXISTS translations (
+        id SERIAL PRIMARY KEY,
+        language_id INTEGER NOT NULL REFERENCES languages(id) ON DELETE CASCADE,
+        key TEXT NOT NULL,
+        value TEXT NOT NULL,
+        created_at TIMESTAMP DEFAULT NOW(),
+        updated_at TIMESTAMP DEFAULT NOW(),
+        UNIQUE(language_id, key)
+      )
+    `);
+    console.log('✅ Translations table created/verified');
+
     // Add userId column to books table if it doesn't exist
     await db.execute(sql`
       DO $$
@@ -109,12 +136,26 @@ async function migrate() {
       console.log('✅ Demo user preferences created');
     }
 
+    // Initialize default languages
+    await db.execute(sql`
+      INSERT INTO languages (code, name)
+      VALUES ('en', 'English'), ('da', 'Dansk')
+      ON CONFLICT (code) DO NOTHING
+    `);
+    console.log('✅ Default languages initialized');
+
     // Create indexes for performance
     await db.execute(sql`
       CREATE INDEX IF NOT EXISTS idx_books_user_id ON books(user_id);
     `);
     await db.execute(sql`
       CREATE INDEX IF NOT EXISTS idx_user_preferences_user_id ON user_preferences(user_id);
+    `);
+    await db.execute(sql`
+      CREATE INDEX IF NOT EXISTS idx_translations_language_id ON translations(language_id);
+    `);
+    await db.execute(sql`
+      CREATE INDEX IF NOT EXISTS idx_translations_key ON translations(key);
     `);
     console.log('✅ Indexes created');
 

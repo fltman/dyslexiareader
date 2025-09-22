@@ -6,7 +6,7 @@ import './Settings.css';
 
 const Settings = () => {
   const { user, logout } = useAuth();
-  const { t, currentLanguage, changeLanguage, getAvailableLanguages } = useLocalization();
+  const { t, currentLanguage, changeLanguage, getAvailableLanguages, addLanguage } = useLocalization();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState('');
@@ -32,6 +32,11 @@ const Settings = () => {
     elevenlabsAgentId: '',
     language: currentLanguage
   });
+
+  // Language request state
+  const [showLanguageRequest, setShowLanguageRequest] = useState(false);
+  const [requestedLanguage, setRequestedLanguage] = useState('');
+  const [isTranslating, setIsTranslating] = useState(false);
 
   // Load user preferences on mount and initialize name form
   useEffect(() => {
@@ -201,6 +206,55 @@ const Settings = () => {
     await changeLanguage(newLanguage);
   };
 
+  const handleRequestNewLanguage = async (e) => {
+    e.preventDefault();
+    if (!requestedLanguage.trim()) return;
+
+    setIsTranslating(true);
+    setError('');
+
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        setError(t('settings.pleaseLogin'));
+        return;
+      }
+
+      const response = await fetch('/api/localization/translate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          targetLanguage: requestedLanguage.trim()
+        })
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        // Add the new language to the localization context
+        addLanguage(requestedLanguage.trim(), data.translations);
+
+        // Switch to the new language
+        await changeLanguage(requestedLanguage.trim());
+
+        setMessage(`${requestedLanguage} language has been added and activated!`);
+        setShowLanguageRequest(false);
+        setRequestedLanguage('');
+      } else {
+        setError(data.error || t('settings.translationError'));
+      }
+    } catch (error) {
+      console.error('Translation error:', error);
+      setError(t('settings.translationError'));
+    } finally {
+      setIsTranslating(false);
+    }
+  };
+
   const handlePreferencesSubmit = async (e) => {
     e.preventDefault();
     setError('');
@@ -339,11 +393,62 @@ const Settings = () => {
               disabled={isLoading}
             >
               {getAvailableLanguages().map(lang => (
-                <option key={lang.code} value={lang.code}>
+                <option key={lang.name} value={lang.name}>
                   {lang.name}
                 </option>
               ))}
             </select>
+          </div>
+
+          <div className="language-request-section">
+            {!showLanguageRequest ? (
+              <button
+                type="button"
+                className="settings-button secondary"
+                onClick={() => setShowLanguageRequest(true)}
+                disabled={isLoading}
+              >
+                + Request New Language
+              </button>
+            ) : (
+              <form onSubmit={handleRequestNewLanguage} className="language-request-form">
+                <div className="form-group">
+                  <label htmlFor="requestedLanguage">Enter Language Name</label>
+                  <input
+                    type="text"
+                    id="requestedLanguage"
+                    value={requestedLanguage}
+                    onChange={(e) => setRequestedLanguage(e.target.value)}
+                    placeholder="e.g., Svenska, Français, Español..."
+                    disabled={isTranslating}
+                    required
+                  />
+                  <small className="form-help">
+                    Enter the language name in its native form (e.g., "Español" for Spanish)
+                  </small>
+                </div>
+                <div className="form-actions">
+                  <button
+                    type="submit"
+                    className="settings-button primary"
+                    disabled={isTranslating || !requestedLanguage.trim()}
+                  >
+                    {isTranslating ? t('settings.translating') : t('settings.createLanguage')}
+                  </button>
+                  <button
+                    type="button"
+                    className="settings-button secondary"
+                    onClick={() => {
+                      setShowLanguageRequest(false);
+                      setRequestedLanguage('');
+                    }}
+                    disabled={isTranslating}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </form>
+            )}
           </div>
         </section>
 

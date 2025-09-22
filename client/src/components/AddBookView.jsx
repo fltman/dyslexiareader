@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useLocalization } from '../contexts/LocalizationContext';
 import './AddBookView.css';
 
 const AddBookView = () => {
@@ -19,6 +20,7 @@ const AddBookView = () => {
     details: ''
   });
   const navigate = useNavigate();
+  const { t } = useLocalization();
 
   useEffect(() => {
     if (!initializing) {
@@ -72,7 +74,7 @@ const AddBookView = () => {
       if (data.status === 'processing' && data.progress) {
         setProcessingProgress({
           show: true,
-          currentStep: data.progress.currentStep || 'Processing...',
+          currentStep: data.progress.currentStep || t('addBook.processing'),
           stepsCompleted: data.progress.stepsCompleted || 0,
           totalSteps: data.progress.totalSteps || 1,
           details: data.progress.details || ''
@@ -91,7 +93,7 @@ const AddBookView = () => {
 
   const handleDone = async () => {
     if (pages.length === 0) {
-      alert('Please scan at least one page before finishing.');
+      alert(t('addBook.scanAtLeastOnePage'));
       return;
     }
 
@@ -104,14 +106,14 @@ const AddBookView = () => {
       });
 
       if (!response.ok) {
-        alert('Error processing book. Please try again.');
+        alert(t('addBook.processError'));
         setProcessing(false);
         setProcessingProgress({ show: false, currentStep: '', stepsCompleted: 0, totalSteps: 0, details: '' });
       }
       // Note: Navigation will happen automatically via pollForUpdates when status becomes 'completed'
     } catch (error) {
       console.error('Error completing book:', error);
-      alert('Error processing book. Please try again.');
+      alert(t('addBook.processError'));
       setProcessing(false);
       setProcessingProgress({ show: false, currentStep: '', stepsCompleted: 0, totalSteps: 0, details: '' });
     }
@@ -120,7 +122,7 @@ const AddBookView = () => {
   if (loading) {
     return (
       <div className="add-book-view">
-        <div className="loading">Setting up book scanning...</div>
+        <div className="loading">{t('addBook.settingUp')}</div>
       </div>
     );
   }
@@ -140,20 +142,20 @@ const AddBookView = () => {
       <div className="add-book-content">
         <div className="qr-section">
           <div className="qr-container">
-            <h2>Scan with your phone</h2>
+            <h2>{t('addBook.scanWithPhone')}</h2>
             <div className="qr-code">
               {qrCode ? (
-                <img src={qrCode} alt="QR Code for mobile scanning" />
+                <img src={qrCode} alt={t('addBook.qrCodeAlt')} />
               ) : (
-                <div className="qr-placeholder">Loading QR code...</div>
+                <div className="qr-placeholder">{t('addBook.loadingQR')}</div>
               )}
             </div>
             <p className="qr-instructions">
-              Scan this QR code with your phone's camera to start taking photos of book pages
+              {t('addBook.qrInstructions')}
             </p>
             {mobileUrl && (
               <div className="mobile-url">
-                <p className="url-label">Or visit this URL on your phone:</p>
+                <p className="url-label">{t('addBook.orVisitUrl')}</p>
                 <a href={mobileUrl} target="_blank" rel="noopener noreferrer" className="url-text">
                   {mobileUrl}
                 </a>
@@ -164,14 +166,14 @@ const AddBookView = () => {
 
         <div className="pages-section">
           <div className="pages-header">
-            <h2>Pages ({pages.length})</h2>
+            <h2>{t('addBook.pages', { count: pages.length })}</h2>
             {pages.length > 0 && (
               <button
                 className="done-button"
                 onClick={handleDone}
                 disabled={processing}
               >
-                {processing ? 'Processing with AI...' : 'Done'}
+                {processing ? t('addBook.processingWithAI') : t('common.done')}
               </button>
             )}
           </div>
@@ -180,17 +182,17 @@ const AddBookView = () => {
             {pages.length === 0 ? (
               <div className="no-pages">
                 <div className="no-pages-icon">📱</div>
-                <h3>No pages yet</h3>
-                <p>Use your phone to scan the QR code and start taking photos</p>
+                <h3>{t('addBook.noPagesYet')}</h3>
+                <p>{t('addBook.scanQRStart')}</p>
               </div>
             ) : (
               pages.map((page, index) => (
                 <div key={page.id} className="page-item">
-                  <div className="page-number">Page {page.pageNumber || (index + 1)}</div>
+                  <div className="page-number">{t('addBook.pageNumber', { number: page.pageNumber || (index + 1) })}</div>
                   <div className="page-preview">
                     <img
                       src={page.imagePath}
-                      alt={`Page ${page.pageNumber || (index + 1)}`}
+                      alt={t('addBook.pageNumber', { number: page.pageNumber || (index + 1) })}
                     />
                   </div>
                 </div>
@@ -202,7 +204,7 @@ const AddBookView = () => {
             <div className="scan-status">
               <div className="status-indicator active">
                 <div className="pulse"></div>
-                Scanning active - Continue taking photos on your phone
+                {t('addBook.scanningActive')}
               </div>
             </div>
           )}
@@ -213,7 +215,7 @@ const AddBookView = () => {
       {processingProgress.show && (
         <div className="processing-modal-overlay">
           <div className="processing-modal">
-            <h2>Processing Book</h2>
+            <h2>{t('addBook.processingBook')}</h2>
             <div className="progress-container">
               <div className="progress-bar">
                 <div
@@ -222,7 +224,10 @@ const AddBookView = () => {
                 />
               </div>
               <div className="progress-text">
-                {processingProgress.stepsCompleted} of {processingProgress.totalSteps} steps
+                {t('addBook.progressSteps', {
+                  completed: processingProgress.stepsCompleted,
+                  total: processingProgress.totalSteps
+                })}
               </div>
             </div>
             <div className="progress-current-step">

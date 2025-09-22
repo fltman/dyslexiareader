@@ -1,13 +1,11 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 
-// Import language files
-import enTranslations from '../locales/en.json';
-import daTranslations from '../locales/da.json';
+// Dynamic translations loaded from API
+const translations = {};
+const availableLanguages = [];
 
-const translations = {
-  en: enTranslations,
-  da: daTranslations
-};
+// Map language names to codes
+const languageCodeMap = {};
 
 const LocalizationContext = createContext();
 
@@ -20,13 +18,34 @@ export const useLocalization = () => {
 };
 
 export const LocalizationProvider = ({ children }) => {
-  const [currentLanguage, setCurrentLanguage] = useState('en');
+  const [currentLanguage, setCurrentLanguage] = useState('English');
   const [isLoading, setIsLoading] = useState(true);
 
-  // Load language preference on mount
+  // Load available languages and translations on mount
   useEffect(() => {
-    const loadLanguagePreference = async () => {
+    const initializeLocalization = async () => {
       try {
+        // First, load available languages
+        const languagesResponse = await fetch('/api/localization/languages');
+        if (languagesResponse.ok) {
+          const languagesData = await languagesResponse.json();
+
+          // Clear existing data
+          availableLanguages.length = 0;
+          Object.keys(languageCodeMap).forEach(key => delete languageCodeMap[key]);
+
+          // Populate available languages
+          languagesData.languages.forEach(lang => {
+            availableLanguages.push(lang);
+            languageCodeMap[lang.name] = lang.code;
+          });
+
+          console.log('✅ Loaded available languages:', availableLanguages.map(l => l.name));
+        }
+
+        // Determine which language to use
+        let targetLanguage = 'English';
+
         // Try to get from user preferences first
         const token = localStorage.getItem('token');
         if (token) {
@@ -39,47 +58,99 @@ export const LocalizationProvider = ({ children }) => {
 
           if (response.ok) {
             const data = await response.json();
-            if (data.preferences?.language) {
-              setCurrentLanguage(data.preferences.language);
-              setIsLoading(false);
-              return;
+            if (data.preferences?.preferredLanguage) {
+              targetLanguage = data.preferences.preferredLanguage;
             }
           }
         }
 
         // Fallback to localStorage
-        const savedLanguage = localStorage.getItem('language');
-        if (savedLanguage && translations[savedLanguage]) {
-          setCurrentLanguage(savedLanguage);
-        } else {
-          // Fallback to browser language
-          const browserLanguage = navigator.language.split('-')[0];
-          if (translations[browserLanguage]) {
-            setCurrentLanguage(browserLanguage);
+        if (targetLanguage === 'English') {
+          const savedLanguage = localStorage.getItem('language');
+          if (savedLanguage && availableLanguages.some(l => l.name === savedLanguage)) {
+            targetLanguage = savedLanguage;
+          } else {
+            // Fallback to browser language
+            const browserLanguageCode = navigator.language.split('-')[0];
+            const browserLanguage = availableLanguages.find(l => l.code === browserLanguageCode);
+            if (browserLanguage) {
+              targetLanguage = browserLanguage.name;
+            }
           }
         }
+
+        // Load translations for the target language
+        await loadTranslationsForLanguage(targetLanguage);
+        setCurrentLanguage(targetLanguage);
+
       } catch (error) {
-        console.error('Error loading language preference:', error);
+        console.error('Error initializing localization:', error);
+        // Fallback to English with default translations
+        await loadFallbackTranslations();
+        setCurrentLanguage('English');
       } finally {
         setIsLoading(false);
       }
     };
 
-    loadLanguagePreference();
+    initializeLocalization();
   }, []);
 
-  // Save language preference
-  const changeLanguage = async (newLanguage) => {
-    if (!translations[newLanguage]) {
-      console.error(`Language ${newLanguage} not supported`);
+  // Function to load translations for a specific language
+  const loadTranslationsForLanguage = async (languageName) => {
+    const languageCode = languageCodeMap[languageName];
+    if (!languageCode) {
+      console.warn(`No code found for language: ${languageName}`);
       return;
     }
 
-    setCurrentLanguage(newLanguage);
-    localStorage.setItem('language', newLanguage);
+    const response = await fetch(`/api/localization/translations/${languageCode}`);
+    if (response.ok) {
+      const data = await response.json();
+      translations[languageName] = data.translations;
+      console.log(`✅ Loaded translations for ${languageName}`);
+    } else {
+      throw new Error(`Failed to load translations for ${languageName}`);
+    }
+  };
 
-    // Save to user preferences if logged in
+  // Fallback translations if API fails
+  const loadFallbackTranslations = async () => {
+    translations['English'] = {
+      app: {
+        name: "The Magical Everything Reader",
+        tagline: "The ultimate reader for people with dyslexia"
+      },
+      auth: {
+        signIn: "Sign In",
+        email: "Email",
+        password: "Password"
+      },
+      common: {
+        loading: "Loading...",
+        error: "An error occurred"
+      }
+    };
+
+    if (!availableLanguages.some(l => l.name === 'English')) {
+      availableLanguages.push({ code: 'en', name: 'English', is_active: true });
+      languageCodeMap['English'] = 'en';
+    }
+  };
+
+  // Save language preference
+  const changeLanguage = async (newLanguage) => {
     try {
+      // Load translations if not already cached
+      if (!translations[newLanguage]) {
+        console.log(`Loading translations for ${newLanguage}...`);
+        await loadTranslationsForLanguage(newLanguage);
+      }
+
+      setCurrentLanguage(newLanguage);
+      localStorage.setItem('language', newLanguage);
+
+      // Save to user preferences if logged in
       const token = localStorage.getItem('token');
       if (token) {
         await fetch('/api/auth/preferences', {
@@ -89,11 +160,11 @@ export const LocalizationProvider = ({ children }) => {
             'Authorization': `Bearer ${token}`
           },
           credentials: 'include',
-          body: JSON.stringify({ language: newLanguage })
+          body: JSON.stringify({ preferredLanguage: newLanguage })
         });
       }
     } catch (error) {
-      console.error('Error saving language preference:', error);
+      console.error('Error changing language:', error);
     }
   };
 
@@ -133,10 +204,26 @@ export const LocalizationProvider = ({ children }) => {
 
   // Get available languages
   const getAvailableLanguages = () => {
-    return Object.keys(translations).map(code => ({
-      code,
-      name: t(`languages.${code}`)
+    return availableLanguages.map(lang => ({
+      code: lang.code,
+      name: lang.name
     }));
+  };
+
+  // Add new language dynamically
+  const addLanguage = (languageName, translationData) => {
+    translations[languageName] = translationData;
+
+    // Add to available languages if not already present
+    if (!availableLanguages.some(l => l.name === languageName)) {
+      const languageCode = languageName.toLowerCase().replace(/\s+/g, '_');
+      languageCodeMap[languageName] = languageCode;
+      availableLanguages.push({
+        code: languageCode,
+        name: languageName,
+        is_active: true
+      });
+    }
   };
 
   const value = {
@@ -144,6 +231,7 @@ export const LocalizationProvider = ({ children }) => {
     changeLanguage,
     t,
     getAvailableLanguages,
+    addLanguage,
     isLoading
   };
 
