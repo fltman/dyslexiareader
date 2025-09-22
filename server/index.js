@@ -360,6 +360,25 @@ app.post('/api/sessions/:sessionId/complete', async (req, res) => {
     // Get first page for AI processing
     const bookId = session.bookId || session.book_id;
     const pages = await dbHelpers.getBookPages(bookId);
+
+    // Get user's language preference for localized processing
+    const book = await dbHelpers.getBook(bookId);
+    const userPreferences = await dbHelpers.getUserPreferences(book.userId || book.user_id);
+    const userLanguage = userPreferences?.preferredLanguage || 'en';
+
+    // Language-specific prompts for book analysis
+    const languagePrompts = {
+      en: {
+        prompt: "Look at this book page image carefully and extract comprehensive information. Extract the book title, determine up to 3 relevant categories, and generate 8-12 descriptive keywords with emojis. If you can see a clear title, use it. If unclear, suggest a descriptive title based on content. \n\nCategories to choose from: Fiction, Non-Fiction, Education, Science, History, Biography, Children, General\n\nFor keywords, include:\n- Language (🇬🇧 English, 🇸🇪 Swedish, etc.)\n- Topic/Subject (📚 Literature, 🔬 Science, etc.)\n- Level/Audience (👶 Children, 🎓 Academic, etc.)\n- Content type (📖 Book, 📋 Certificate, etc.)\n\nRespond in English only in strict JSON format:",
+        categories: ["Fiction", "Non-Fiction", "Education", "Science", "History", "Biography", "Children", "General"]
+      },
+      da: {
+        prompt: "Se nøje på dette bogsidebillede og udtræk omfattende information. Udtræk bogtitlen, bestem op til 3 relevante kategorier, og generer 8-12 beskrivende nøgleord med emojis. Hvis du kan se en klar titel, brug den. Hvis uklart, foreslå en beskrivende titel baseret på indhold. \n\nKategorier at vælge fra: Fiktion, Faglitteratur, Uddannelse, Videnskab, Historie, Biografi, Børn, Generelt\n\nFor nøgleord, inkluder:\n- Sprog (🇩🇰 Dansk, 🇬🇧 Engelsk, etc.)\n- Emne/Område (📚 Litteratur, 🔬 Videnskab, etc.)\n- Niveau/Målgruppe (👶 Børn, 🎓 Akademisk, etc.)\n- Indholdstype (📖 Bog, 📋 Certifikat, etc.)\n\nSvar på dansk i strikt JSON-format:",
+        categories: ["Fiktion", "Faglitteratur", "Uddannelse", "Videnskab", "Historie", "Biografi", "Børn", "Generelt"]
+      }
+    };
+
+    const currentLanguageConfig = languagePrompts[userLanguage] || languagePrompts.en;
     if (pages.length === 0) {
       return res.status(400).json({ error: 'No pages uploaded' });
     }
@@ -418,7 +437,7 @@ app.post('/api/sessions/:sessionId/complete', async (req, res) => {
           content: [
             {
               type: "text",
-              text: "Look at this book page image carefully and extract comprehensive information. Extract the book title, determine up to 3 relevant categories, and generate 8-12 descriptive keywords with emojis. If you can see a clear title, use it. If unclear, suggest a descriptive title based on content. \n\nCategories to choose from: Fiction, Non-Fiction, Education, Science, History, Biography, Children, General\n\nFor keywords, include:\n- Language (🇬🇧 English, 🇸🇪 Swedish, etc.)\n- Topic/Subject (📚 Literature, 🔬 Science, etc.)\n- Level/Audience (👶 Children, 🎓 Academic, etc.)\n- Content type (📖 Book, 📋 Certificate, etc.)\n\nRespond only in strict JSON format:\n{\n  \"title\": \"Book Title Here\",\n  \"category\": \"Primary Category\",\n  \"categories\": [\"Category1\", \"Category2\", \"Category3\"],\n  \"keywords\": [\n    {\"label\": \"Keyword\", \"emoji\": \"🔤\", \"group\": \"language|topic|level|content\"},\n    {\"label\": \"Another\", \"emoji\": \"📚\", \"group\": \"topic\"}\n  ]\n}"
+              text: `${currentLanguageConfig.prompt}\n{\n  \"title\": \"Book Title Here\",\n  \"category\": \"Primary Category\",\n  \"categories\": [\"Category1\", \"Category2\", \"Category3\"],\n  \"keywords\": [\n    {\"label\": \"Keyword\", \"emoji\": \"🔤\", \"group\": \"language|topic|level|content\"},\n    {\"label\": \"Another\", \"emoji\": \"📚\", \"group\": \"topic\"}\n  ]\n}`
             },
             {
               type: "image_url",

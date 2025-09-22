@@ -1,0 +1,154 @@
+{
+  "app": {
+    "name": "The Magical Everything Reader",
+    "tagline": "The ultimate reader for people with dyslexia"
+  },
+  "auth": {
+    "login": "Login",
+    "register": "Register",
+    "logout": "Logout",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "forgotPassword": "Forgot Password?",
+    "noAccount": "Don't have an account?",
+    "hasAccount": "Already have an account?",
+    "loginButton": "Sign In",
+    "registerButton": "Create Account",
+    "loginError": "Invalid email or password",
+    "registerError": "Registration failed. Please try again.",
+    "passwordMismatch": "Passwords do not match",
+    "emailInvalid": "Please enter a valid email address",
+    "passwordTooShort": "Password must be at least 6 characters long",
+    "fieldRequired": "This field is required"
+  },
+  "navigation": {
+    "home": "Home",
+    "books": "Books",
+    "settings": "Settings",
+    "camera": "Camera",
+    "dashboard": "Dashboard"
+  },
+  "books": {
+    "title": "Your Books",
+    "subtitle": "Discover the magic of reading",
+    "addNew": "Add New Book",
+    "noBooks": "No books yet",
+    "noBooksMessage": "Start your reading journey by adding your first book!",
+    "processing": "Processing...",
+    "error": "Error loading books",
+    "deleteConfirm": "Are you sure you want to delete this book?",
+    "delete": "Delete",
+    "cancel": "Cancel",
+    "pages": "pages",
+    "page": "page"
+  },
+  "bookReader": {
+    "loading": "Loading book...",
+    "error": "Error loading book",
+    "noPages": "No pages found",
+    "previousPage": "Previous Page",
+    "nextPage": "Next Page",
+    "playAudio": "Play Audio",
+    "pauseAudio": "Pause Audio",
+    "stopAudio": "Stop Audio",
+    "textToSpeech": "Text to Speech",
+    "pageNumber": "Page {{current}} of {{total}}"
+  },
+  "camera": {
+    "title": "Take photos of book pages",
+    "tapButton": "Tap the camera button to take a photo",
+    "returnToApp": "Return to the main app when done",
+    "pagesCapture": "{{count}} pages captured",
+    "pageCapture": "{{count}} page captured",
+    "tips": {
+      "title": "📸 Tips for best results:",
+      "steady": "• Hold your phone steady",
+      "lighting": "• Ensure good lighting",
+      "wholePage": "• Capture the entire page",
+      "onePage": "• Take one page at a time"
+    },
+    "uploading": "Uploading page...",
+    "success": "✅ Page uploaded successfully!",
+    "error": "Failed to upload page. Please try again.",
+    "networkError": "Network error. Check your connection.",
+    "invalidSession": "Invalid session. Please scan the QR code again."
+  },
+  "settings": {
+    "title": "Settings",
+    "subtitle": "Manage your account and reading preferences",
+    "personalInfo": "Personal Information",
+    "updateName": "Update Name",
+    "changePassword": "Change Password",
+    "currentPassword": "Current Password",
+    "newPassword": "New Password",
+    "confirmNewPassword": "Confirm New Password",
+    "updating": "Updating...",
+    "saving": "Saving...",
+    "language": "Language",
+    "selectLanguage": "Select your preferred language",
+    "elevenlabs": {
+      "title": "ElevenLabs Text-to-Speech Settings",
+      "apiKey": "ElevenLabs API Key",
+      "apiKeyHelp": "Your ElevenLabs API key for text-to-speech functionality",
+      "voiceId": "Voice ID",
+      "voiceIdHelp": "The voice ID to use for speech synthesis",
+      "agentId": "Agent ID (Optional)",
+      "agentIdHelp": "Optional: Agent ID for conversational AI features",
+      "playbackSpeed": "Playback Speed",
+      "playbackSpeedHelp": "Default playback speed for text-to-speech audio",
+      "saveSettings": "Save ElevenLabs Settings",
+      "speeds": {
+        "slower": "0.5x (Slower)",
+        "normal": "1x (Normal)",
+        "faster": "2x (Faster)"
+      }
+    },
+    "messages": {
+      "nameUpdated": "Name updated successfully!",
+      "passwordUpdated": "Password updated successfully!",
+      "settingsUpdated": "Settings updated successfully!",
+      "preferencesUpdated": "Preferences updated successfully!",
+      "updateFailed": "Update failed. Please try again.",
+      "passwordsNoMatch": "New passwords do not match",
+      "passwordTooShort": "New password must be at least 6 characters long"
+    }
+  },
+  "qr": {
+    "title": "Scan to Add Pages",
+    "subtitle": "Open camera on your phone to scan this QR code",
+    "instructions": "Once scanned, you can take photos of book pages directly from your mobile device",
+    "sessionExpires": "Session expires in {{minutes}} minutes",
+    "newSession": "Generate New QR Code",
+    "error": "Error generating QR code"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "close": "Close",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "submit": "Submit",
+    "retry": "Retry",
+    "yes": "Yes",
+    "no": "No"
+  },
+  "languages": {
+    "en": "English",
+    "da": "Dansk (Danish)",
+    "sv": "Svenska (Swedish)",
+    "no": "Norsk (Norwegian)",
+    "de": "Deutsch (German)",
+    "fr": "Français (French)",
+    "es": "Español (Spanish)",
+    "it": "Italiano (Italian)"
+  }
+}

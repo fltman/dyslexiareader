@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
+import { LocalizationProvider } from './contexts/LocalizationContext';
 import AuthView from './components/AuthView';
 import UserHeader from './components/UserHeader';
 import BooksView from './components/BooksView';
@@ -68,9 +69,11 @@ const AppRoutes = () => {
 
 function App() {
   return (
-    <AuthProvider>
-      <AppRoutes />
-    </AuthProvider>
+    <LocalizationProvider>
+      <AuthProvider>
+        <AppRoutes />
+      </AuthProvider>
+    </LocalizationProvider>
   );
 }
 

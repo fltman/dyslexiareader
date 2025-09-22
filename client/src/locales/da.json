@@ -1,0 +1,154 @@
+{
+  "app": {
+    "name": "Den Magiske Alletings Læser",
+    "tagline": "Den ultimative læser til mennesker med ordblindhed"
+  },
+  "auth": {
+    "login": "Log ind",
+    "register": "Tilmeld",
+    "logout": "Log ud",
+    "email": "E-mail",
+    "password": "Adgangskode",
+    "confirmPassword": "Bekræft adgangskode",
+    "firstName": "Fornavn",
+    "lastName": "Efternavn",
+    "forgotPassword": "Glemt adgangskode?",
+    "noAccount": "Har du ikke en konto?",
+    "hasAccount": "Har du allerede en konto?",
+    "loginButton": "Log ind",
+    "registerButton": "Opret konto",
+    "loginError": "Ugyldig e-mail eller adgangskode",
+    "registerError": "Tilmelding mislykkedes. Prøv igen.",
+    "passwordMismatch": "Adgangskoderne stemmer ikke overens",
+    "emailInvalid": "Indtast venligst en gyldig e-mailadresse",
+    "passwordTooShort": "Adgangskoden skal være mindst 6 tegn lang",
+    "fieldRequired": "Dette felt er påkrævet"
+  },
+  "navigation": {
+    "home": "Hjem",
+    "books": "Bøger",
+    "settings": "Indstillinger",
+    "camera": "Kamera",
+    "dashboard": "Dashboard"
+  },
+  "books": {
+    "title": "Dine bøger",
+    "subtitle": "Oplev læsningens magi",
+    "addNew": "Tilføj ny bog",
+    "noBooks": "Ingen bøger endnu",
+    "noBooksMessage": "Start din læserejse ved at tilføje din første bog!",
+    "processing": "Behandler...",
+    "error": "Fejl ved indlæsning af bøger",
+    "deleteConfirm": "Er du sikker på, at du vil slette denne bog?",
+    "delete": "Slet",
+    "cancel": "Annuller",
+    "pages": "sider",
+    "page": "side"
+  },
+  "bookReader": {
+    "loading": "Indlæser bog...",
+    "error": "Fejl ved indlæsning af bog",
+    "noPages": "Ingen sider fundet",
+    "previousPage": "Forrige side",
+    "nextPage": "Næste side",
+    "playAudio": "Afspil lyd",
+    "pauseAudio": "Pause lyd",
+    "stopAudio": "Stop lyd",
+    "textToSpeech": "Tekst til tale",
+    "pageNumber": "Side {{current}} af {{total}}"
+  },
+  "camera": {
+    "title": "Tag billeder af bogsider",
+    "tapButton": "Tryk på kameraknappen for at tage et billede",
+    "returnToApp": "Vend tilbage til hovedappen når du er færdig",
+    "pagesCapture": "{{count}} sider taget",
+    "pageCapture": "{{count}} side taget",
+    "tips": {
+      "title": "📸 Tips til bedste resultater:",
+      "steady": "• Hold din telefon stabil",
+      "lighting": "• Sørg for god belysning",
+      "wholePage": "• Tag hele siden med",
+      "onePage": "• Tag én side ad gangen"
+    },
+    "uploading": "Uploader side...",
+    "success": "✅ Side uploadet succesfuldt!",
+    "error": "Kunne ikke uploade siden. Prøv igen.",
+    "networkError": "Netværksfejl. Tjek din forbindelse.",
+    "invalidSession": "Ugyldig session. Scan venligst QR-koden igen."
+  },
+  "settings": {
+    "title": "Indstillinger",
+    "subtitle": "Administrer din konto og læsepræferencer",
+    "personalInfo": "Personlige oplysninger",
+    "updateName": "Opdater navn",
+    "changePassword": "Skift adgangskode",
+    "currentPassword": "Nuværende adgangskode",
+    "newPassword": "Ny adgangskode",
+    "confirmNewPassword": "Bekræft ny adgangskode",
+    "updating": "Opdaterer...",
+    "saving": "Gemmer...",
+    "language": "Sprog",
+    "selectLanguage": "Vælg dit foretrukne sprog",
+    "elevenlabs": {
+      "title": "ElevenLabs tekst-til-tale indstillinger",
+      "apiKey": "ElevenLabs API-nøgle",
+      "apiKeyHelp": "Din ElevenLabs API-nøgle til tekst-til-tale funktionalitet",
+      "voiceId": "Stemme-ID",
+      "voiceIdHelp": "Stemme-ID'et der skal bruges til talesyntese",
+      "agentId": "Agent-ID (Valgfrit)",
+      "agentIdHelp": "Valgfrit: Agent-ID til conversational AI funktioner",
+      "playbackSpeed": "Afspilningshastighed",
+      "playbackSpeedHelp": "Standard afspilningshastighed for tekst-til-tale lyd",
+      "saveSettings": "Gem ElevenLabs indstillinger",
+      "speeds": {
+        "slower": "0.5x (Langsommere)",
+        "normal": "1x (Normal)",
+        "faster": "2x (Hurtigere)"
+      }
+    },
+    "messages": {
+      "nameUpdated": "Navn opdateret succesfuldt!",
+      "passwordUpdated": "Adgangskode opdateret succesfuldt!",
+      "settingsUpdated": "Indstillinger opdateret succesfuldt!",
+      "preferencesUpdated": "Præferencer opdateret succesfuldt!",
+      "updateFailed": "Opdatering mislykkedes. Prøv igen.",
+      "passwordsNoMatch": "Nye adgangskoder stemmer ikke overens",
+      "passwordTooShort": "Ny adgangskode skal være mindst 6 tegn lang"
+    }
+  },
+  "qr": {
+    "title": "Scan for at tilføje sider",
+    "subtitle": "Åbn kamera på din telefon for at scanne denne QR-kode",
+    "instructions": "Når den er scannet, kan du tage billeder af bogsider direkte fra din mobile enhed",
+    "sessionExpires": "Session udløber om {{minutes}} minutter",
+    "newSession": "Generer ny QR-kode",
+    "error": "Fejl ved generering af QR-kode"
+  },
+  "common": {
+    "loading": "Indlæser...",
+    "error": "Fejl",
+    "success": "Succes",
+    "save": "Gem",
+    "cancel": "Annuller",
+    "delete": "Slet",
+    "edit": "Rediger",
+    "close": "Luk",
+    "back": "Tilbage",
+    "next": "Næste",
+    "previous": "Forrige",
+    "submit": "Indsend",
+    "retry": "Prøv igen",
+    "yes": "Ja",
+    "no": "Nej"
+  },
+  "languages": {
+    "en": "English",
+    "da": "Dansk (Danish)",
+    "sv": "Svenska (Swedish)",
+    "no": "Norsk (Norwegian)",
+    "de": "Deutsch (German)",
+    "fr": "Français (French)",
+    "es": "Español (Spanish)",
+    "it": "Italiano (Italian)"
+  }
+}

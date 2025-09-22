@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { useLocalization } from '../contexts/LocalizationContext';
 import './Settings.css';
 
 const Settings = () => {
   const { user, logout } = useAuth();
+  const { t, currentLanguage, changeLanguage, getAvailableLanguages } = useLocalization();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState('');
@@ -27,7 +29,8 @@ const Settings = () => {
   const [preferences, setPreferences] = useState({
     elevenlabsApiKey: '',
     elevenlabsVoiceId: '',
-    elevenlabsAgentId: ''
+    elevenlabsAgentId: '',
+    language: currentLanguage
   });
 
   // Load user preferences on mount and initialize name form
@@ -70,7 +73,8 @@ const Settings = () => {
 
           setPreferences(prev => ({
             ...prev,
-            ...processedPreferences
+            ...processedPreferences,
+            language: processedPreferences.preferredLanguage || currentLanguage
           }));
         }
       } else if (response.status === 401 || response.status === 403) {
@@ -88,12 +92,12 @@ const Settings = () => {
     setMessage('');
 
     if (passwordForm.newPassword !== passwordForm.confirmPassword) {
-      setError('New passwords do not match');
+      setError(t('settings.messages.passwordsNoMatch'));
       return;
     }
 
     if (passwordForm.newPassword.length < 6) {
-      setError('New password must be at least 6 characters long');
+      setError(t('settings.messages.passwordTooShort'));
       return;
     }
 
@@ -122,7 +126,7 @@ const Settings = () => {
       const data = await response.json();
 
       if (response.ok) {
-        setMessage('Password updated successfully!');
+        setMessage(t('settings.messages.passwordUpdated'));
         setPasswordForm({
           currentPassword: '',
           newPassword: '',
@@ -133,10 +137,10 @@ const Settings = () => {
         logout();
         return;
       } else {
-        setError(data.error || 'Failed to update password');
+        setError(data.error || t('settings.messages.updateFailed'));
       }
     } catch (error) {
-      setError('Failed to update password');
+      setError(t('settings.messages.updateFailed'));
     } finally {
       setIsLoading(false);
     }
@@ -171,20 +175,30 @@ const Settings = () => {
       const data = await response.json();
 
       if (response.ok) {
-        setMessage('Name updated successfully!');
+        setMessage(t('settings.messages.nameUpdated'));
         // Update the auth context would happen automatically on next load
       } else if (response.status === 401 || response.status === 403) {
         console.warn('Authentication failed in Settings profile update, logging out');
         logout();
         return;
       } else {
-        setError(data.error || 'Failed to update name');
+        setError(data.error || t('settings.messages.updateFailed'));
       }
     } catch (error) {
-      setError('Failed to update name');
+      setError(t('settings.messages.updateFailed'));
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleLanguageChange = async (newLanguage) => {
+    setPreferences(prev => ({
+      ...prev,
+      language: newLanguage
+    }));
+
+    // Update the localization context
+    await changeLanguage(newLanguage);
   };
 
   const handlePreferencesSubmit = async (e) => {
@@ -216,6 +230,12 @@ const Settings = () => {
         delete preferencesToSave.elevenlabsAgentId;
       }
 
+      // Map language to preferredLanguage for database
+      if (preferencesToSave.language) {
+        preferencesToSave.preferredLanguage = preferencesToSave.language;
+        delete preferencesToSave.language;
+      }
+
       const response = await fetch('/api/auth/preferences', {
         method: 'PUT',
         headers,
@@ -226,16 +246,16 @@ const Settings = () => {
       const data = await response.json();
 
       if (response.ok) {
-        setMessage('Preferences updated successfully!');
+        setMessage(t('settings.messages.preferencesUpdated'));
       } else if (response.status === 401 || response.status === 403) {
         console.warn('Authentication failed in Settings preferences update, logging out');
         logout();
         return;
       } else {
-        setError(data.error || 'Failed to update preferences');
+        setError(data.error || t('settings.messages.updateFailed'));
       }
     } catch (error) {
-      setError('Failed to update preferences');
+      setError(t('settings.messages.updateFailed'));
     } finally {
       setIsLoading(false);
     }
@@ -250,8 +270,8 @@ const Settings = () => {
   return (
     <div className="settings-container">
       <div className="settings-header">
-        <h1>Settings</h1>
-        <p className="settings-subtitle">Manage your account and reading preferences</p>
+        <h1>{t('settings.title')}</h1>
+        <p className="settings-subtitle">{t('settings.subtitle')}</p>
       </div>
 
       {message && <div className="success-message">{message}</div>}
@@ -260,10 +280,10 @@ const Settings = () => {
       <div className="settings-content">
         {/* Account Section */}
         <section className="settings-section">
-          <h2>Personal Information</h2>
+          <h2>{t('settings.personalInfo')}</h2>
           <form onSubmit={handleNameSubmit} className="name-form">
             <div className="form-group">
-              <label htmlFor="firstName">First Name</label>
+              <label htmlFor="firstName">{t('auth.firstName')}</label>
               <input
                 type="text"
                 id="firstName"
@@ -273,12 +293,12 @@ const Settings = () => {
                   firstName: e.target.value
                 }))}
                 disabled={isLoading}
-                placeholder="Enter your first name"
+                placeholder={t('auth.firstName')}
               />
             </div>
 
             <div className="form-group">
-              <label htmlFor="lastName">Last Name</label>
+              <label htmlFor="lastName">{t('auth.lastName')}</label>
               <input
                 type="text"
                 id="lastName"
@@ -288,12 +308,12 @@ const Settings = () => {
                   lastName: e.target.value
                 }))}
                 disabled={isLoading}
-                placeholder="Enter your last name"
+                placeholder={t('auth.lastName')}
               />
             </div>
 
             <div className="form-group">
-              <label>Email:</label>
+              <label>{t('auth.email')}:</label>
               <span className="readonly-field">{user?.email}</span>
             </div>
 
@@ -302,17 +322,37 @@ const Settings = () => {
               className="settings-button primary"
               disabled={isLoading}
             >
-              {isLoading ? 'Updating...' : 'Update Name'}
+              {isLoading ? t('settings.updating') : t('settings.updateName')}
             </button>
           </form>
         </section>
 
+        {/* Language Preference Section */}
+        <section className="settings-section">
+          <h2>{t('settings.language')}</h2>
+          <div className="form-group">
+            <label htmlFor="language">{t('settings.selectLanguage')}</label>
+            <select
+              id="language"
+              value={preferences.language || currentLanguage}
+              onChange={(e) => handleLanguageChange(e.target.value)}
+              disabled={isLoading}
+            >
+              {getAvailableLanguages().map(lang => (
+                <option key={lang.code} value={lang.code}>
+                  {lang.name}
+                </option>
+              ))}
+            </select>
+          </div>
+        </section>
+
         {/* Password Change Section */}
         <section className="settings-section">
-          <h2>Change Password</h2>
+          <h2>{t('settings.changePassword')}</h2>
           <form onSubmit={handlePasswordSubmit} className="password-form">
             <div className="form-group">
-              <label htmlFor="currentPassword">Current Password</label>
+              <label htmlFor="currentPassword">{t('settings.currentPassword')}</label>
               <input
                 type="password"
                 id="currentPassword"
@@ -327,7 +367,7 @@ const Settings = () => {
             </div>
 
             <div className="form-group">
-              <label htmlFor="newPassword">New Password</label>
+              <label htmlFor="newPassword">{t('settings.newPassword')}</label>
               <input
                 type="password"
                 id="newPassword"
@@ -343,7 +383,7 @@ const Settings = () => {
             </div>
 
             <div className="form-group">
-              <label htmlFor="confirmPassword">Confirm New Password</label>
+              <label htmlFor="confirmPassword">{t('settings.confirmNewPassword')}</label>
               <input
                 type="password"
                 id="confirmPassword"
@@ -363,17 +403,17 @@ const Settings = () => {
               className="settings-button primary"
               disabled={isLoading}
             >
-              {isLoading ? 'Updating...' : 'Change Password'}
+              {isLoading ? t('settings.updating') : t('settings.changePassword')}
             </button>
           </form>
         </section>
 
         {/* ElevenLabs Settings Section */}
         <section className="settings-section">
-          <h2>ElevenLabs Text-to-Speech Settings</h2>
+          <h2>{t('settings.elevenlabs.title')}</h2>
           <form onSubmit={handlePreferencesSubmit} className="preferences-form">
             <div className="form-group">
-              <label htmlFor="elevenlabsApiKey">ElevenLabs API Key</label>
+              <label htmlFor="elevenlabsApiKey">{t('settings.elevenlabs.apiKey')}</label>
               <input
                 type="password"
                 id="elevenlabsApiKey"
@@ -386,12 +426,12 @@ const Settings = () => {
                 disabled={isLoading}
               />
               <small className="form-help">
-                Your ElevenLabs API key for text-to-speech functionality
+                {t('settings.elevenlabs.apiKeyHelp')}
               </small>
             </div>
 
             <div className="form-group">
-              <label htmlFor="elevenlabsVoiceId">Voice ID</label>
+              <label htmlFor="elevenlabsVoiceId">{t('settings.elevenlabs.voiceId')}</label>
               <input
                 type="text"
                 id="elevenlabsVoiceId"
@@ -404,12 +444,12 @@ const Settings = () => {
                 disabled={isLoading}
               />
               <small className="form-help">
-                The voice ID to use for speech synthesis
+                {t('settings.elevenlabs.voiceIdHelp')}
               </small>
             </div>
 
             <div className="form-group">
-              <label htmlFor="elevenlabsAgentId">Agent ID (Optional)</label>
+              <label htmlFor="elevenlabsAgentId">{t('settings.elevenlabs.agentId')}</label>
               <input
                 type="text"
                 id="elevenlabsAgentId"
@@ -418,16 +458,16 @@ const Settings = () => {
                   ...prev,
                   elevenlabsAgentId: e.target.value
                 }))}
-                placeholder="Agent ID for conversational AI"
+                placeholder={t('settings.elevenlabs.agentId')}
                 disabled={isLoading}
               />
               <small className="form-help">
-                Optional: Agent ID for conversational AI features
+                {t('settings.elevenlabs.agentIdHelp')}
               </small>
             </div>
 
             <div className="form-group">
-              <label htmlFor="playbackSpeed">Playback Speed</label>
+              <label htmlFor="playbackSpeed">{t('settings.elevenlabs.playbackSpeed')}</label>
               <select
                 id="playbackSpeed"
                 value={preferences.playbackSpeed ? parseFloat(preferences.playbackSpeed).toFixed(1) : '1.0'}
@@ -437,15 +477,15 @@ const Settings = () => {
                 }))}
                 disabled={isLoading}
               >
-                <option value="0.5">0.5x (Slower)</option>
+                <option value="0.5">{t('settings.elevenlabs.speeds.slower')}</option>
                 <option value="0.75">0.75x</option>
-                <option value="1.0">1x (Normal)</option>
+                <option value="1.0">{t('settings.elevenlabs.speeds.normal')}</option>
                 <option value="1.25">1.25x</option>
                 <option value="1.5">1.5x</option>
-                <option value="2.0">2x (Faster)</option>
+                <option value="2.0">{t('settings.elevenlabs.speeds.faster')}</option>
               </select>
               <small className="form-help">
-                Default playback speed for text-to-speech audio
+                {t('settings.elevenlabs.playbackSpeedHelp')}
               </small>
             </div>
 
@@ -454,7 +494,7 @@ const Settings = () => {
               className="settings-button primary"
               disabled={isLoading}
             >
-              {isLoading ? 'Saving...' : 'Save ElevenLabs Settings'}
+              {isLoading ? t('settings.saving') : t('settings.elevenlabs.saveSettings')}
             </button>
           </form>
         </section>
