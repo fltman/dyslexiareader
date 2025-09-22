@@ -55,11 +55,17 @@
     "processing": "Behandler...",
     "error": "Fejl ved indlæsning af bøger",
     "deleteConfirm": "Er du sikker på, at du vil slette denne bog?",
+    "deleteConfirmation": "Er du sikker på, at du vil slette '{{title}}'?",
+    "deleteWarning": "Denne handling kan ikke fortrydes. Alle sider og indhold vil blive permanent fjernet.",
+    "deleting": "Sletter...",
+    "deleteError": "Kunne ikke slette bog. Prøv igen.",
+    "thisBook": "denne bog",
     "delete": "Slet",
     "deleteBook": "Slet bog",
     "cancel": "Annuller",
     "searchPlaceholder": "Søg bøger efter titel, forfatter eller indhold...",
     "unknownAuthor": "Ukendt forfatter",
+    "book": "Bog",
     "pages": "sider",
     "page": "side"
   },
@@ -160,11 +166,18 @@
     "no": "Nej",
     "home": "Hjem",
     "settings": "Indstillinger",
-    "user": "Bruger"
+    "user": "Bruger",
+    "later": "Måske senere"
   },
   "userHeader": {
     "welcome": "Velkommen, {{name}}!",
-    "signOut": "Log ud"
+    "signOut": "Log ud",
+    "elevenLabsRequired": "ElevenLabs-opsætning påkrævet",
+    "ttsSetupRequired": "For at aktivere tekst-til-tale funktionalitet skal du angive:",
+    "elevenLabsApiKey": "ElevenLabs API-nøgle",
+    "voiceId": "Stemme-ID til stemmesyntese",
+    "visitSettings": "Besøg din indstillingsside for at konfigurere disse muligheder og låse den fulde læseoplevelse op.",
+    "goToSettings": "Gå til indstillinger"
   },
   "languages": {
     "en": "English",

@@ -55,11 +55,17 @@
     "processing": "Processing...",
     "error": "Error loading books",
     "deleteConfirm": "Are you sure you want to delete this book?",
+    "deleteConfirmation": "Are you sure you want to delete '{{title}}'?",
+    "deleteWarning": "This action cannot be undone. All pages and content will be permanently removed.",
+    "deleting": "Deleting...",
+    "deleteError": "Failed to delete book. Please try again.",
+    "thisBook": "this book",
     "delete": "Delete",
     "deleteBook": "Delete Book",
     "cancel": "Cancel",
     "searchPlaceholder": "Search books by title, author, or content...",
     "unknownAuthor": "Unknown Author",
+    "book": "Book",
     "pages": "pages",
     "page": "page"
   },
@@ -160,11 +166,18 @@
     "no": "No",
     "home": "Home",
     "settings": "Settings",
-    "user": "User"
+    "user": "User",
+    "later": "Maybe Later"
   },
   "userHeader": {
     "welcome": "Welcome, {{name}}!",
-    "signOut": "Sign Out"
+    "signOut": "Sign Out",
+    "elevenLabsRequired": "ElevenLabs Setup Required",
+    "ttsSetupRequired": "To enable text-to-speech functionality, you need to provide:",
+    "elevenLabsApiKey": "ElevenLabs API Key",
+    "voiceId": "Voice ID for speech synthesis",
+    "visitSettings": "Visit your settings page to configure these options and unlock the full reading experience.",
+    "goToSettings": "Go to Settings"
   },
   "languages": {
     "en": "English",
