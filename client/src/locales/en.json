@@ -185,7 +185,8 @@
     "processing": "Processing...",
     "detectingText": "Detecting text...",
     "bookNotFound": "Book not found",
-    "backToBooks": "Back to Books"
+    "backToBooks": "Back to Books",
+    "clickToPlay": "Click to play"
   },
   "languages": {
     "en": "English",

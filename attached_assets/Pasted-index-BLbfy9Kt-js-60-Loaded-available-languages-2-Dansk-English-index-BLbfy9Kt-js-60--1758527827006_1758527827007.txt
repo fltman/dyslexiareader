@@ -1,0 +1,303 @@
+index-BLbfy9Kt.js:60 ✅ Loaded available languages: (2) ['Dansk', 'English']
+index-BLbfy9Kt.js:60 🔄 Treating 'en' as language code, mapped to 'English'
+index-BLbfy9Kt.js:60 ✅ Loaded translations for English (code: en)
+index-BLbfy9Kt.js:60 📚 Updating agent knowledge for book ID: 65
+index-BLbfy9Kt.js:60 🎛️ Loaded playback speed from preferences: 1
+index-BLbfy9Kt.js:60 🟢 Rendering 0 text block overlays, imageRef: false
+index-BLbfy9Kt.js:60 📄 Loading text blocks for page: 0 pageId: 51
+index-BLbfy9Kt.js:60 🗺️ Current cache state: []
+index-BLbfy9Kt.js:60 🌍 No cache found, fetching from API...
+index-BLbfy9Kt.js:60 🔍 Fetching text blocks for pageId: 51
+index-BLbfy9Kt.js:60 🟢 Rendering 0 text block overlays, imageRef: true
+index-BLbfy9Kt.js:60 📦 Fetched text blocks: 19 blocks
+index-BLbfy9Kt.js:60 ✅ Fetched 19 text blocks from API for page 51
+index-BLbfy9Kt.js:60 🗺️ Updated cache, now contains: ['51']
+index-BLbfy9Kt.js:60 💻 Setting text blocks for current page: 19 blocks
+index-BLbfy9Kt.js:60 🟢 Rendering 19 text block overlays, imageRef: true
+index-BLbfy9Kt.js:60 🟢 Rendering block: 769 status: completed position: {x: 1, y: 44, width: 135, height: 30}
+index-BLbfy9Kt.js:60 Translation key "bookViewer.clickToPlay" is not a string
+overrideMethod @ hook.js:608
+t @ index-BLbfy9Kt.js:60
+(anonymous) @ index-BLbfy9Kt.js:60
+Ey @ index-BLbfy9Kt.js:60
+Nc @ index-BLbfy9Kt.js:48
+Xc @ index-BLbfy9Kt.js:48
+Tf @ index-BLbfy9Kt.js:48
+Wf @ index-BLbfy9Kt.js:48
+Qm @ index-BLbfy9Kt.js:48
+ds @ index-BLbfy9Kt.js:48
+Zf @ index-BLbfy9Kt.js:48
+rd @ index-BLbfy9Kt.js:48
+at @ index-BLbfy9Kt.js:17
+index-BLbfy9Kt.js:60 🟢 Rendering block: 770 status: completed position: {x: 1, y: 206, width: 102, height: 47}
+index-BLbfy9Kt.js:60 Translation key "bookViewer.clickToPlay" is not a string
+overrideMethod @ hook.js:608
+t @ index-BLbfy9Kt.js:60
+(anonymous) @ index-BLbfy9Kt.js:60
+Ey @ index-BLbfy9Kt.js:60
+Nc @ index-BLbfy9Kt.js:48
+Xc @ index-BLbfy9Kt.js:48
+Tf @ index-BLbfy9Kt.js:48
+Wf @ index-BLbfy9Kt.js:48
+Qm @ index-BLbfy9Kt.js:48
+ds @ index-BLbfy9Kt.js:48
+Zf @ index-BLbfy9Kt.js:48
+rd @ index-BLbfy9Kt.js:48
+at @ index-BLbfy9Kt.js:17
+index-BLbfy9Kt.js:60 🟢 Rendering block: 771 status: completed position: {x: 1, y: 2198, width: 104, height: 27}
+index-BLbfy9Kt.js:60 Translation key "bookViewer.clickToPlay" is not a string
+overrideMethod @ hook.js:608
+t @ index-BLbfy9Kt.js:60
+(anonymous) @ index-BLbfy9Kt.js:60
+Ey @ index-BLbfy9Kt.js:60
+Nc @ index-BLbfy9Kt.js:48
+Xc @ index-BLbfy9Kt.js:48
+Tf @ index-BLbfy9Kt.js:48
+Wf @ index-BLbfy9Kt.js:48
+Qm @ index-BLbfy9Kt.js:48
+ds @ index-BLbfy9Kt.js:48
+Zf @ index-BLbfy9Kt.js:48
+rd @ index-BLbfy9Kt.js:48
+at @ index-BLbfy9Kt.js:17
+index-BLbfy9Kt.js:60 🟢 Rendering block: 772 status: completed position: {x: 1, y: 2253, width: 84, height: 24}
+index-BLbfy9Kt.js:60 Translation key "bookViewer.clickToPlay" is not a string
+overrideMethod @ hook.js:608
+t @ index-BLbfy9Kt.js:60
+(anonymous) @ index-BLbfy9Kt.js:60
+Ey @ index-BLbfy9Kt.js:60
+Nc @ index-BLbfy9Kt.js:48
+Xc @ index-BLbfy9Kt.js:48
+Tf @ index-BLbfy9Kt.js:48
+Wf @ index-BLbfy9Kt.js:48
+Qm @ index-BLbfy9Kt.js:48
+ds @ index-BLbfy9Kt.js:48
+Zf @ index-BLbfy9Kt.js:48
+rd @ index-BLbfy9Kt.js:48
+at @ index-BLbfy9Kt.js:17
+index-BLbfy9Kt.js:60 🟢 Rendering block: 773 status: completed position: {x: 555, y: 0, width: 627, height: 234}
+index-BLbfy9Kt.js:60 Translation key "bookViewer.clickToPlay" is not a string
+overrideMethod @ hook.js:608
+t @ index-BLbfy9Kt.js:60
+(anonymous) @ index-BLbfy9Kt.js:60
+Ey @ index-BLbfy9Kt.js:60
+Nc @ index-BLbfy9Kt.js:48
+Xc @ index-BLbfy9Kt.js:48
+Tf @ index-BLbfy9Kt.js:48
+Wf @ index-BLbfy9Kt.js:48
+Qm @ index-BLbfy9Kt.js:48
+ds @ index-BLbfy9Kt.js:48
+Zf @ index-BLbfy9Kt.js:48
+rd @ index-BLbfy9Kt.js:48
+at @ index-BLbfy9Kt.js:17
+index-BLbfy9Kt.js:60 🟢 Rendering block: 774 status: completed position: {x: 824, y: 809, width: 886, height: 105}
+index-BLbfy9Kt.js:60 Translation key "bookViewer.clickToPlay" is not a string
+overrideMethod @ hook.js:608
+t @ index-BLbfy9Kt.js:60
+(anonymous) @ index-BLbfy9Kt.js:60
+Ey @ index-BLbfy9Kt.js:60
+Nc @ index-BLbfy9Kt.js:48
+Xc @ index-BLbfy9Kt.js:48
+Tf @ index-BLbfy9Kt.js:48
+Wf @ index-BLbfy9Kt.js:48
+Qm @ index-BLbfy9Kt.js:48
+ds @ index-BLbfy9Kt.js:48
+Zf @ index-BLbfy9Kt.js:48
+rd @ index-BLbfy9Kt.js:48
+at @ index-BLbfy9Kt.js:17
+index-BLbfy9Kt.js:60 🟢 Rendering block: 775 status: completed position: {x: 448, y: 2009, width: 1621, height: 151}
+index-BLbfy9Kt.js:60 Translation key "bookViewer.clickToPlay" is not a string
+overrideMethod @ hook.js:608
+t @ index-BLbfy9Kt.js:60
+(anonymous) @ index-BLbfy9Kt.js:60
+Ey @ index-BLbfy9Kt.js:60
+Nc @ index-BLbfy9Kt.js:48
+Xc @ index-BLbfy9Kt.js:48
+Tf @ index-BLbfy9Kt.js:48
+Wf @ index-BLbfy9Kt.js:48
+Qm @ index-BLbfy9Kt.js:48
+ds @ index-BLbfy9Kt.js:48
+Zf @ index-BLbfy9Kt.js:48
+rd @ index-BLbfy9Kt.js:48
+at @ index-BLbfy9Kt.js:17
+index-BLbfy9Kt.js:60 🟢 Rendering block: 776 status: completed position: {x: 914, y: 2316, width: 691, height: 53}
+index-BLbfy9Kt.js:60 Translation key "bookViewer.clickToPlay" is not a string
+overrideMethod @ hook.js:608
+t @ index-BLbfy9Kt.js:60
+(anonymous) @ index-BLbfy9Kt.js:60
+Ey @ index-BLbfy9Kt.js:60
+Nc @ index-BLbfy9Kt.js:48
+Xc @ index-BLbfy9Kt.js:48
+Tf @ index-BLbfy9Kt.js:48
+Wf @ index-BLbfy9Kt.js:48
+Qm @ index-BLbfy9Kt.js:48
+ds @ index-BLbfy9Kt.js:48
+Zf @ index-BLbfy9Kt.js:48
+rd @ index-BLbfy9Kt.js:48
+at @ index-BLbfy9Kt.js:17
+index-BLbfy9Kt.js:60 🟢 Rendering block: 777 status: completed position: {x: 540, y: 2435, width: 1431, height: 49}
+index-BLbfy9Kt.js:60 Translation key "bookViewer.clickToPlay" is not a string
+overrideMethod @ hook.js:608
+t @ index-BLbfy9Kt.js:60
+(anonymous) @ index-BLbfy9Kt.js:60
+Ey @ index-BLbfy9Kt.js:60
+Nc @ index-BLbfy9Kt.js:48
+Xc @ index-BLbfy9Kt.js:48
+Tf @ index-BLbfy9Kt.js:48
+Wf @ index-BLbfy9Kt.js:48
+Qm @ index-BLbfy9Kt.js:48
+ds @ index-BLbfy9Kt.js:48
+Zf @ index-BLbfy9Kt.js:48
+rd @ index-BLbfy9Kt.js:48
+at @ index-BLbfy9Kt.js:17
+index-BLbfy9Kt.js:60 🟢 Rendering block: 778 status: completed position: {x: 160, y: 2528, width: 81, height: 19}
+index-BLbfy9Kt.js:60 Translation key "bookViewer.clickToPlay" is not a string
+overrideMethod @ hook.js:608
+t @ index-BLbfy9Kt.js:60
+(anonymous) @ index-BLbfy9Kt.js:60
+Ey @ index-BLbfy9Kt.js:60
+Nc @ index-BLbfy9Kt.js:48
+Xc @ index-BLbfy9Kt.js:48
+Tf @ index-BLbfy9Kt.js:48
+Wf @ index-BLbfy9Kt.js:48
+Qm @ index-BLbfy9Kt.js:48
+ds @ index-BLbfy9Kt.js:48
+Zf @ index-BLbfy9Kt.js:48
+rd @ index-BLbfy9Kt.js:48
+at @ index-BLbfy9Kt.js:17
+index-BLbfy9Kt.js:60 🟢 Rendering block: 779 status: completed position: {x: 699, y: 2573, width: 72, height: 20}
+index-BLbfy9Kt.js:60 Translation key "bookViewer.clickToPlay" is not a string
+overrideMethod @ hook.js:608
+t @ index-BLbfy9Kt.js:60
+(anonymous) @ index-BLbfy9Kt.js:60
+Ey @ index-BLbfy9Kt.js:60
+Nc @ index-BLbfy9Kt.js:48
+Xc @ index-BLbfy9Kt.js:48
+Tf @ index-BLbfy9Kt.js:48
+Wf @ index-BLbfy9Kt.js:48
+Qm @ index-BLbfy9Kt.js:48
+ds @ index-BLbfy9Kt.js:48
+Zf @ index-BLbfy9Kt.js:48
+rd @ index-BLbfy9Kt.js:48
+at @ index-BLbfy9Kt.js:17
+index-BLbfy9Kt.js:60 🟢 Rendering block: 780 status: completed position: {x: 468, y: 3646, width: 146, height: 74}
+index-BLbfy9Kt.js:60 Translation key "bookViewer.clickToPlay" is not a string
+overrideMethod @ hook.js:608
+t @ index-BLbfy9Kt.js:60
+(anonymous) @ index-BLbfy9Kt.js:60
+Ey @ index-BLbfy9Kt.js:60
+Nc @ index-BLbfy9Kt.js:48
+Xc @ index-BLbfy9Kt.js:48
+Tf @ index-BLbfy9Kt.js:48
+Wf @ index-BLbfy9Kt.js:48
+Qm @ index-BLbfy9Kt.js:48
+ds @ index-BLbfy9Kt.js:48
+Zf @ index-BLbfy9Kt.js:48
+rd @ index-BLbfy9Kt.js:48
+at @ index-BLbfy9Kt.js:17
+index-BLbfy9Kt.js:60 🟢 Rendering block: 781 status: completed position: {x: 1649, y: 2548, width: 41, height: 37}
+index-BLbfy9Kt.js:60 Translation key "bookViewer.clickToPlay" is not a string
+overrideMethod @ hook.js:608
+t @ index-BLbfy9Kt.js:60
+(anonymous) @ index-BLbfy9Kt.js:60
+Ey @ index-BLbfy9Kt.js:60
+Nc @ index-BLbfy9Kt.js:48
+Xc @ index-BLbfy9Kt.js:48
+Tf @ index-BLbfy9Kt.js:48
+Wf @ index-BLbfy9Kt.js:48
+Qm @ index-BLbfy9Kt.js:48
+ds @ index-BLbfy9Kt.js:48
+Zf @ index-BLbfy9Kt.js:48
+rd @ index-BLbfy9Kt.js:48
+at @ index-BLbfy9Kt.js:17
+index-BLbfy9Kt.js:60 🟢 Rendering block: 782 status: completed position: {x: 1642, y: 2544, width: 88, height: 73}
+index-BLbfy9Kt.js:60 Translation key "bookViewer.clickToPlay" is not a string
+overrideMethod @ hook.js:608
+t @ index-BLbfy9Kt.js:60
+(anonymous) @ index-BLbfy9Kt.js:60
+Ey @ index-BLbfy9Kt.js:60
+Nc @ index-BLbfy9Kt.js:48
+Xc @ index-BLbfy9Kt.js:48
+Tf @ index-BLbfy9Kt.js:48
+Wf @ index-BLbfy9Kt.js:48
+Qm @ index-BLbfy9Kt.js:48
+ds @ index-BLbfy9Kt.js:48
+Zf @ index-BLbfy9Kt.js:48
+rd @ index-BLbfy9Kt.js:48
+at @ index-BLbfy9Kt.js:17
+index-BLbfy9Kt.js:60 🟢 Rendering block: 783 status: completed position: {x: 2202, y: 2552, width: 92, height: 80}
+index-BLbfy9Kt.js:60 Translation key "bookViewer.clickToPlay" is not a string
+overrideMethod @ hook.js:608
+t @ index-BLbfy9Kt.js:60
+(anonymous) @ index-BLbfy9Kt.js:60
+Ey @ index-BLbfy9Kt.js:60
+Nc @ index-BLbfy9Kt.js:48
+Xc @ index-BLbfy9Kt.js:48
+Tf @ index-BLbfy9Kt.js:48
+Wf @ index-BLbfy9Kt.js:48
+Qm @ index-BLbfy9Kt.js:48
+ds @ index-BLbfy9Kt.js:48
+Zf @ index-BLbfy9Kt.js:48
+rd @ index-BLbfy9Kt.js:48
+at @ index-BLbfy9Kt.js:17
+index-BLbfy9Kt.js:60 🟢 Rendering block: 784 status: completed position: {x: 2636, y: 1556, width: 388, height: 79}
+index-BLbfy9Kt.js:60 Translation key "bookViewer.clickToPlay" is not a string
+overrideMethod @ hook.js:608
+t @ index-BLbfy9Kt.js:60
+(anonymous) @ index-BLbfy9Kt.js:60
+Ey @ index-BLbfy9Kt.js:60
+Nc @ index-BLbfy9Kt.js:48
+Xc @ index-BLbfy9Kt.js:48
+Tf @ index-BLbfy9Kt.js:48
+Wf @ index-BLbfy9Kt.js:48
+Qm @ index-BLbfy9Kt.js:48
+ds @ index-BLbfy9Kt.js:48
+Zf @ index-BLbfy9Kt.js:48
+rd @ index-BLbfy9Kt.js:48
+at @ index-BLbfy9Kt.js:17
+index-BLbfy9Kt.js:60 🟢 Rendering block: 785 status: completed position: {x: 2535, y: 1678, width: 489, height: 123}
+index-BLbfy9Kt.js:60 Translation key "bookViewer.clickToPlay" is not a string
+overrideMethod @ hook.js:608
+t @ index-BLbfy9Kt.js:60
+(anonymous) @ index-BLbfy9Kt.js:60
+Ey @ index-BLbfy9Kt.js:60
+Nc @ index-BLbfy9Kt.js:48
+Xc @ index-BLbfy9Kt.js:48
+Tf @ index-BLbfy9Kt.js:48
+Wf @ index-BLbfy9Kt.js:48
+Qm @ index-BLbfy9Kt.js:48
+ds @ index-BLbfy9Kt.js:48
+Zf @ index-BLbfy9Kt.js:48
+rd @ index-BLbfy9Kt.js:48
+at @ index-BLbfy9Kt.js:17
+index-BLbfy9Kt.js:60 🟢 Rendering block: 786 status: completed position: {x: 2757, y: 1835, width: 148, height: 42}
+index-BLbfy9Kt.js:60 Translation key "bookViewer.clickToPlay" is not a string
+overrideMethod @ hook.js:608
+t @ index-BLbfy9Kt.js:60
+(anonymous) @ index-BLbfy9Kt.js:60
+Ey @ index-BLbfy9Kt.js:60
+Nc @ index-BLbfy9Kt.js:48
+Xc @ index-BLbfy9Kt.js:48
+Tf @ index-BLbfy9Kt.js:48
+Wf @ index-BLbfy9Kt.js:48
+Qm @ index-BLbfy9Kt.js:48
+ds @ index-BLbfy9Kt.js:48
+Zf @ index-BLbfy9Kt.js:48
+rd @ index-BLbfy9Kt.js:48
+at @ index-BLbfy9Kt.js:17
+index-BLbfy9Kt.js:60 🟢 Rendering block: 787 status: completed position: {x: 2611, y: 3280, width: 77, height: 38}
+index-BLbfy9Kt.js:60 Translation key "bookViewer.clickToPlay" is not a string
+overrideMethod @ hook.js:608
+t @ index-BLbfy9Kt.js:60
+(anonymous) @ index-BLbfy9Kt.js:60
+Ey @ index-BLbfy9Kt.js:60
+Nc @ index-BLbfy9Kt.js:48
+Xc @ index-BLbfy9Kt.js:48
+Tf @ index-BLbfy9Kt.js:48
+Wf @ index-BLbfy9Kt.js:48
+Qm @ index-BLbfy9Kt.js:48
+ds @ index-BLbfy9Kt.js:48
+Zf @ index-BLbfy9Kt.js:48
+rd @ index-BLbfy9Kt.js:48
+at @ index-BLbfy9Kt.js:17
+index-BLbfy9Kt.js:60 Image loaded, ready for detection
+index-BLbfy9Kt.js:60 ✅ Agent knowledge updated successfully

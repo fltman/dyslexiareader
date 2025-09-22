@@ -185,7 +185,8 @@
     "processing": "Behandler...",
     "detectingText": "Registrerer tekst...",
     "bookNotFound": "Bog ikke fundet",
-    "backToBooks": "Tilbage til bøger"
+    "backToBooks": "Tilbage til bøger",
+    "clickToPlay": "Klik for at afspille"
   },
   "languages": {
     "en": "English",
