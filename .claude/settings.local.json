@@ -40,7 +40,8 @@
       "WebFetch(domain:elevenlabs.io)",
       "Bash(git fetch:*)",
       "Bash(git merge:*)",
-      "Read(//Users/andersbj/Desktop/**)"
+      "Read(//Users/andersbj/Desktop/**)",
+      "Bash(git restore:*)"
     ],
     "deny": [],
     "ask": []
