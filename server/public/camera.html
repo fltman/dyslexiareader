@@ -291,6 +291,46 @@
             document.getElementById('cameraBtn').style.display = 'none';
         }
 
+        // Convert image to AVIF format with fallback to JPEG
+        async function convertToOptimalFormat(file) {
+            return new Promise((resolve) => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = new Image();
+                    img.onload = function() {
+                        const canvas = document.createElement('canvas');
+                        canvas.width = img.width;
+                        canvas.height = img.height;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0);
+
+                        // Try AVIF first (better compression)
+                        canvas.toBlob(
+                            (blob) => {
+                                if (blob) {
+                                    // Successfully created AVIF
+                                    resolve(new File([blob], `page-${Date.now()}.avif`, { type: 'image/avif' }));
+                                } else {
+                                    // Fallback to JPEG if AVIF fails
+                                    canvas.toBlob(
+                                        (jpegBlob) => {
+                                            resolve(new File([jpegBlob], `page-${Date.now()}.jpg`, { type: 'image/jpeg' }));
+                                        },
+                                        'image/jpeg',
+                                        0.85  // Slightly higher quality for JPEG
+                                    );
+                                }
+                            },
+                            'image/avif',
+                            0.75  // AVIF quality - can be lower due to better compression
+                        );
+                    };
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
         // Handle file selection from native camera
         cameraInput.addEventListener('change', async (event) => {
             const file = event.target.files[0];
@@ -302,9 +342,13 @@
             errorDiv.style.display = 'none';
 
             try {
+                // Convert to AVIF (with JPEG fallback)
+                const convertedFile = await convertToOptimalFormat(file);
+                console.log(`Converted to ${convertedFile.type}, size: ${(convertedFile.size / 1024).toFixed(2)}KB`);
+
                 // Upload the image
                 const formData = new FormData();
-                formData.append('image', file, `page-${Date.now()}.jpg`);
+                formData.append('image', convertedFile, convertedFile.name);
 
                 const response = await fetch(`/api/sessions/${sessionId}/pages`, {
                     method: 'POST',
@@ -318,7 +362,7 @@
                     updatePageCount();
                     showSuccess();
 
-                    // Add to recent photos
+                    // Add to recent photos (use original for preview)
                     addRecentPhoto(file, pageNum);
 
                     // Clear the input so the same file can be selected again
